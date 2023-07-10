@@ -1,0 +1,22 @@
+{
+  "name": "cquicc",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "npx gh-pages -d dist -t true && rm -rf dist"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.4",
+    "@tsconfig/svelte": "^5.0.0",
+    "svelte": "^4.0.5",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "marked": "^5.1.1",
+    "@codemirror/lang-html": "^6.4.4",
+    "svelte-codemirror-editor": "^1.1.0"
+  }
+}
