@@ -2,7 +2,9 @@
   import CodeMirror from "svelte-codemirror-editor";
   import { html } from "@codemirror/lang-html";
   import Template from "./basic.html?raw";
+  import { dracula } from "thememirror";
   import { onMount } from "svelte";
+  import { marked } from "marked";
 
   let //
     frame,
@@ -56,6 +58,7 @@
     <CodeMirror
       bind:value
       lang={html()}
+      theme={dracula}
       styles={{
         "&": {
           fontSize: "18px",
