@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/theme/simple.css" id="theme">
+</head>
+
+<body class="reveal">
+  <main class="slides">
+    <section>
+      <h2 class="f j-ct" style="align-self: center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Qiskit-Logo.svg" height="72">
+        bjective
+      </h2>
+      <div>To Train a Circuit Denoising AutoEncoder</div>
+    </section>
+
+    <section>
+      <h3>What is an AutoEncoder?</h3>
+      <p style="font-size:0.66em">
+        An AutoEncoder is a Neural Network that learns to reconstruct its input with just the most
+        essential information
+      </p>
+      <img src="https://pyimagesearch.com/wp-content/uploads/2020/02/keras_denoising_autoencoder_header.png"
+        height="350px">
+    </section>
+    <section>
+      <h3>How do we apply it?</h3>
+      <p style="font-size:0.66em">
+        Quantum Circuits have a big noise problem. This causes loss of information. To correct for this
+        we can first convert the data into its most raw information form
+      </p>
+      <ul class="norm-li mid-li">
+        <style>
+          .mmt {
+            height: 1.5em;
+            vertical-align: middle;
+          }
+        </style>
+        <li><img src="./data/mmt.svg" class="mmt"> 0.2345 |1⟩</li>
+        <li><img src="./data/mmt.svg" class="mmt"> 0&emsp;&emsp; |1⟩</li>
+        <li><img src="./data/mmt.svg" class="mmt"> 1&emsp;&emsp; |1⟩</li>
+        <li><img src="./data/mmt.svg" class="mmt"> 0.4368 |1⟩</li>
+      </ul> <br>
+      All these data points are converted into a 8-vectors and passed in
+    </section>
+
+    <section>
+      <h3>How do we apply it?</h3>
+      We then use 2 backends to generate the data.
+      <div class="f j-ar tc mx-a" style="margin-top: 20px;margin-bottom: -10px;max-width: 75%;">
+        <code>QASM_Simulator()</code> <code>NoiseModel()</code>
+      </div>
+      <img class="mx-a"
+        src="https://www.researchgate.net/publication/356472938/figure/fig3/AS:1093535814172689@1637730663818/Simulation-results-of-QAN-protocol-circuit-of-Fig2-on-a-IBM-QASM-simulator-and-b.png"
+        height="300px"> <br>
+
+      900 Circuits of 4,6,8 qubits each are generated and run on the backends
+    </section>
+
+    <section>
+      <h3>Making the Model</h3>
+      <table>
+        <tr>
+          <td><b>Input Layer:</b></td>
+          <td>8+1 (8 Qubits + 1 #qubits)</td>
+          <td>8<sup>9</sup></td>
+        </tr>
+        <tr>
+          <td><b>Hidden Layer(s):</b></td>
+          <td>8, 6</td>
+          <td>8<sup>8</sup> + 8<sup>6</sup></td>
+        </tr>
+        <tr>
+          <td><b>Bottleneck:</b></td>
+          <td>4</td>
+          <td>6<sup>4</sup></td>
+        </tr>
+        <tr>
+          <td><b>Hidden Layer(s):</b></td>
+          <td>6, 8</td>
+          <td>4<sup>6</sup> + 6<sup>8</sup></td>
+        </tr>
+        <tr>
+          <td><b>Output Layer:</b></td>
+          <td>8 Qubits</td>
+          <td>8<sup>8</sup></td>
+        </tr>
+        <tr>
+          <td>Total Parameters:</td>
+          <td></td>
+          <td>~170 Million <!-- 169,719,312 --></td>
+        </tr>
+      </table>
+      <img class="mx-a" src="./data/nn.svg"> <br>
+    </section>
+
+    <section>
+      <h3>Training the Model</h3>
+      <table>
+        <tr>
+          <th>Epochs:</th>
+          <th>Batch:</th>
+          <th>Optimizer:</th>
+          <th>Loss Fn:</th>
+        </tr>
+        <tr>
+          <td>5000 (Early Stopping)</td>
+          <td>8</td>
+          <td>Adam</td>
+          <td>Modified MSE</td>
+        </tr>
+      </table>
+      <br>
+      <div class="f">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="15 -50 40 40" height="300px">
+          <path fill="none" d="M20,-15 l30,-30" stroke="blue" stroke-width="1" />
+          <circle id="pt" cx="20" cy="-15" r="1.5" fill="red" stroke="none" />
+          <use xlink:href="#pt" x="30" y="-30" />
+          <use xlink:href="#pt" x="15" y="-15" fill="blue" />
+
+          <g stroke="none" fill="black" font-size="6">
+            <text x="37" y="-27" font-style="italic" fill="blue" font-size="5">(pred)</text>
+            <text x="23" y="-13.5" font-style="italic" fill="blue" font-size="4">(Ideal)</text>
+            <text x="34" y="-44" font-style="italic" fill="blue" font-size="4">(Noisy)</text>
+          </g>
+        </svg>
+        <div class="f-col j-ct mx-a tc" style="font-size: 32px;">
+          $ \text{Mod-MSE} = \sum_{i=1}^{n} \frac{||\ pred\ -\ ideal\ ||}{||\ noisy\ -\ ideal\ ||} $
+          <br>
+          <ul class="norm-li">
+            <li>&raquo; Forces Loss to move linearly</li>
+            <li>&raquo; Automatically Constraints from 0 &rarr; 1</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>Results</h3>
+      <table>
+        <tr>
+          <th>Type</th>
+          <th>Vector</th>
+          <th>Error from Ideal</th>
+        </tr>
+        <tr>
+          <td>Noisy</td>
+          <td>.6667, .4167, .5&emsp;&emsp;, .4167</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Pred</td>
+          <td>.5020 , .4931 , .4918, .5116</td>
+          <td>1.2%</td>
+        </tr>
+        <tr>
+          <td>Ideal</td>
+          <td>.5&emsp;&emsp;, .5&emsp;&emsp;,.5&emsp;&emsp;, .5&emsp;&emsp;</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+        </tr>
+        <tr>
+          <td>Noisy</td>
+          <td>.4444, .7778, .3333, .3333</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Pred</td>
+          <td>0&emsp;&emsp;, 0&emsp;&emsp;, 0&emsp;&emsp;, 0.5</td>
+          <td>10%</td>
+        </tr>
+        <tr>
+          <td>Ideal</td>
+          <td>.4192, .4706, .4447, .3621</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>---</td>
+          <td>---</td>
+          <td>---</td>
+        </tr>
+        <tr>
+          <td>Noisy</td>
+          <td>0.4412, 0.4706, 0.5441, 0.4706, 0.3529, 0.4412, 0.2059</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Pred</td>
+          <td>0.2318, 0.4482, 0.4314, 0.4421, 0.4039, 0.4511, 0.3753</td>
+          <td>11%</td>
+        </tr>
+        <tr>
+          <td>Ideal</td>
+          <td>0&emsp;&emsp;, 0&emsp;&emsp;, .5&emsp;&emsp;, .5&emsp;&emsp;, 0&emsp;&emsp;,
+            0&emsp;&emsp;,.5&emsp;&emsp;</td>
+          <td></td>
+        </tr>
+      </table>
+    </section>
+
+    <section>
+      <h3>Results</h3>
+      <p>The net average error after 3 runs of 100 random data points each was 11.6%</p>
+      <div class="tl">
+        So it turns out model: <br>
+        <ul class="p20 mid-li">
+          <li>&raquo; Tends to almost exclusively 0.5</li>
+          <li>&raquo; Doesn't recognize anything outside of 0.5 &plusmn; 0.1</li>
+          <li>&raquo; Works even on 5 & 7 qubits despite being trained on 4,6,8</li>
+        </ul> <br>
+        Obvious Fixes: <br>
+        <ul class="p20 mid-li">
+          <li>&raquo; Adding t1, t2 & depth data for each qubit</li>
+          <li>&raquo; Adding more balanced circuits to trainset</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h3>Immidiate Future Scope</h3>
+      <ul class="mid-li">
+        <li>&raquo; Adding t1, t2 & depth data for each qubit</li>
+        <li>&raquo; Adding more balanced circuits to trainset</li>
+        <li>&raquo; Benchmarking the same process against a Quantum AE</li>
+        <li>&raquo; Adding more IBMQ Systems (to generalise)</li>
+        <li>&raquo; Using new NoiseModel (now outdated by 2 yrs)</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/reveal.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/math/math.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.1.0/plugin/markdown/markdown.js"></script>
+  <script>
+    document.querySelectorAll( 'section' ).forEach( e => {
+      // add auto-animate to all sections
+      e.setAttribute( 'data-auto-animate', "" );
+
+      // converts 'md' to revealJS compatible format
+      if ( !e.hasAttribute( 'md' ) ) return;
+      e.setAttribute( 'data-markdown', "" );
+      e.removeAttribute( 'md' );
+      e.innerHTML = `<script type="text/template">${ e.innerText }</` + `script>`;
+    } );
+    //
+    Reveal.initialize( {
+      history: true,
+      transition: 'linear',
+      showSlideNumber: 'all',
+      fragments: false,
+      hideCursorTime: 1e3,
+      viewDistance: 3,
+      plugins: [ RevealMath, RevealMarkdown ]
+    } );
+  </script>
+  <style type="text/css">
+    td,
+    th {
+      font-size: 24px !important;
+    }
+
+    ul {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    li {
+      list-style-type: none;
+      font-size: 1rem;
+    }
+
+    img {
+      object-fit: contain;
+    }
+
+    .reveal .reveal_section {
+      position: relative;
+    }
+
+    .reveal .caption {
+      position: absolute;
+      bottom: 0px;
+      left: 50px;
+    }
+
+    .MathJax {
+      pointer-events: none;
+    }
+
+    .norm-li li {
+      font-size: 1em;
+    }
+
+    .mid-li li {
+      font-size: 32px;
+    }
+
+    html {
+      /* filter: invert(86%); */
+    }
+  </style>
+</body>
+
+</html>

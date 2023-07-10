@@ -1,0 +1,422 @@
+[
+  {
+    "name": "ibmq_kolkata",
+    "frac": {
+      "mean": 2.08,
+      "median": 0.86,
+      "stdv": 5.81,
+      "stdv_pct": 278.86
+    },
+    "T1": {
+      "mean": 114171.11,
+      "median": 162875.85,
+      "stdv": 48101.13,
+      "stdv_pct": 42.13
+    },
+    "T2": {
+      "mean": 97791.12,
+      "median": 225103.38,
+      "stdv": 67063.75,
+      "stdv_pct": 68.57
+    }
+  },
+  {
+    "name": "ibmq_mumbai",
+    "frac": {
+      "mean": 1.51,
+      "median": 1.31,
+      "stdv": 0.87,
+      "stdv_pct": 57.82
+    },
+    "T1": {
+      "mean": 127731.73,
+      "median": 162079.98,
+      "stdv": 47228.85,
+      "stdv_pct": 36.97
+    },
+    "T2": {
+      "mean": 172859.35,
+      "median": 225469.93,
+      "stdv": 76962.77,
+      "stdv_pct": 44.52
+    }
+  },
+  {
+    "name": "ibmq_lima",
+    "frac": {
+      "mean": 2,
+      "median": 1.76,
+      "stdv": 0.79,
+      "stdv_pct": 39.81
+    },
+    "T1": {
+      "mean": 52148.11,
+      "median": 40090.64,
+      "stdv": 29326.14,
+      "stdv_pct": 56.23
+    },
+    "T2": {
+      "mean": 95526.81,
+      "median": 133428.31,
+      "stdv": 39693.72,
+      "stdv_pct": 41.55
+    }
+  },
+  {
+    "name": "ibmq_belem",
+    "frac": {
+      "mean": 1.38,
+      "median": 1.13,
+      "stdv": 0.74,
+      "stdv_pct": 53.98
+    },
+    "T1": {
+      "mean": 89268.6,
+      "median": 34121.53,
+      "stdv": 35005.11,
+      "stdv_pct": 39.21
+    },
+    "T2": {
+      "mean": 104070.7,
+      "median": 130724.33,
+      "stdv": 28252.55,
+      "stdv_pct": 27.14
+    }
+  },
+  {
+    "name": "ibmq_quito",
+    "frac": {
+      "mean": 0.92,
+      "median": 1.08,
+      "stdv": 0.44,
+      "stdv_pct": 47.85
+    },
+    "T1": {
+      "mean": 106445.57,
+      "median": 114840.72,
+      "stdv": 24058.34,
+      "stdv_pct": 22.6
+    },
+    "T2": {
+      "mean": 92212.08,
+      "median": 19636.53,
+      "stdv": 41997.35,
+      "stdv_pct": 45.54
+    }
+  },
+  {
+    "name": "ibmq_guadalupe",
+    "frac": {
+      "mean": 1.07,
+      "median": 0.95,
+      "stdv": 0.44,
+      "stdv_pct": 41.64
+    },
+    "T1": {
+      "mean": 94391.77,
+      "median": 68329.04,
+      "stdv": 29650.84,
+      "stdv_pct": 31.41
+    },
+    "T2": {
+      "mean": 100142.2,
+      "median": 59384.94,
+      "stdv": 58355.75,
+      "stdv_pct": 58.27
+    }
+  },
+  {
+    "name": "ibmq_jakarta",
+    "frac": {
+      "mean": 0.41,
+      "median": 0.37,
+      "stdv": 0.2,
+      "stdv_pct": 49.75
+    },
+    "T1": {
+      "mean": 108743.39,
+      "median": 123422.38,
+      "stdv": 30834.87,
+      "stdv_pct": 28.35
+    },
+    "T2": {
+      "mean": 42858.9,
+      "median": 33585.86,
+      "stdv": 24743.97,
+      "stdv_pct": 57.73
+    }
+  },
+  {
+    "name": "ibmq_manila",
+    "frac": {
+      "mean": 0.39,
+      "median": 0.33,
+      "stdv": 0.18,
+      "stdv_pct": 45.91
+    },
+    "T1": {
+      "mean": 169435.47,
+      "median": 136811.21,
+      "stdv": 69404.05,
+      "stdv_pct": 40.96
+    },
+    "T2": {
+      "mean": 63647.12,
+      "median": 78116.71,
+      "stdv": 26782.01,
+      "stdv_pct": 42.07
+    }
+  },
+  {
+    "name": "ibm_hanoi",
+    "frac": {
+      "mean": 0.84,
+      "median": 0.75,
+      "stdv": 0.66,
+      "stdv_pct": 79.47
+    },
+    "T1": {
+      "mean": 164046,
+      "median": 182364.13,
+      "stdv": 54588.4,
+      "stdv_pct": 33.27
+    },
+    "T2": {
+      "mean": 123686.98,
+      "median": 23752.11,
+      "stdv": 86791.09,
+      "stdv_pct": 70.16
+    }
+  },
+  {
+    "name": "ibm_lagos",
+    "frac": {
+      "mean": 0.53,
+      "median": 0.66,
+      "stdv": 0.23,
+      "stdv_pct": 43.8
+    },
+    "T1": {
+      "mean": 128545.24,
+      "median": 135612.53,
+      "stdv": 23149.49,
+      "stdv_pct": 18
+    },
+    "T2": {
+      "mean": 67188.87,
+      "median": 59299.93,
+      "stdv": 27579.92,
+      "stdv_pct": 41.04
+    }
+  },
+  {
+    "name": "ibm_nairobi",
+    "frac": {
+      "mean": 0.73,
+      "median": 0.64,
+      "stdv": 0.54,
+      "stdv_pct": 73.47
+    },
+    "T1": {
+      "mean": 106468,
+      "median": 156053.24,
+      "stdv": 39210.94,
+      "stdv_pct": 36.82
+    },
+    "T2": {
+      "mean": 60810.31,
+      "median": 47630.42,
+      "stdv": 33092.49,
+      "stdv_pct": 54.41
+    }
+  },
+  {
+    "name": "ibm_cairo",
+    "frac": {
+      "mean": 1.04,
+      "median": 0.8,
+      "stdv": 0.87,
+      "stdv_pct": 83.77
+    },
+    "T1": {
+      "mean": 103508.28,
+      "median": 148340.41,
+      "stdv": 32471.22,
+      "stdv_pct": 31.37
+    },
+    "T2": {
+      "mean": 94046.5,
+      "median": 159661.51,
+      "stdv": 49628.23,
+      "stdv_pct": 52.76
+    }
+  },
+  {
+    "name": "ibm_perth",
+    "frac": {
+      "mean": 0.75,
+      "median": 0.57,
+      "stdv": 0.36,
+      "stdv_pct": 47.67
+    },
+    "T1": {
+      "mean": 161439.97,
+      "median": 156661.93,
+      "stdv": 36531.33,
+      "stdv_pct": 22.62
+    },
+    "T2": {
+      "mean": 116317.24,
+      "median": 206055.66,
+      "stdv": 46674.94,
+      "stdv_pct": 40.12
+    }
+  },
+  {
+    "name": "ibm_peekskill",
+    "frac": {
+      "mean": 0.94,
+      "median": 0.84,
+      "stdv": 0.5,
+      "stdv_pct": 53.2
+    },
+    "T1": {
+      "mean": 328710.01,
+      "median": 358805.93,
+      "stdv": 120703.69,
+      "stdv_pct": 36.72
+    },
+    "T2": {
+      "mean": 275621.22,
+      "median": 262557.46,
+      "stdv": 100948.61,
+      "stdv_pct": 36.62
+    }
+  },
+  {
+    "name": "ibm_ithaca",
+    "frac": {
+      "mean": 1.11,
+      "median": 0.94,
+      "stdv": 0.83,
+      "stdv_pct": 74.97
+    },
+    "T1": {
+      "mean": 188879.89,
+      "median": 210691.91,
+      "stdv": 60294.54,
+      "stdv_pct": 31.92
+    },
+    "T2": {
+      "mean": 189367,
+      "median": 220555.34,
+      "stdv": 101155.41,
+      "stdv_pct": 53.41
+    }
+  },
+  {
+    "name": "ibm_oslo",
+    "frac": {
+      "mean": 0.78,
+      "median": 0.92,
+      "stdv": 0.42,
+      "stdv_pct": 54.39
+    },
+    "T1": {
+      "mean": 127424.76,
+      "median": 149294.71,
+      "stdv": 26038.19,
+      "stdv_pct": 20.43
+    },
+    "T2": {
+      "mean": 92154.84,
+      "median": 138378.43,
+      "stdv": 42361.37,
+      "stdv_pct": 45.96
+    }
+  },
+  {
+    "name": "ibm_geneva",
+    "frac": {
+      "mean": 0.63,
+      "median": 0.66,
+      "stdv": 0.42,
+      "stdv_pct": 66.78
+    },
+    "T1": {
+      "mean": 290151.42,
+      "median": 344653.85,
+      "stdv": 121378.41,
+      "stdv_pct": 41.83
+    },
+    "T2": {
+      "mean": 169501.35,
+      "median": 24103.48,
+      "stdv": 107954.02,
+      "stdv_pct": 63.68
+    }
+  },
+  {
+    "name": "ibm_prague",
+    "frac": {
+      "mean": 0.85,
+      "median": 0.83,
+      "stdv": 0.54,
+      "stdv_pct": 63.4
+    },
+    "T1": {
+      "mean": 147764.49,
+      "median": 198883.53,
+      "stdv": 71274,
+      "stdv_pct": 48.23
+    },
+    "T2": {
+      "mean": 111788.1,
+      "median": 215020.5,
+      "stdv": 71318.93,
+      "stdv_pct": 63.79
+    }
+  },
+  {
+    "name": "ibm_sherbrooke",
+    "frac": {
+      "mean": 0.71,
+      "median": 0.62,
+      "stdv": 0.63,
+      "stdv_pct": 88.35
+    },
+    "T1": {
+      "mean": 296581.81,
+      "median": 306134.38,
+      "stdv": 97989.33,
+      "stdv_pct": 33.03
+    },
+    "T2": {
+      "mean": 182728.37,
+      "median": 26506.45,
+      "stdv": 112465.06,
+      "stdv_pct": 61.54
+    }
+  },
+  {
+    "name": "ibm_brisbane",
+    "frac": {
+      "mean": 0.7,
+      "median": 0.57,
+      "stdv": 0.54,
+      "stdv_pct": 76.59
+    },
+    "T1": {
+      "mean": 234871.67,
+      "median": 242402.64,
+      "stdv": 78948.67,
+      "stdv_pct": 33.61
+    },
+    "T2": {
+      "mean": 145289.98,
+      "median": 222408.25,
+      "stdv": 76737.11,
+      "stdv_pct": 52.81
+    }
+  }
+]

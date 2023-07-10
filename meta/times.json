@@ -1,0 +1,255 @@
+[
+  {
+    "name": "ibmq_kolkata",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 450.28,
+      "reset": 724.27
+    }
+  },
+  {
+    "name": "ibmq_mumbai",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 451.3,
+      "reset": 3612.44
+    }
+  },
+  {
+    "name": "ibmq_lima",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 405.33,
+      "reset": 6232.88
+    }
+  },
+  {
+    "name": "ibmq_belem",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 531.55,
+      "reset": 6262.04
+    }
+  },
+  {
+    "name": "ibmq_quito",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 295.11,
+      "reset": 5920
+    }
+  },
+  {
+    "name": "ibmq_guadalupe",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 422.66,
+      "reset": 9203.55
+    }
+  },
+  {
+    "name": "ibmq_jakarta",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 341.33,
+      "reset": 5553.77
+    }
+  },
+  {
+    "name": "ibmq_manila",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 368,
+      "reset": 5514.66
+    }
+  },
+  {
+    "name": "ibm_hanoi",
+    "gate_times": {
+      "id": 32,
+      "rz": 0,
+      "sx": 32,
+      "x": 32,
+      "cx": 383.8,
+      "reset": 849.77
+    }
+  },
+  {
+    "name": "ibm_lagos",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 359.11,
+      "reset": 1082.92
+    }
+  },
+  {
+    "name": "ibm_nairobi",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 306.96,
+      "reset": 5596.44
+    }
+  },
+  {
+    "name": "ibm_cairo",
+    "gate_times": {
+      "id": 24.88,
+      "rz": 0,
+      "sx": 24.88,
+      "x": 24.88,
+      "cx": 352.88,
+      "reset": 924.31
+    }
+  },
+  {
+    "name": "ibm_auckland",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 474.92,
+      "reset": 937.08
+    }
+  },
+  {
+    "name": "ibm_perth",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 444.44,
+      "reset": 805.58
+    }
+  },
+  {
+    "name": "ibm_peekskill",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 472.88,
+      "reset": 977.77
+    }
+  },
+  {
+    "name": "ibm_washington",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 559.51,
+      "reset": 909.24
+    }
+  },
+  {
+    "name": "ibm_ithaca",
+    "gate_times": {
+      "id": 49.77,
+      "rz": 0,
+      "sx": 49.77,
+      "x": 49.77,
+      "cx": 536.88,
+      "reset": 5144.12
+    }
+  },
+  {
+    "name": "ibm_oslo",
+    "gate_times": {
+      "id": 35.55,
+      "rz": 0,
+      "sx": 35.55,
+      "x": 35.55,
+      "cx": 316.44,
+      "reset": 960
+    }
+  },
+  {
+    "name": "ibm_geneva",
+    "gate_times": {
+      "id": 36.6,
+      "rz": 0,
+      "sx": 36.6,
+      "x": 36.6,
+      "cx": 598.09,
+      "reset": 1680.85
+    }
+  },
+  {
+    "name": "ibm_kyiv",
+    "gate_times": {
+      "id": 49.77,
+      "rz": 0,
+      "sx": 49.77,
+      "x": 49.77,
+      "cx": 636.44,
+      "reset": 1294.22
+    }
+  },
+  {
+    "name": "ibm_prague",
+    "gate_times": {
+      "id": 27.15,
+      "rz": 0,
+      "sx": 27.15,
+      "x": 27.15,
+      "cz": 86.48,
+      "reset": 1161.37
+    }
+  },
+  {
+    "name": "ibm_sherbrooke",
+    "gate_times": {
+      "id": 56.88,
+      "rz": 0,
+      "sx": 56.88,
+      "x": 56.88,
+      "ecr": 538.46,
+      "reset": 1306.26
+    }
+  },
+  {
+    "name": "ibm_brisbane",
+    "gate_times": {
+      "id": 60,
+      "rz": 0,
+      "sx": 60,
+      "x": 60,
+      "ecr": 664.94,
+      "reset": 4079.02
+    }
+  }
+]

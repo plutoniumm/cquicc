@@ -1,0 +1,3 @@
+docs/* linguist-documentation=false
+*.html linguist-detectable=false
+*.ipynb linguist-detectable=false
