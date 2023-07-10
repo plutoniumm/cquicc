@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.2.0",
+    "jquery": "^3.7.0",
     "js-yaml": "^4.1.0",
     "marked": "^5.1.1",
     "svelte-codemirror-editor": "^1.1.0",
-    "thememirror": "^2.0.1"
+    "thememirror": "^2.0.1",
+    "typeset": "^0.3.3"
   }
 }

@@ -4,10 +4,8 @@
   import Template from "./basic.md?raw";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
-  import { marked } from "marked";
-  import yaml from "js-yaml";
 
-  import { defStyles } from "./utils";
+  import { defStyles, render } from "./utils";
 
   let //
     frame,
@@ -16,12 +14,9 @@
     doc;
 
   const write = (text) => {
-    const [, meta, ...rest] = text.split("---");
+    const { meta, html } = render(text);
 
-    const metaObj = yaml.load(meta.trim(), { json: true });
-    const html = marked(rest.join("---"));
-
-    console.log(metaObj);
+    console.log(meta);
 
     doc.open();
     doc.write(html);
