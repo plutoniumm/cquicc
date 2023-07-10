@@ -1,3 +1,21 @@
 body {
   font-family: "Computer Modern Serif", sans-serif;
+  padding: 1em;
+}
+
+#frontmatter-lhs {
+  font-family: Helvetica !important;
+}
+
+#topic {
+  color: #888;
+}
+
+.split-container {
+  display: flex;
+}
+
+.split-container>div {
+  flex: 1;
+  overflow: auto;
 }

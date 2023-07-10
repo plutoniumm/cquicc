@@ -6,13 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
   <link rel="stylesheet" href="/cquicc.css">
 
   &head;
 </head>
 
 <body>
-  &body;
+  <header class="f">
+    <h1 id="topic">&topic;</h1>
+    <div>&year;</div>
+  </header>
+  <hr />
+  <section class="f fw4">
+    <div id="frontmatter-lhs">
+      <h1 id="title">&title;</h1>
+      <div id="author">&author;</div>
+      <div id="from">&from;</div>
+      <div id="date">&date;</div>
+    </div>
+    <div class="p20" id="frontmatter-rhs">
+      <img src="/iitm.svg" height="100px" width="100px" alt="">
+    </div>
+  </section>
+  <hr />
+  <section>
+    &body;
+  </section>
 </body>
 
 </html>
