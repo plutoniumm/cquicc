@@ -1,10 +1,12 @@
 <script lang="ts">
   import CodeMirror from "svelte-codemirror-editor";
-  import { html } from "@codemirror/lang-html";
-  import Template from "./basic.html?raw";
+  import { markdown } from "@codemirror/lang-markdown";
+  import Template from "./basic.md?raw";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
   import { marked } from "marked";
+
+  import { isTop, defStyles } from "./utils";
 
   let //
     frame,
@@ -32,15 +34,6 @@
     write(Template);
   });
 
-  // is iframe
-  const isTop = () => {
-    try {
-      return window.top === window.self;
-    } catch (e) {
-      return false;
-    }
-  };
-
   const handleMessage = ({ data }) => {
     if (isTop()) return 0; // ignore if !embeded
     if (data.type !== "code") return 0; // ignore if not code
@@ -57,15 +50,9 @@
   <div class="editor">
     <CodeMirror
       bind:value
-      lang={html()}
+      lang={markdown()}
       theme={dracula}
-      styles={{
-        "&": {
-          fontSize: "18px",
-          height: "100%",
-          width: "100%",
-        },
-      }}
+      styles={defStyles}
       lineWrapping={true}
       on:change={handleChange}
     />

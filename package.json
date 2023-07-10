@@ -10,14 +10,14 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^5.0.0",
-    "typescript": "^5.0.2",
     "svelte": "^4.0.5",
+    "typescript": "^5.0.2",
     "vite": "^4.3.9"
   },
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.2.0",
     "svelte-codemirror-editor": "^1.1.0",
-    "@codemirror/lang-html": "^6.4.4",
-    "thememirror": "^2.0.1",
-    "marked": "^5.1.1"
+    "marked": "^5.1.1",
+    "thememirror": "^2.0.1"
   }
 }
