@@ -5,8 +5,9 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
   import { marked } from "marked";
+  import yaml from "js-yaml";
 
-  import { isTop, defStyles } from "./utils";
+  import { defStyles } from "./utils";
 
   let //
     frame,
@@ -15,8 +16,15 @@
     doc;
 
   const write = (text) => {
+    const [, meta, ...rest] = text.split("---");
+
+    const metaObj = yaml.load(meta.trim(), { json: true });
+    const html = marked(rest.join("---"));
+
+    console.log(metaObj);
+
     doc.open();
-    doc.write(text);
+    doc.write(html);
     doc.close();
   };
 
@@ -30,21 +38,9 @@
 
   onMount(() => {
     if (!doc) doc = frame.contentWindow.document;
-
     write(Template);
   });
-
-  const handleMessage = ({ data }) => {
-    if (isTop()) return 0; // ignore if !embeded
-    if (data.type !== "code") return 0; // ignore if not code
-
-    const { code } = data;
-    value = code;
-    write(code);
-  };
 </script>
-
-<svelte:window on:message={handleMessage} />
 
 <main class="f fw">
   <div class="editor">
