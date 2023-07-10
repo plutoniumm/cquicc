@@ -1,0 +1,28 @@
+.codemirror-wrapper {
+  overflow-y: hidden;
+}
+
+.cm-scroller {
+  overflow: auto;
+  min-height: 100vh
+}
+
+
+.cm-activeLine {
+  background: #eef4 !important;
+  border-radius: 5px;
+}
+
+.cm-line,
+.cm-line *,
+.cm-matchingBracket {
+  font-variant-ligatures: contextual;
+  font-family: "Fira Code";
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.cm-gutterElement {
+  font-family: "Fira Code";
+  font-size: 14px;
+}
