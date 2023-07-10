@@ -1,0 +1,58 @@
+qsvm ) conda activate py39                                                                           (base) 18:02:21
+qsvm ) python3 ./qubo.py 10                                                                          (py39) 18:02:28
+LOG: Starting classical SVM with sigma=10
+training time for classical SVM:1.0min
+LOG: Results for classical SVM:
+Confusion Matrix: [[76 50]
+ [39 75]] 
+
+Classification Report:               precision    recall  f1-score   support
+
+         0.0       0.66      0.60      0.63       126
+         1.0       0.60      0.66      0.63       114
+
+    accuracy                           0.63       240
+   macro avg       0.63      0.63      0.63       240
+weighted avg       0.63      0.63      0.63       240
+
+Kernel matrix: [[1.         0.97440186 0.98482097 ... 0.97950366 0.98353381 0.97091446]
+ [0.97440186 1.         0.96518631 ... 0.95350077 0.96200936 0.93189755]
+ [0.98482097 0.96518631 1.         ... 0.9875486  0.98226831 0.96458164]
+ ...
+ [0.97950366 0.95350077 0.9875486  ... 1.         0.98685231 0.98365611]
+ [0.98353381 0.96200936 0.98226831 ... 0.98685231 1.         0.97335154]
+ [0.97091446 0.93189755 0.96458164 ... 0.98365611 0.97335154 1.        ]]
+LOG: Generated QUBO equation
+QUBO:
+ [[-0.5         1.          0.48720093 ...  0.98353381 -0.48545723
+  -0.97091446]
+ [ 1.          0.          0.97440186 ...  1.96706763 -0.97091446
+  -1.94182893]
+ [ 0.48720093  0.97440186 -0.5        ...  0.96200936 -0.46594877
+  -0.93189755]
+ ...
+ [ 0.98353381  1.96706763  0.96200936 ...  0.         -0.97335154
+  -1.94670309]
+ [-0.48545723 -0.97091446 -0.46594877 ... -0.97335154 -0.5
+   1.        ]
+ [-0.97091446 -1.94182893 -0.93189755 ... -1.94670309  1.
+   0.        ]]
+Minimum energy: -2254.3842588486114
+LOG: Finished QUBO
+Bias: -1.89794921875
+training time for DWave'd SVM:53.7min
+LOG: Testing DWave'd SVM
+testing time for DWave'd SVM:1.0min
+Classification Report:               precision    recall  f1-score   support
+
+        -1.0       0.56      0.97      0.71       126
+         1.0       0.81      0.15      0.25       114
+
+    accuracy                           0.58       240
+   macro avg       0.68      0.56      0.48       240
+weighted avg       0.68      0.58      0.49       240
+ 
+
+Confusion Matrix: [[122   4]
+ [ 97  17]]
+qsvm )                                                                                               (py39) 18:55:52
