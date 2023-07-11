@@ -1,14 +1,34 @@
 body {
   font-family: "Computer Modern Serif", sans-serif;
-  padding: 1em;
+  width: 21cm;
+  height: 29.7cm;
+  padding: 1cm;
+}
+
+#topic {
+  font-style: italic;
+  font-family: Helvetica;
+}
+
+#year {
+  line-height: 2.5em;
+  vertical-align: bottom;
 }
 
 #frontmatter-lhs {
   font-family: Helvetica !important;
 }
 
+#frontmatter-lhs>#title {
+  margin-top: 0;
+}
+
 #topic {
   color: #888;
+}
+
+.katex-html {
+  display: none;
 }
 
 .split-container {
