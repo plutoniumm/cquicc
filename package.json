@@ -23,6 +23,7 @@
     "marked": "^5.1.1",
     "marked-highlight": "^2.0.1",
     "marked-katex-extension": "^3.0.0",
+    "sass": "^1.63.6",
     "svelte-codemirror-editor": "^1.1.0",
     "thememirror": "^2.0.1",
     "typeset": "^0.3.3"

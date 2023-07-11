@@ -36,6 +36,11 @@
   });
 </script>
 
+<div class="p5 f j-ar" id="functions">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="p10 rx5" on:click={() => window.frames[0].print()}>print</div>
+</div>
 <main class="f fw">
   <div class="editor">
     <CodeMirror
@@ -57,10 +62,21 @@
   <iframe id="mfWHAT" bind:this={frame} frameborder="0" title="Editor Output" />
 </main>
 
-<style>
+<style lang="scss">
+  #functions {
+    background: #222;
+    color: #fff;
+    div {
+      background: #000;
+      transition: background 0.2s ease-in-out;
+      &:hover {
+        background: #8888;
+      }
+    }
+  }
   main {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 2em - 16px);
     background: #888;
   }
 
