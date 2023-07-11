@@ -1,6 +1,10 @@
-import typeset from "typeset";
+import markedKatex from "marked-katex-extension";
+import { markedHighlight } from "marked-highlight";
 import { marked } from "marked";
+import hljs from 'highlight.js';
+import typeset from "typeset";
 import yaml from "js-yaml";
+
 import template from "./render.html?raw"
 
 export const defStyles = {
@@ -10,6 +14,22 @@ export const defStyles = {
     width: "100%",
   },
 }
+
+const options = {
+  katex: {
+    throwOnError: false
+  },
+  hljs: {
+    langPrefix: 'hljs language-',
+    highlight ( code, lang ) {
+      const language = hljs.getLanguage( lang ) ? lang : 'plaintext';
+      return hljs.highlight( code, { language } ).value;
+    }
+  }
+}
+
+marked.use( markedKatex( options.katex ) );
+marked.use( markedHighlight( options.hljs ) );
 
 export const render = ( text ) => {
   const [ , meta, ...rest ] = text.split( "---" );

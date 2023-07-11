@@ -16,9 +16,13 @@
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.2.0",
+    "@codemirror/language-data": "^6.3.1",
+    "highlight.js": "^11.8.0",
     "jquery": "^3.7.0",
     "js-yaml": "^4.1.0",
     "marked": "^5.1.1",
+    "marked-highlight": "^2.0.1",
+    "marked-katex-extension": "^3.0.0",
     "svelte-codemirror-editor": "^1.1.0",
     "thememirror": "^2.0.1",
     "typeset": "^0.3.3"

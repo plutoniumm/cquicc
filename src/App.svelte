@@ -1,6 +1,8 @@
 <script lang="ts">
   import CodeMirror from "svelte-codemirror-editor";
-  import { markdown } from "@codemirror/lang-markdown";
+
+  import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+  import { languages } from "@codemirror/language-data";
   import Template from "./basic.md?raw";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
@@ -38,12 +40,19 @@
   <div class="editor">
     <CodeMirror
       bind:value
-      lang={markdown()}
+      lang={markdown({
+        base: markdownLanguage,
+        codeLanguages: languages,
+        completeHTMLTags: true,
+      })}
       theme={dracula}
+      basic={true}
       styles={defStyles}
       lineWrapping={true}
+      placeholder="Type some markdown here..."
       on:change={handleChange}
     />
+    <!-- theme={dracula} -->
   </div>
   <iframe id="mfWHAT" bind:this={frame} frameborder="0" title="Editor Output" />
 </main>
