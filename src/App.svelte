@@ -7,11 +7,8 @@
 
   import { defStyles, render } from "./utils";
 
-  let //
-    frame,
-    value = Template,
-    old,
-    doc;
+  let value = Template;
+  let frame, old, doc;
 
   const write = (text) => {
     const { meta, html } = render(text);
