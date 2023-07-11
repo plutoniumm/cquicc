@@ -1,4 +1,6 @@
-## RedPitaya LocalServer
+# RedPitaya LocalServer
+
+## Execution
 ### Install
 ```sh
 # only Sanic is needed
