@@ -3,6 +3,10 @@ body {
   padding: 1em;
 }
 
+#topic {
+  font-style: italic;
+}
+
 #frontmatter-lhs {
   font-family: Helvetica !important;
 }
