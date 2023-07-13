@@ -1,6 +1,8 @@
 body {
   font-family: "Computer Modern Serif", sans-serif;
-  padding: 1em;
+  width: 21cm;
+  height: 29.7cm;
+  padding: 1cm;
 }
 
 #topic {

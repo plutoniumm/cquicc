@@ -1,0 +1,3 @@
+[submodule "projects/denoising/encoder"]
+	path = projects/denoising/encoder
+	url = https://github.com/plutoniumm/enqoder.git

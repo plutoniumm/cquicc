@@ -28,8 +28,9 @@ const options = {
   }
 }
 
-marked.use( markedKatex( options.katex ) );
-marked.use( markedHighlight( options.hljs ) );
+marked
+  .use( markedKatex( options.katex ) )
+  .use( markedHighlight( options.hljs ) );
 
 export const render = ( text ) => {
   const [ , meta, ...rest ] = text.split( "---" );

@@ -1,7 +1,14 @@
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const excludes = [
+  "a11y-no-static-element-interactions",
+  "a11y-click-events-have-key-events"
+];
 
 export default {
-  // Consult https://svelte.dev/docs#compile-time-svelte-preprocess
-  // for more information about preprocessors
   preprocess: vitePreprocess(),
-}
+  onwarn: ( warning, handler ) => {
+    if ( excludes.includes( warning.code ) ) return;
+    handler( warning );
+  }
+};
