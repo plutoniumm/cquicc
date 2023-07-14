@@ -33,11 +33,23 @@ marked
   .use( markedHighlight( options.hljs ) );
 
 export const render = ( text ) => {
+  text = text
+    .replaceAll( "/===", "</div></section>" )
+    .replaceAll( "===", "<section class='split'><div>" )
+    .replaceAll( "+++", "</div><div>" );
+
   const [ , meta, ...rest ] = text.split( "---" );
 
   const m = yaml.load( meta.trim(), { json: true } );
+  if ( !m.date )
+    m.date = new Date().toISOString();
+
   m.year = new Date( m.date ).getFullYear();
-  m.date = new Date( m.date ).toLocaleDateString( 'en-GB' );
+  m.date = new Date( m.date ).toLocaleDateString( 'en-GB', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  } );
 
   let html = marked( rest.join( "---" ) );
   html = typeset( html );

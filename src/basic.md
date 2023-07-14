@@ -1,10 +1,11 @@
 ---
 topic: "Quantum Machine Learning"
-title: "A Brief Literature Review of the QML Landscape"
+title: "Weekly Update"
 author: "Manav Seksaria"
 from: "MCQuICC, IIT Madras"
-date: "01-23-2023"
 ---
+
+===
 
 ## Code Syntax Test
 This is a test
@@ -29,6 +30,8 @@ Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam repellat qu
 # Math Test with Katex
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi in ipsum iure est officia ut, excepturi rerum esse cum, delectus dolorem nam minima reiciendis. Quod accusantium commodi inventore ab enim eaque atque quidem maiores perferendis sequi! Laborum nobis voluptatem repellendus mollitia. Obcaecati, a totam dolorum odio itaque quas reprehenderit dicta iure laboriosam libero earum corrupti fugiat possimus pariatur rem, esse eos! Expedita veritatis facilis vel hic, soluta officia accusantium eum possimus cumque atque magnam aperiam voluptas, accusamus error, obcaecati laudantium.
 
++++
+
 $$
 \begin{aligned}
 \text{minimize} \quad & \sum_{i=1}^n \sum_{j=1}^n c_{ij} x_{ij} \\
@@ -38,3 +41,5 @@ $$
 & x_{ij} \in \{0,1\}, \quad i,j=1,\ldots,n.
 \end{aligned}
 $$
+
+/===

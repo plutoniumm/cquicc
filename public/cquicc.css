@@ -1,8 +1,31 @@
+html {
+  width: 21cm !important;
+  max-width: 21cm !important;
+  overflow-x: hidden;
+  margin: 0 auto;
+  background: #ccc;
+}
+
 body {
   font-family: "Computer Modern Serif", sans-serif;
-  width: 21cm;
-  height: 29.7cm;
   padding: 1cm;
+  width: 100%;
+  margin: 0;
+  background: #fff;
+}
+
+.split {
+  display: flex;
+  justify-content: space-between;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  border-bottom: 2px solid #000;
+}
+
+.split>div {
+  width: 49%;
+  max-width: 49%;
 }
 
 #topic {
@@ -16,15 +39,30 @@ body {
 }
 
 #frontmatter-lhs {
-  font-family: Helvetica !important;
+  font-family: Helvetica;
+  padding-top: 5px;
+  font-size: 22px;
 }
 
-#frontmatter-lhs>#title {
-  margin-top: 0;
+#frontmatter-lhs #from {
+  padding: 10px 0;
 }
 
-#topic {
-  color: #888;
+#frontmatter-lhs #from,
+#frontmatter-lhs #date {
+  font-size: 16px;
+}
+
+hr {
+  border: 1px solid #000;
+  margin: 0;
+  padding: 0;
+}
+
+#title {
+  font-family: Helvetica;
+  margin: 0;
+  padding: 0;
 }
 
 .katex-html {

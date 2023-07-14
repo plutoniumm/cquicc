@@ -35,24 +35,11 @@
     write(Template);
   });
 
-  $: zoom = 1;
-  $: zoomStyle = [
-    [`zoom:`, zoom],
-    [`-webkit-transform`, `scale(${zoom})`],
-    [`-moz-transform`, `scale(${zoom})`],
-  ]
-    .map((x) => x.join(":"))
-    .join(";");
-
   const print = () => window.frames[0].print();
 </script>
 
-<div class="p5 f j-ar" id="functions">
-  <div class="p10 rx5" on:click={print}>print</div>
-  <div class="f">
-    <div class="p10 rx5" on:click={() => (zoom += 0.1)}>+</div>
-    <div class="p10 rx5" on:click={() => (zoom -= 0.1)}>-</div>
-  </div>
+<div class="f j-ar p-fix" id="funcs">
+  <div class="rx10 ptr" on:click={print}>print</div>
 </div>
 <main class="f fw">
   <div class="editor">
@@ -76,50 +63,43 @@
     bind:this={frame}
     frameborder="0"
     title="Editor Output"
-    style={zoomStyle}
+    style="background:#888;"
   />
 </main>
 
 <style lang="scss">
-  iframe {
-    transform-origin: 0 0;
-    -webkit-transform-origin: 0 0;
-    -moz-transform-origin: 0 0;
-  }
-  #functions {
-    background: #222;
+  #funcs {
     color: #fff;
-    .rx5 {
-      background: #000;
-      transition: background 0.2s ease-in-out;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    .rx10 {
+      padding: 10px;
+      background: #2af;
+      transition: opacity 0.2s ease-in-out;
       &:hover {
-        background: #6664;
+        opacity: 0.8;
       }
     }
   }
   main {
     width: 100vw;
-    height: calc(100vh - 2em - 16px);
+    height: 100vh;
     background: #888;
+    --split: 42%;
+  }
+
+  .editor {
+    width: var(--split);
+  }
+  iframe {
+    width: calc(100% - var(--split));
   }
 
   .editor,
   iframe {
-    width: 50%;
     height: 100%;
     background: #ccc;
     overflow-y: scroll;
-  }
-
-  @media (max-width: 768px) {
-    .editor,
-    iframe {
-      width: 100%;
-      height: 50%;
-    }
-  }
-
-  iframe {
-    background: #eee;
   }
 </style>
