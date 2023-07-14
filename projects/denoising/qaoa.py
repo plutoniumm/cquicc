@@ -44,6 +44,7 @@ qc.measure_all()
 print("Running sampler")
 # Sample ansatz at optimal parameters
 samp_dist = sampler.run(qc, shots=int(1024)).result().quasi_dists[0]
+print("Primitve Results", samp_dist)
 bitwise = getBitwise(samp_dist, 10)
 
 print("Bringing in the Guns")
@@ -70,7 +71,7 @@ model.eval()
 
 qubits = tensor([5])
 bitwise = tensor([bitwise])
-print(f"Denoising {bitwise} with {qubits} qubits");
+print(f"Denoising\n{bitwise} with {qubits} qubits");
 
 preds = model(bitwise, qubits).detach()
 

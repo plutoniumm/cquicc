@@ -1,11 +1,16 @@
 ---
-topic: "Quantum Machine Learning"
+topic: "QML: Week 1: 10th July - 14th July"
 title: "Weekly Update"
 author: "Manav Seksaria"
 from: "MCQuICC, IIT Madras"
 ---
 
 ===
+
+## QAOA Denoising
+I built the QAOA and ran some preliminary tests on it, however it seems our Denoiser may not be suitable for it since:
+- QAOA returns bit strings i.e individual states for each Qubit so say [1, 0, 1] or (Up, Down, Up) for 3 Qubits after the minimisation
+- Our Denoiser on the other hand runs on probabilities of each state. So it operates on [0.25, 0.33, 0.66] or (25% Chance Up, 33% Up, 66% Up) for 3 Qubits
 
 ## Code Syntax Test
 This is a test

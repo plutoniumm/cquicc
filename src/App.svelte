@@ -15,7 +15,7 @@
   const write = (text) => {
     const { meta, html } = render(text);
 
-    console.log(meta);
+    localStorage.setItem("cquicc-code", text);
 
     doc.open();
     doc.write(html);
@@ -32,7 +32,12 @@
 
   onMount(() => {
     if (!doc) doc = frame.contentWindow.document;
-    write(Template);
+    const code = localStorage.getItem("cquicc-code");
+
+    if (code) {
+      write(code);
+      value = code;
+    } else write(Template);
   });
 
   const print = () => window.frames[0].print();
