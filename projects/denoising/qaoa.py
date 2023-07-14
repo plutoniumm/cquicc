@@ -60,11 +60,6 @@ print("Running sampler")
 samp_dist = sampler.run(qc, shots=int(1024)).result().quasi_dists[0]
 print(samp_dist)
 
-probs = samp_dist.data;
-
-# list all keys on samp_dist object
-print(samp_dist.keys())
-
-bitwise = getBitwise(probs, 32)
+bitwise = getBitwise(samp_dist, 10)
 
 print(bitwise)
