@@ -36,7 +36,13 @@
   });
 
   const print = () => window.frames[0].print();
+
+  const keyup = (e) => {
+    if (e.key === "p" && e.ctrlKey) print();
+  };
 </script>
+
+<svelte:window on:keyup={keyup} />
 
 <div class="f j-ar p-fix" id="funcs">
   <div class="rx10 ptr" on:click={print}>print</div>

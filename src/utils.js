@@ -36,7 +36,7 @@ export const render = ( text ) => {
   text = text
     .replaceAll( "/===", "</div></section>" )
     .replaceAll( "===", "<section class='split'><div>" )
-    .replaceAll( "+++", "</div><div>" );
+    .replaceAll( "+++", "\n\n</div><div>\n\n" );
 
   const [ , meta, ...rest ] = text.split( "---" );
 

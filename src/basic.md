@@ -28,9 +28,7 @@ Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptates inventore l
 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam repellat quae qui obcaecati ipsam sapiente sequi delectus minus dicta esse?
 
 # Math Test with Katex
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi in ipsum iure est officia ut, excepturi rerum esse cum, delectus dolorem nam minima reiciendis. Quod accusantium commodi inventore ab enim eaque atque quidem maiores perferendis sequi! Laborum nobis voluptatem repellendus mollitia. Obcaecati, a totam dolorum odio itaque quas reprehenderit dicta iure laboriosam libero earum corrupti fugiat possimus pariatur rem, esse eos! Expedita veritatis facilis vel hic, soluta officia accusantium eum possimus cumque atque magnam aperiam voluptas, accusamus error, obcaecati laudantium.
-
-+++
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi in ipsum iure est officia ut, excepturi rerum esse cum, delectus dolorem nam minima reiciendis.+++Quod accusantium commodi inventore ab enim eaque atque quidem maiores perferendis sequi! Laborum nobis voluptatem repellendus mollitia. Obcaecati, atotam dolorum odio itaque quas reprehenderit dicta iure laboriosam libero earum corrupti fugiat possimus pariatur rem, esse eos! Expedita veritatis facilis vel hic, soluta officia accusantium eum possimus cumque atque magnam aperiam voluptas, accusamus error, obcaecati laudantium.
 
 $$
 \begin{aligned}

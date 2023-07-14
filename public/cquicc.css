@@ -12,15 +12,27 @@ body {
   width: 100%;
   margin: 0;
   background: #fff;
+  counter-reset: page;
 }
 
+/* .split will also act as a page counter */
 .split {
   display: flex;
   justify-content: space-between;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: auto;
+  margin: 5px 0;
   border-bottom: 2px solid #000;
+}
+
+.split::after {
+  counter-increment: page;
+  display: block;
+  content: counter(page);
+  position: absolute;
+  right: 3em;
+  bottom: 3.5em;
+  font: 700 16px Times;
 }
 
 .split>div {
@@ -67,13 +79,4 @@ hr {
 
 .katex-html {
   display: none;
-}
-
-.split-container {
-  display: flex;
-}
-
-.split-container>div {
-  flex: 1;
-  overflow: auto;
 }
