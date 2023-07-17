@@ -1,4 +1,4 @@
-import os
+import subprocess
 from sanic import Sanic
 from sanic.response import (
   text, json, html, file_stream
@@ -18,31 +18,51 @@ async def index(request):
 
 @app.post("/rce")
 async def rce(request):
+    # data = request.json
     data = request.body.decode()
 
     if not data:
         return json(
           {"error": "No command provided"},
-          status_code=400
+          status=400
         )
 
     try:
-        print(f"Executing command: {data}")
-        result = os.system(data)
-        return json(
-          {"result": result},
-          status_code=200
+       print(f"Executing command: {data}")
+       result = subprocess.Popen(
+          data,
+          stdout=subprocess.PIPE,
+          stderr=subprocess.PIPE,
+          shell=True,
+          text=True,
+          universal_newlines=True
         )
-    except Exception as e:
+       out, err = result.communicate()
+
+       if result.returncode != 0:
+          return json(
+            {"error": result.stderr},
+            status=400
+          )
+       else:
+          return json(
+            {"result": result.stdout},
+            status=200
+          )
+
+    except subprocess.CalledProcessError as e:
+        print("EXPLOSIOSOSKJWSNSNNNNNNN")
         return json(
-          {"error": str(e)},
-          status_code=500
+          {"error": e.stderr},
+          status=400
         )
+
 
 if __name__ == "__main__":
   print(f"Starting RedPitaya Server on port {PORT}");
   app.run(
     host='0.0.0.0',
     port=PORT,
-    access_log=False
+    access_log=True,
+    debug=True
   );
