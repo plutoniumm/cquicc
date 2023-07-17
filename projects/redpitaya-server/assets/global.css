@@ -1,3 +1,25 @@
-h1 {
-  color: #faa;
+body {
+  background: #f5f5f7;
+  width: min(600px, 100%);
+}
+
+h2 {
+  margin: 1em 0 5px 0;
+}
+
+#rce {
+  width: auto;
+  background: #222;
+  color: #fff;
+}
+
+textarea {
+  width: calc(100% - 20px);
+  font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #2f2;
+}
+
+textarea::placeholder {
+  color: #888;
 }
