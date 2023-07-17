@@ -37,7 +37,7 @@ a:visited {
   content: counter(page);
   position: absolute;
   right: 3em;
-  bottom: 3.5em;
+  bottom: 2.5em;
   font: 700 16px Times;
 }
 
