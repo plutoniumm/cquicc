@@ -4,6 +4,8 @@ from sanic.response import (
   text, json, html, file_stream
 );
 
+from commands import blink
+
 PORT=1337;
 
 app = Sanic("redpitaya");
@@ -15,6 +17,12 @@ app.static("/assets", "./assets", name="assets");
 async def index(request):
     return html("<h1>RedPitaya Server</h1>");
 
+@app.get("/blink")
+async def blink_led(request):
+    # (waits, loops)
+    blink(2, 5);
+    return json({"status": "success"});
+
 
 @app.post("/rce")
 async def rce(request):
@@ -22,10 +30,7 @@ async def rce(request):
     data = request.body.decode()
 
     if not data:
-        return json(
-          {"error": "No command provided"},
-          status=400
-        )
+        return json({"error": "Got no cmd"}, 400)
 
     try:
        print(f"Executing command: {data}")
@@ -40,22 +45,13 @@ async def rce(request):
        out, err = result.communicate()
 
        if result.returncode != 0:
-          return json(
-            {"error": result.stderr},
-            status=400
-          )
+          return json({"error": err}, 400)
        else:
-          return json(
-            {"result": result.stdout},
-            status=200
-          )
+          return json({"result": out})
 
     except subprocess.CalledProcessError as e:
-        print("EXPLOSIOSOSKJWSNSNNNNNNN")
-        return json(
-          {"error": e.stderr},
-          status=400
-        )
+        print("EXPLOSIONN")
+        return json({"error": e.stderr}, 400)
 
 
 if __name__ == "__main__":
