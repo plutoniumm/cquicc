@@ -1,4 +1,5 @@
 import subprocess;
+from commands import check_scpi;
 
 def cli(command:str):
     print(f"Running command: {command}")
@@ -20,3 +21,17 @@ def cli(command:str):
     except Exception as e:
         print("EXPLOSIONN")
         return False, e;
+
+def run_scpi():
+    running = check_scpi();
+    if running:
+        return True, "SCPI Server already running";
+
+    success, out = cli("systemctl enable redpitaya_scpi");
+    if not success:
+        return False, "Unable to enable scpi service";
+
+    if "Created symlink" in out:
+        return True, "SCPI Service enabled";
+    else:
+        return False, "Unable to enable scpi service";

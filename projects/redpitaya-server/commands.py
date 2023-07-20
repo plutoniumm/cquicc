@@ -31,7 +31,7 @@ def blink(interval:int, iters: int)->None:
     return False
 
 # check if scpi server running
-def ind():
+def check_scpi():
   print("Checking if SCPI server is running")
   try:
     rp_s.tx_txt("*IDN?")
