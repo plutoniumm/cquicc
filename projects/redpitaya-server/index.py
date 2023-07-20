@@ -4,7 +4,8 @@ from sanic.response import (
   text, json, html, file_stream
 );
 
-from commands import blink;
+from utils import cli;
+from commands import blink, ind;
 
 PORT=1337;
 
@@ -23,11 +24,19 @@ async def index(request):
 @app.get("/blink")
 async def blink_led(request):
     # (waits, loops)
-    check = blink(2, 5);
+    check = blink(2, 3);
     if not check:
-      return html("<div style='color:red'>Couldn't Blink</div>")
+      return html("<div style='color:#f22'>Couldn't Blink</div>")
     else:
-      return html("<div style='color:green'>Blunk LED</div>")
+      return html("<div style='color:#2f2'>Blunk LED</div>")
+
+@app.head("/scpi")
+async def scpi(request):
+    running = ind();
+    if not running:
+      return err("SCPI server is not running", 400);
+    else:
+      return json({"status": "running"});
 
 
 @app.post("/rce")
@@ -38,27 +47,11 @@ async def rce(request):
     if not data:
         return err("Got no cmd");
 
-    try:
-       print(f"Executing command: {data}")
-       result = subprocess.Popen(
-          data,
-          stdout=subprocess.PIPE,
-          stderr=subprocess.PIPE,
-          shell=True,
-          text=True,
-          universal_newlines=True
-        );
-       out, error = result.communicate();
-
-       if result.returncode != 0:
-          return err(error);
-       else:
-          return json({"result": out});
-
-    except subprocess.CalledProcessError as e:
-        print("EXPLOSIONN")
-        return err(e.stderr);
-
+    success, output = cli(data);
+    if not success:
+        return err(output);
+    else:
+        return json({"result": output});
 
 if __name__ == "__main__":
   print(f"Starting RedPitaya Server on port {PORT}");

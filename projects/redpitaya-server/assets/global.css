@@ -13,13 +13,21 @@ h2 {
   color: #fff;
 }
 
-textarea {
+.result {
+  border-radius: 5px;
+  margin: 5px;
   width: calc(100% - 20px);
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
-  color: #2f2;
+  background: #222;
+  color: #888;
 }
 
-textarea::placeholder {
-  color: #888;
+button {
+  /* rpm-10 b0 */
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+  min-width: 100px;
+  background: #aaf;
 }

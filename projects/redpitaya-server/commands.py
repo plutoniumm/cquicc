@@ -10,6 +10,7 @@ LED:HB - Red LED | Board Activity LED
 LED:ETH - Ethernet LED
 """
 
+# toggle led blink
 def blink(interval:int, iters: int)->None:
   print("Blinking LED1")
   success = 0
@@ -27,4 +28,15 @@ def blink(interval:int, iters: int)->None:
     return True
   else:
     print("Failed to blink LED1")
+    return False
+
+# check if scpi server running
+def ind():
+  print("Checking if SCPI server is running")
+  try:
+    rp_s.tx_txt("*IDN?")
+    print("SCPI server is running")
+    return True
+  except:
+    print("SCPI server is not running")
     return False

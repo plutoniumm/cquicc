@@ -1,21 +1,20 @@
-// preventdefault
-// const form = document.querySelector( "#rce" );
-// function runRCE ( e ) {
-//   e.preventDefault();
-//   const code = document.querySelector( '#rce-code' ).value
-//   console.log( code );
+const base = new URL( window.location.href )
 
-//   fetch( '/rce', {
-//     method: 'POST',
-//     // body: JSON.stringify( code.split( ' ' ) )
-//     body: code
-//   } )
-//     .then( res => res.text() )
-//     .then( res => {
-//       console.log( res );
-//     } )
-//     .catch( err => {
-//       console.log( err );
-//     } );
-// };
-// form.addEventListener( 'submit', runRCE );
+async function check_scpi () {
+  const host = "/scpi";
+
+  const response = await fetch( host, { method: 'HEAD' } );
+
+  return response.status === 200;
+};
+
+check_scpi().then( ( scpi ) => {
+  console.log( "SCPI:", scpi );
+} );
+
+document.querySelectorAll( '[tx]' ).forEach( el => {
+  el.style.color = el.getAttribute( 'tx' );
+} );
+document.querySelectorAll( '[bg]' ).forEach( el => {
+  el.style.backgroundColor = el.getAttribute( 'bg' );
+} );
