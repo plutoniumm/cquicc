@@ -1,10 +1,10 @@
-import subprocess
-from sanic import Sanic
+import subprocess;
+from sanic import Sanic;
 from sanic.response import (
   text, json, html, file_stream
 );
 
-from commands import blink
+from commands import blink;
 
 PORT=1337;
 
@@ -13,6 +13,9 @@ app = Sanic("redpitaya");
 app.static("/", "./index.html");
 app.static("/assets", "./assets", name="assets");
 
+def err(text: str, code: int=500):
+  return json({"error": text}, code);
+
 @app.get("/get")
 async def index(request):
     return html("<h1>RedPitaya Server</h1>");
@@ -20,17 +23,20 @@ async def index(request):
 @app.get("/blink")
 async def blink_led(request):
     # (waits, loops)
-    blink(2, 5);
-    return json({"status": "success"});
+    check = blink(2, 5);
+    if not check:
+      return html("<div style='color:red'>Couldn't Blink</div>")
+    else:
+      return html("<div style='color:green'>Blunk LED</div>")
 
 
 @app.post("/rce")
 async def rce(request):
     # data = request.json
-    data = request.body.decode()
+    data = request.body.decode();
 
     if not data:
-        return json({"error": "Got no cmd"}, 400)
+        return err("Got no cmd");
 
     try:
        print(f"Executing command: {data}")
@@ -41,17 +47,17 @@ async def rce(request):
           shell=True,
           text=True,
           universal_newlines=True
-        )
-       out, err = result.communicate()
+        );
+       out, error = result.communicate();
 
        if result.returncode != 0:
-          return json({"error": err}, 400)
+          return err(error);
        else:
-          return json({"result": out})
+          return json({"result": out});
 
     except subprocess.CalledProcessError as e:
         print("EXPLOSIONN")
-        return json({"error": e.stderr}, 400)
+        return err(e.stderr);
 
 
 if __name__ == "__main__":

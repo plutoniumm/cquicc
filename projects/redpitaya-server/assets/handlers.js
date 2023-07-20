@@ -1,5 +1,5 @@
 // preventdefault
-const form = document.querySelector( "#rce" );
+// const form = document.querySelector( "#rce" );
 // function runRCE ( e ) {
 //   e.preventDefault();
 //   const code = document.querySelector( '#rce-code' ).value

@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="/assets/atomic.css">
   <link rel="stylesheet" href="/assets/global.css">
 
+  <script src="https://unpkg.com/htmx.org@1.9.3"
+    integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
+    crossorigin="anonymous"></script>
+
   <title>Redpitaya LocalServer</title>
 </head>
 
@@ -27,7 +31,14 @@
   </form> -->
 
   <h2>Specific Functions</h2>
-  <p>Not made yet</p>
+  <main>
+    <section>
+      <h3>Blink LED</h3>
+      <button id="blink" hx-get="/blink" hx-target="#led-result" hx-swap="innerHTML" hx-trigger="click">Blink
+        LED1</button>
+      <div id="led-result"></div>
+    </section>
+  </main>
 
   <script src="/assets/handlers.js"></script>
 </body>
