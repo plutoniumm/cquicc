@@ -198,70 +198,65 @@ class scpi (object):
         try:
             assert func.upper() in waveform_list
         except AssertionError as waveform_err:
-            raise ValueError(f"{func.upper()} is not a defined waveform") from waveform_err
+            print(func.upper(), "is not a defined waveform")
 
         try:
             assert freq_down_lim < freq <= freq_up_lim
         except AssertionError as freq_err:
-            raise ValueError(f"Frequency is out of range {freq_down_lim, freq_up_lim} Hz") from freq_err
+            print("Frequency out of range", freq_down_lim, freq_up_lim)
 
         try:
             assert abs(volt) <= volt_lim
         except AssertionError as ampl_err:
-            raise ValueError(f"Amplitude is out of range {-volt_lim, volt_lim} V") from ampl_err
+            print("Amplitude out of range", -volt_lim, volt_lim)
 
         try:
             assert abs(offset) <= offs_lim
         except AssertionError as offs_err:
-            raise ValueError(f"Offset is out of range {-offs_lim, offs_lim} V") from offs_err
+            print("Offset out of range", -offs_lim, offs_lim)
 
         try:
             assert 0 <= dcyc <= 1
         except AssertionError as dcyc_err:
-            raise ValueError(f"Duty Cycle is out of range {0, 1}") from dcyc_err
+            print("Duty cycle out of range", 0, 1)
 
         try:
             assert abs(phase) <= phase_lim
         except AssertionError as phase_err:
-            raise ValueError(f"Phase is out of range {-phase_lim, phase_lim} deg") from phase_err
+            print("Phase out of range", -phase_lim, phase_lim)
 
         if data is not None:
 
             try:
                 assert data.shape[0] <= buff_size
             except AssertionError as data_err:
-                raise ValueError(f"Data array is too long. Max length is {buff_size}") from data_err
-
-            #try:
-            #    assert max(absolute(data)) <= volt_lim
-            #except AssertionError:
-            #    raise ValueError(f"Amplitude of data is out of range {-volt_lim, volt_lim}")
+                print("Data length out of range. Max: ", buff_size)
 
         try:
             assert ncyc >= 1
         except AssertionError as ncyc_err:
-            raise ValueError("NCYC minimum is 1") from ncyc_err
+            print("NCYC minimum is 1")
 
         try:
             assert nor >= 1
         except AssertionError as nor_err:
-            raise ValueError("NOR minimum is 1") from nor_err
+            print("NOR minimum is 1")
 
         if period is not None:
             try:
                 assert period >= 1
             except AssertionError as period_err:
-                raise ValueError("Minimal burst period 1 µs") from period_err
+                print("Period needs to be greater than 1 µs")
 
         try:
             assert trig.upper() in trigger_list
         except AssertionError as trig_err:
-            raise ValueError(f"{trig.upper()} is not a defined trigger source") from trig_err
+            print(trig.upper(), "is not a defined trigger source")
 
         try:
             assert not((siglab is True) and (sdrlab is True))
         except AssertionError as board_err:
-            raise ValueError("Please select only one board option. 'siglab' and 'sdrlab' cannot be true at the same time.") from board_err
+            print("Please select only one board option. 'siglab' and 'sdrlab' cannot be true at the same time.")
 
 
 
@@ -270,38 +265,38 @@ class scpi (object):
 
 
         ### SEND COMMANDS TO RP ###
-        self.tx_txt(f"SOUR{chan}:FUNC {func.upper()}")
-        self.tx_txt(f"SOUR{chan}:VOLT {volt}")
+        self.tx_txt("SOUR{0}:FUNC {1}".format(chan, func.upper()))
+        self.tx_txt("SOUR{0}:VOLT {1}".format(chan, volt))
 
         if func.upper() not in waveform_list[7:9]:
-            self.tx_txt(f"SOUR{chan}:FREQ:FIX {freq}")
+            self.tx_txt("SOUR{0}:FREQ:FIX {1}".format(chan, freq))
 
-        self.tx_txt(f"SOUR{chan}:VOLT:OFFS {offset}")
-        self.tx_txt(f"SOUR{chan}:PHAS {phase}")
+        self.tx_txt("SOUR{0}:VOLT:OFFS {1}".format(chan, offset))
+        self.tx_txt("SOUR{0}:PHAS {1}".format(chan, phase))
 
         if func.upper() == "PWM":
-            self.tx_txt(f"SOUR{chan}:DCYC {dcyc}")
+            self.tx_txt("SOUR{0}:DCYC {1}".format(chan, dcyc))
 
         if (data is not None) and (func.upper() == "ARBITRARY"):
+            wf_data = []
             for n in data:
-                wf_data.append(f"{n:.5f}")
+                wf_data.append("{:.5f}".format(n))
             cust_wf = ", ".join(map(str, wf_data))
 
-            self.tx_txt(f"SOUR{chan}:TRAC:DATA:DATA {cust_wf}")
+            self.tx_txt("SOUR{0}:TRAC:DATA:DATA {1}".format(chan, cust_wf))
 
         if burst:
-            self.tx_txt(f"SOUR{chan}:BURS:STAT BURST")
-            self.tx_txt(f"SOUR{chan}:BURS:NCYC {ncyc}")
-            self.tx_txt(f"SOUR{chan}:BURS:NOR {nor}")
+            self.tx_txt("SOUR{0}:BURS:STAT BURST".format(chan))
+            self.tx_txt("SOUR{0}:BURS:NCYC {1}".format(chan, ncyc))
+            self.tx_txt("SOUR{0}:BURS:NOR {1}".format(chan, nor))
 
             if period is not None:
-                self.tx_txt(f"SOUR{chan}:BURS:INT:PER {period}")
+                self.tx_txt("SOUR{0}:BURS:INT:PER {1}".format(chan, period))
         else:
-            self.tx_txt(f"SOUR{chan}:BURS:STAT CONTINUOUS")
+            self.tx_txt("SOUR{0}:BURS:STAT CONTINUOUS".format(chan))
 
-        self.tx_txt(f"SOUR{chan}:TRIG:SOUR {trig.upper()}")
+        self.tx_txt("SOUR{0}:TRIG:SOUR {1}".format(chan, trig.upper()))
 
-        #print(f"SOUR{chan} set successfully")
 
     def acq_set(
         self,
@@ -405,62 +400,52 @@ class scpi (object):
                     trig_lvl_lim = 20.0
                     gain_lvl = "HV"
 
-        ### CHECK FOR ERRORS ###
-        #try:
-        #    assert dec in decimation_list
-        #except AssertionError as dec_err:
-        #        raise ValueError(f"Decimation needs to be a power of 2 {1, 65536}")
-
         try:
             assert abs(trig_lvl) <= trig_lvl_lim
         except AssertionError as trig_err:
-            raise ValueError(f"Trigger level out of range {-trig_lvl_lim, trig_lvl_lim} V",
-                             f"for gain {gain_lvl}") from trig_err
+            print("Trigger level out of range", -trig_lvl_lim, trig_lvl_lim, "V for gain", gain_lvl)
 
         try:
             assert trig_delay >= 0
         except AssertionError as trig_dly_err:
-            raise ValueError("Trigger delay cannot be less that 0") from trig_dly_err
+            print("Trigger delay needs to be greater than 0")
 
         if units is not None:
             try:
                 assert units.upper() in units_list
             except AssertionError as unit_err:
-                raise ValueError(f"{units.upper()} is not a defined unit") from unit_err
+                print(units.upper(), "is not a defined unit")
 
         if sample_format is not None:
             try:
                 assert sample_format.upper() in format_list
             except AssertionError as format_err:
-                raise ValueError(f"{sample_format.upper()} is not a defined format") from format_err
+                print(sample_format.upper(), "is not a defined format")
 
         if gain is not None:
             try:
                 assert (gain[0].upper() in gain_list) and (gain[1].upper() in gain_list)
             except AssertionError as gain_err:
-                raise ValueError(f"{gain[0].upper()} or {gain[1].upper()} is not a defined gain") from gain_err
+                print(gain[0].upper(), "or", gain[1].upper(), "is not a defined gain")
 
         if siglab and coupling is not None:
             try:
                 assert (coupling[0].upper() in coupling_list) and (coupling[1].upper() in coupling_list)
             except AssertionError as coupling_err:
-                raise ValueError(f"{coupling[0].upper()} or {coupling[1].upper()}",
-                                 "is not a defined coupling") from coupling_err
+                print(coupling[0].upper(), "or", coupling[1].upper(), "is not a defined coupling")
             try:
                 assert abs(ext_trig_lvl) <= trig_lvl_lim
             except AssertionError as ext_trig_err:
-                raise ValueError("External trigger level out of range",
-                                 f"{-trig_lvl_lim, trig_lvl_lim} V") from ext_trig_err
+                print("External trigger level out of range", -trig_lvl_lim, trig_lvl_lim, "V")
 
         try:
             assert not((siglab is True) and (input4 is True))
         except AssertionError as board_err:
-            raise ValueError("Please select only one board option.",
-                             "'siglab' and 'input4' cannot be true at the same time.") from board_err
+            print("Please select only one board option. 'siglab' and 'input4' cannot be true at the same time.")
 
 
         ### SEND COMMANDS TO RP ###
-        self.tx_txt(f"ACQ:DEC {dec}")
+        self.tx_txt("ACQ:DEC {}".format(dec))
 
         if averaging:
             self.tx_txt("ACQ:AVG ON")
@@ -468,26 +453,27 @@ class scpi (object):
             self.tx_txt("ACQ:AVG OFF")
 
         if trig_delay_ns:
-            self.tx_txt(f"ACQ:TRIG:DLY:NS {trig_delay}")
+            self.tx_txt("ACQ:TRIG:DLY:NS {}".format(trig_delay))
         else:
-            self.tx_txt(f"ACQ:TRIG:DLY {trig_delay}")
+            self.tx_txt("ACQ:TRIG:DLY {}".format(trig_delay))
 
         if units is not None:
-            self.tx_txt(f"ACQ:DATA:UNITS {units.upper()}")
+            self.tx_txt("ACQ:DATA:UNITS {}".format(units.upper()))
         if sample_format is not None:
-            self.tx_txt(f"ACQ:DATA:FORMAT {sample_format.upper()}")
+            self.tx_txt("ACQ:DATA:FORMAT {}".format(sample_format.upper()))
 
         if gain is not None:
             for i in range(n):
-                self.tx_txt(f"ACQ:SOUR{i+1}:GAIN {gain[i].upper()}")
+                self.tx_txt("ACQ:SOUR{}:GAIN {}".format(i + 1, gain[i].upper()))
 
-        self.tx_txt(f"ACQ:TRIG:LEV {trig_lvl}")
+        self.tx_txt("ACQ:TRIG:LEV {}".format(trig_lvl))
 
         if siglab and coupling is not None:
             for i in range(n):
-                self.tx_txt(f"ACQ:SOUR{i+1}:COUP {coupling[i].upper()}")
+                self.tx_txt("ACQ:SOUR{}:COUP {}".format(i + 1, coupling[i].upper()))
 
-            self.tx_txt(f"ACQ:TRIG:EXT:LEV {ext_trig_lvl}")
+            self.tx_txt("ACQ:TRIG:EXT:LEV {}".format(ext_trig_lvl))
+
 
         #print("ACQ set successfully")
 
@@ -547,32 +533,32 @@ class scpi (object):
         settings.append(self.txrx_txt("ACQ:BUF:SIZE?"))
 
         for i in range(n):
-            settings.append(self.txrx_txt(f"ACQ:SOUR{i+1}:GAIN?"))
+            settings.append(self.txrx_txt("ACQ:SOUR{}:GAIN?".format(i+1)))
 
         if siglab:
             for i in range(2):
-                settings.append(self.txrx_txt(f"ACQ:SOUR{i+1}:COUP?"))
+                settings.append(self.txrx_txt("ACQ:SOUR{}:COUP?".format(i+1)))
 
             settings.append(self.txrx_txt("ACQ:TRIG:EXT:LEV?"))
 
-
-        print(f"Decimation: {settings[0]}")
-        print(f"Averaging: {settings[1]}")
-        print(f"Trigger delay (samples): {settings[2]}")
-        print(f"Trigger delay (ns): {settings[3]}")
-        print(f"Trigger level (V): {settings[4]}")
-        print(f"Buffer size: {settings[5]}")
+        print("Decimation: {}".format(settings[0]))
+        print("Averaging: {}".format(settings[1]))
+        print("Trigger delay (samples): {}".format(settings[2]))
+        print("Trigger delay (ns): {}".format(settings[3]))
+        print("Trigger level (V): {}".format(settings[4]))
+        print("Buffer size: {}".format(settings[5]))
 
         if input4:
-            print(f"Gain CH1/CH2/CH3/CH4: {settings[6]}, {settings[7]}, {settings[8]}, {settings[9]}")
+            print("Gain CH1/CH2/CH3/CH4: {}, {}, {}, {}".format(settings[6], settings[7], settings[8], settings[9]))
         else:
-            print(f"Gain CH1/CH2: {settings[6]}, {settings[7]}")
+            print("Gain CH1/CH2: {}, {}".format(settings[6], settings[7]))
 
         if siglab:
-            print(f"Coupling CH1/CH2: {settings[8]}, {settings[9]}")
-            print(f"External trigger level (V): {settings[10]}")
+            print("Coupling CH1/CH2: {}, {}".format(settings[8], settings[9]))
+            print("External trigger level (V): {}".format(settings[10]))
 
         return settings
+
 
     def acq_data(
         self,
@@ -654,19 +640,19 @@ class scpi (object):
             try:
                 assert 16384 >= start >= 0
             except AssertionError as start_err:
-                raise ValueError(f"Start position out of range {low_lim, up_lim}") from start_err
+                print("Start position out of range", low_lim, up_lim)
 
         if end is not None:
             try:
                 assert 16384 >= end >= 0
             except AssertionError as end_err:
-                raise ValueError(f"End position out of range {low_lim, up_lim}") from end_err
+                print("End position out of range", low_lim, up_lim)
 
         if num_samples is not None:
             try:
                 assert 16384 >= num_samples >= 0
             except AssertionError as sample_err:
-                raise ValueError(f"Sample number out of range {low_lim, up_lim}") from sample_err
+                print("Number of samples out of range", low_lim, up_lim)
 
         # Get data type from Red Pitaya
         units = self.txrx_txt('ACQ:DATA:UNITS?')
@@ -674,20 +660,17 @@ class scpi (object):
 
 
         # Determine the output data
-        if(start is not None) and (end is not None):
-            self.tx_txt(f"ACQ:SOUR{chan}:DATA:STA:END? {start},{end}")
-
-        elif(start is not None) and (num_samples is not None):
-            self.tx_txt(f"ACQ:SOUR{chan}:DATA:STA:N? {start},{num_samples}")
-
+        if (start is not None) and (end is not None):
+            self.tx_txt("ACQ:SOUR{}:DATA:STA:END? {},{}".format(chan, start, end))
+        elif (start is not None) and (num_samples is not None):
+            self.tx_txt("ACQ:SOUR{}:DATA:STA:N? {},{}".format(chan, start, num_samples))
         elif old and (num_samples is not None):
-            self.tx_txt(f"ACQ:SOUR{chan}:DATA:OLD:N? {num_samples}")
-
+            self.tx_txt("ACQ:SOUR{}:DATA:OLD:N? {}".format(chan, num_samples))
         elif lat and (num_samples is not None):
-            self.tx_txt(f"ACQ:SOUR{chan}:DATA:LAT:N? {num_samples}")
-
+            self.tx_txt("ACQ:SOUR{}:DATA:LAT:N? {}".format(chan, num_samples))
         else:
-            self.tx_txt(f"ACQ:SOUR{chan}:DATA?")
+            self.tx_txt("ACQ:SOUR{}:DATA?".format(chan))
+
 
         # Convert data
         if binary:
@@ -741,36 +724,37 @@ class scpi (object):
         try:
             assert speed in speed_list
         except AssertionError as speed_err:
-            raise ValueError(f"{speed} is not a defined speed for UART connection. Please check the speed table.") from speed_err
+            print(speed, "is not a defined speed for UART connection. Please check the speed table.")
 
         try:
             assert bits in database_list
         except AssertionError as bits_err:
-            raise ValueError(f"{bits} is not a defined character size.") from bits_err
+            print(bits, "is not a defined character size.")
 
         try:
             assert parity in parity_list
         except AssertionError as parity_err:
-            raise ValueError(f"{parity} is not a defined parity.") from parity_err
+            print(parity, "is not a defined parity.")
 
         try:
             assert stop in (1,2)
         except AssertionError as stop_err:
-            raise ValueError("The number of stop bits can only be 1 or 2") from stop_err
+            print("The number of stop bits can only be 1 or 2")
 
         try:
             assert 0 <= timeout <= 255
         except AssertionError as timeout_err:
-            raise ValueError(f"Timeout {timeout} is out of range [0, 255]") from timeout_err
+            print("Timeout out of range. Please select a value between 0 and 255.")
 
         # Configuring UART
 
         self.tx_txt("UART:INIT")
-        self.tx_txt(f"UART:SPEED {speed}")
-        self.tx_txt(f"UART:BITS {bits.upper()}")
-        self.tx_txt(f"UART:STOPB STOP{stop}")
-        self.tx_txt(f"UART:PARITY {parity.upper()}")
-        self.tx_txt(f"UART:TIMEOUT {timeout}")
+        self.tx_txt("UART:SPEED {}".format(speed))
+        self.tx_txt("UART:BITS {}".format(bits.upper()))
+        self.tx_txt("UART:STOPB STOP{}".format(stop))
+        self.tx_txt("UART:PARITY {}".format(parity.upper()))
+        self.tx_txt("UART:TIMEOUT {}".format(timeout))
+
 
         self.tx_txt("UART:SETUP")
         print("UART is configured")
@@ -784,8 +768,6 @@ class scpi (object):
         [speed, databits, stopbits, parity, timeout]
 
         """
-
-        # Configuring UART
 
         settings = []
 
@@ -801,11 +783,12 @@ class scpi (object):
         settings.append(self.txrx_txt("UART:PARITY?"))
         settings.append(self.txrx_txt("UART:TIMEOUT?"))
 
-        print(f"Baudrate/Speed: {settings[0]}")
-        print(f"Databits: {settings[1]}")
-        print(f"Stopbits: {settings[2]}")
-        print(f"Parity: {settings[3]}")
-        print(f"Timeout (0.1 sec): {settings[4]}")
+
+        print("Baudrate/Speed: {}".format(settings[0]))
+        print("Databits: {}".format(settings[1]))
+        print("Stopbits: {}".format(settings[2]))
+        print("Parity: {}".format(settings[3]))
+        print("Timeout (0.1 sec): {}".format(settings[4]))
 
         return settings
 
@@ -832,8 +815,8 @@ class scpi (object):
 
 
         # transforming and writing to UART
-        arr = ',#H'.join(format(x, 'X') for x in bytearray(string, f"{code}"))
-        self.tx_txt(f"UART:WRITE{len(string)} #H{arr}")
+        arr = ',#H'.join('{:X}'.format(x) for x in bytearray(string, '{}'.format(code)))
+        self.tx_txt('UART:WRITE{} #H{}'.format(len(string), arr))
 
         print("String sent")
 
@@ -857,7 +840,7 @@ class scpi (object):
         except AssertionError as length_err:
             raise ValueError("Length must be greater than 0.") from length_err
 
-        self.tx_txt(f"UART:READ{length}")
+        self.tx_txt("UART:READ{}".format(length))
         res = self.rx_txt()
         res = res.strip('{}\n\r').replace("  ", "").split(',')
         string = "".join(chr(int(x)) for x in res)  # int(x).decode("utf8")
@@ -902,30 +885,31 @@ class scpi (object):
         try:
             assert spi_mode.upper() in spi_mode_list
         except AssertionError as spi_mode_err:
-            raise ValueError(f"{spi_mode} is not a defined SPI mode.") from spi_mode_err
+            print(spi_mode.upper(), "is not a defined SPI mode.")
 
         try:
             assert cs_mode.upper() in cs_mode_list
         except AssertionError as cs_err:
-            raise ValueError(f"{cs_mode} is not a defined CS mode.") from cs_err
+            print(cs_mode.upper(), "is not a defined CS mode.")
 
         try:
             assert speed_min_limit <= speed <= speed_max_limit
         except AssertionError as speed_err:
-            raise ValueError(f"{speed} is out of range [{speed_min_limit},{speed_max_limit}].") from speed_err
+            print("Speed out of range [", speed_min_limit, speed_max_limit, "]")
 
         try:
             assert word_len >= bits_min_limit
         except AssertionError as bits_err:
-            raise ValueError(f"Word length must be greater than {bits_min_limit}. Current word length: {word_len}") from bits_err
+            print("Word length must be greater than", bits_min_limit, ". Current word length:", word_len)
 
 
         # Configuring SPI
 
-        self.tx_txt(f"SPI:SET:MODE {spi_mode.upper()}")
-        self.tx_txt(f"SPI:SET:CSMODE {cs_mode.upper()}")
-        self.tx_txt(f"SPI:SET:SPEED {speed}")
-        self.tx_txt(f"SPI:SET:WORD {word_len}")
+        self.tx_txt("SPI:SET:MODE {}".format(spi_mode.upper()))
+        self.tx_txt("SPI:SET:CSMODE {}".format(cs_mode.upper()))
+        self.tx_txt("SPI:SET:SPEED {}".format(speed))
+        self.tx_txt("SPI:SET:WORD {}".format(word_len))
+
 
         self.tx_txt("SPI:SET:SET")
         print("SPI is configured")
@@ -951,11 +935,12 @@ class scpi (object):
         settings.append(self.txrx_txt("SPI:SET:WORD?"))
         settings.append(self.txrx_txt("SPI:MSG:SIZE?"))
 
-        print(f"SPI mode: {settings[0]}")
-        print(f"CS mode: {settings[1]}")
-        print(f"Speed: {settings[2]}")
-        print(f"Word length: {settings[3]}")
-        print(f"Message queue length: {settings[4]}")
+
+        print("SPI mode: {}".format(settings[0]))
+        print("CS mode: {}".format(settings[1]))
+        print("Speed: {}".format(settings[2]))
+        print("Word length: {}".format(settings[3]))
+        print("Message queue length: {}".format(settings[4]))
 
         return settings
 
