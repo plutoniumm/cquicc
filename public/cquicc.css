@@ -41,6 +41,11 @@ a:visited {
   font: 700 16px Times;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .split>div {
   width: 49%;
   max-width: 49%;

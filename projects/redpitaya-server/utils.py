@@ -23,6 +23,7 @@ def cli(command:str):
         return False, e;
 
 def run_scpi():
+    return True, "ok";
     running = check_scpi();
     if running:
         return True, "SCPI Server already running";
