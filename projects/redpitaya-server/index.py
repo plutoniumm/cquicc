@@ -33,11 +33,11 @@ async def blink_led(request):
       return html("<div style='color:#2f2'>Blunk LED</div>")
 
 if __name__ == "__main__":
-  print(f"Starting RedPitaya Server on port {PORT}");
+  print("Starting RedPitaya Server on port", PORT);
 
   running, output = run_scpi();
   if not running:
-    print(f"Unable to start scpi: {output}");
+    print("Unable to start scpi: ", output);
     exit(1);
 
   app.run(

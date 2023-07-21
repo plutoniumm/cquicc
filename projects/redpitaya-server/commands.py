@@ -16,12 +16,12 @@ def blink(interval:int, iters: int)->None:
   success = 0
   for _ in range(iters):
     sleep(interval)
-    rp_s.tx_txt(f"DIG:PIN LED1,1")
+    rp_s.tx_txt("DIG:PIN LED1,1")
     sleep(interval)
-    rp_s.tx_txt(f"DIG:PIN LED1,0")
+    rp_s.tx_txt("DIG:PIN LED1,0")
 
     success+=1
-    print(f"Blinked", iters)
+    print("Blinked", iters)
 
   if success == iters:
     print("Blinked LED1 successfully")

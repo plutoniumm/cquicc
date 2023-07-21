@@ -2,7 +2,7 @@ import subprocess;
 from commands import check_scpi;
 
 def cli(command:str):
-    print(f"Running command: {command}")
+    print("Running command: ",command)
     try:
         result = subprocess.Popen(
             command,
