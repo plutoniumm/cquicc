@@ -1,48 +1,50 @@
-from sanic import Sanic;
-from sanic.response import (
-  text, json, html, file_stream
-);
-
+import http.server
 from utils import run_scpi
-from commands import blink;
+from commands import blink
+from response import rJSON, rHTML, rText, div
 
-PORT=1337;
+PORT = 1337
 
-app = Sanic("redpitaya");
+class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
+    def log_message(self, format, *args):
+        return
+    def do_GET(self):
+        print("GET", self.path)
+        if self.path == '/':
+            return rHTML(self, open('index.html').read())
+        elif self.path.startswith('/assets/'):
+            file = self.path[1:]
+            print("File:", file)
+            return rText(self, open(file).read())
+        elif self.path == '/blink':
+            running, output = run_scpi()
+            if not running:
+                return rJSON(self, {"error": output}, 500)
+            else:
+                check = blink(2, 3)
 
-app.static("/", "./index.html");
-app.static("/assets", "./assets", name="assets");
+                response = div("Couldn't Blink","color:#f22") if not check else div("Blunk","color:#2f2")
 
-def err(text: str, code: int=500):
-  return json({"error": text}, code);
+                return rHTML(self, div(response))
+        else:
+            return rHTML(self, "<h1>404 Not Found</h1>", 404)
 
-@app.get("/get")
-async def index(request):
-    return html("<h1>RedPitaya Server</h1>");
 
-@app.get("/blink")
-async def blink_led(request):
-    running, output = run_scpi()
-    if not running:
-      return err(output, 500);
-
-    check = blink(2, 3);
-    if not check:
-      return html("<div style='color:#f22'>Couldn't Blink</div>")
-    else:
-      return html("<div style='color:#2f2'>Blunk LED</div>")
+def serve(port):
+    with http.server.HTTPServer(("", port), RedPitayaHandler) as httpd:
+        print("Serving at port", port)
+        httpd.serve_forever()
 
 if __name__ == "__main__":
-  print("Starting RedPitaya Server on port", PORT);
+    print("Starting RedPitaya Server on port", PORT)
 
-  running, output = run_scpi();
-  if not running:
-    print("Unable to start scpi: ", output);
-    exit(1);
+    running, output = run_scpi()
+    if not running:
+        print("Unable to start scpi:", output)
+        exit(1)
 
-  app.run(
-    host='0.0.0.0',
-    port=PORT,
-    access_log=True,
-    debug=True
-  );
+    try:
+        serve(PORT)
+    except KeyboardInterrupt:
+        print("Stopping RedPitaya Server")
+        exit(0)
