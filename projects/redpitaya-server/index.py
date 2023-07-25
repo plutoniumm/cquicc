@@ -33,10 +33,17 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
             print("No such path")
             return rHTML(self, "<h1>404 Not Found</h1>", 404)
 
+    def do_POST(self):
+        return rHTML(self, "<h1>404 Not Found</h1>", 404)
+    def do_PUT(self):
+        return rHTML(self, "<h1>404 Not Found</h1>", 404)
+    def do_DELETE(self):
+        return rHTML(self, "<h1>404 Not Found</h1>", 404)
+
 
 def serve(port):
     server_address = ('', port)
-    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+    httpd = HTTPServer(server_address, RedPitayaHandler)
     print("Serving at port", port)
     httpd.serve_forever()
 
