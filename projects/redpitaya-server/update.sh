@@ -1,6 +1,6 @@
-cd /webapps/
-rm -rf /webapps/cquicc /webapps/server
-git clone https://github.com/plutoniumm/cquicc.git
+cd /webapp/
+rm -rf /webapp/cquicc/ /webapp/server/
+git clone https://github.com/plutoniumm/cquicc.git --depth 1
 
 # Get file out
-mv /webapps/cquicc/projects/redpitaya-server /webapps/server
+mv /webapp/cquicc/projects/redpitaya-server /webapp/server

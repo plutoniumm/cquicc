@@ -1,8 +1,6 @@
 """SCPI access to Red Pitaya."""
-
 import socket
 import struct
-import numpy as np
 
 __author__ = "Luka Golinar, Iztok Jeras, Miha Gjura"
 __copyright__ = "Copyright 2023, Red Pitaya"
@@ -83,7 +81,6 @@ class scpi (object):
 
 
 # SCPI command functions
-
     def sour_set(
         self,
         chan: int,
@@ -93,7 +90,7 @@ class scpi (object):
         offset: float = 0,
         phase: float = 0,
         dcyc: float = 0.5,
-        data: np.ndarray = None,
+        data = None,
         burst: bool = False,
         ncyc: int = 1,
         nor: int = 1,
