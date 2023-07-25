@@ -1,7 +1,7 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from utils import getParams
 from commands import blink
-from response import rJSON, rHTML, div, rFile
+from response import rHTML, div, rFile
 
 PORT = 1337
 
