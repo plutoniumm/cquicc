@@ -16,17 +16,16 @@ LED:ETH - Ethernet LED
 def blink(interval:int, iters: int, led: int)->None:
   print("Blinking LED1")
   success = 0
-  for _ in range(iters):
+  for i in range(iters):
     sleep(interval)
     rp_s.tx_txt("DIG:PIN LED"+str(led)+",1")
     sleep(interval)
     rp_s.tx_txt("DIG:PIN LED"+str(led)+",0")
 
     success+=1
-    print("Blinked", iters)
+    print("Blinked", i)
 
   if success == iters:
-    print("Blinked LED"+str(led)+" "+str(iters)+" times")
     return True
   else:
     print("Failed to blink LED"+str(led))
