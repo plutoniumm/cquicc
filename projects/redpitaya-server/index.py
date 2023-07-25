@@ -1,11 +1,11 @@
-import http.server
+from http.server import SimpleHTTPRequestHandler, HTTPServer
 from utils import getParams
 from commands import blink
 from response import rJSON, rHTML, div, rFile
 
 PORT = 1337
 
-class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
+class RedPitayaHandler(SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         return
     def do_GET(self):
@@ -31,15 +31,26 @@ class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def serve(port):
-    with http.server.HTTPServer(("", port), RedPitayaHandler) as httpd:
-        print("Serving at port", port)
-        httpd.serve_forever()
+    server_address = ('', port)
+    httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+    print("Serving at port", port)
+    httpd.serve_forever()
+
+def serve_loop(port):
+    port = int(port)
+    try:
+        serve(port)
+    except OSError:
+        serve_loop(port+1)
 
 if __name__ == "__main__":
     print("Starting RedPitaya Server on port", PORT)
 
     try:
-        serve(PORT)
+        serve_loop(PORT)
     except KeyboardInterrupt:
         print("Stopping RedPitaya Server")
         exit(0)
+    except Exception as e:
+        print("Error:", e)
+        exit(1)
