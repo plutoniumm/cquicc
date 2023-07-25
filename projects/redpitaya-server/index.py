@@ -6,10 +6,13 @@ from response import rJSON, rHTML, div, rFile
 PORT = 1337
 
 class RedPitayaHandler(SimpleHTTPRequestHandler):
+    def log_request(self, code='-', size='-'):
+        return # disable logging
     def log_message(self, format, *args):
-        return
+        return # disable logging
+
     def do_GET(self):
-        print("GET", self.path)
+        print("Sending", self.path)
         if self.path == '/':
             return rHTML(self, open('index.html').read())
         elif self.path.startswith('/assets/'):
@@ -27,6 +30,7 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
             except Exception as e:
                 return rHTML(self, div("Couldn't Blink","color:#f22"))
         else:
+            print("No such path")
             return rHTML(self, "<h1>404 Not Found</h1>", 404)
 
 
