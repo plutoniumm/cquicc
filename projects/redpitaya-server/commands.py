@@ -2,7 +2,9 @@ import sys
 from time import sleep
 import redpitaya_scpi as scpi
 
-rp_s = scpi.scpi(sys.argv[1])
+scpi_uri = sys.argv[1];
+print("Connecting to: ", scpi_uri);
+rp_s = scpi.scpi(scpi_uri);
 
 """
 LED:MMC - Orange LED | Memory Card LED

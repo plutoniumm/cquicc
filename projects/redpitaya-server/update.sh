@@ -11,5 +11,7 @@ sleep 1
 mv cquicc/projects/redpitaya-server server
 
 rm -rf cquicc
+
 mv server/start.sh start.sh
+chmod +777 start.sh
 mv -f server/update.sh update.sh
