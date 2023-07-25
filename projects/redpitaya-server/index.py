@@ -1,5 +1,5 @@
 import http.server
-from utils import run_scpi
+from utils import run_scpi, getParams
 from commands import blink
 from response import rJSON, rHTML, div, rFile
 
@@ -15,12 +15,14 @@ class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
         elif self.path.startswith('/assets/'):
             file = self.path[1:]
             return rFile(self, file)
-        elif self.path == '/blink':
+        elif self.path.startswith('/blink'):
             running, output = run_scpi()
             if not running:
                 return rJSON(self, {"error": output}, 500)
             else:
-                check = blink(2, 3)
+                params = getParams(self.path)
+                led = int(params.get('led', 1))
+                check = blink(2, 3, led)
 
                 response = div("Couldn't Blink","color:#f22") if not check else div("Blunk","color:#2f2")
 

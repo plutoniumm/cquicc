@@ -1,13 +1,6 @@
 # RedPitaya LocalServer
 
-## Execution
-### Install
-```sh
-# only Sanic is needed
-pip3 install -r requirements.txt
-```
+Runs on all versions of python3.5+
 
-### Run
-```sh
-python3 ./index.py
-```
+- Run: `python3 ./index.py`
+- Open: `http://localhost:1337/`

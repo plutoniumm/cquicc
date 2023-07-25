@@ -11,23 +11,23 @@ LED:ETH - Ethernet LED
 """
 
 # toggle led blink
-def blink(interval:int, iters: int)->None:
+def blink(interval:int, iters: int, led: int)->None:
   print("Blinking LED1")
   success = 0
   for _ in range(iters):
     sleep(interval)
-    rp_s.tx_txt("DIG:PIN LED1,1")
+    rp_s.tx_txt("DIG:PIN LED"+str(led)+",1")
     sleep(interval)
-    rp_s.tx_txt("DIG:PIN LED1,0")
+    rp_s.tx_txt("DIG:PIN LED"+str(led)+",0")
 
     success+=1
     print("Blinked", iters)
 
   if success == iters:
-    print("Blinked LED1 successfully")
+    print("Blinked LED"+str(led)+" "+str(iters)+" times")
     return True
   else:
-    print("Failed to blink LED1")
+    print("Failed to blink LED"+str(led))
     return False
 
 # check if scpi server running

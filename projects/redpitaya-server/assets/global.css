@@ -1,10 +1,31 @@
 body {
   background: #f5f5f7;
   width: min(600px, 100%);
+  margin: 0 auto;
+  min-height: 100vh;
 }
 
 h2 {
   margin: 1em 0 5px 0;
+}
+
+#error-holder {
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+}
+
+.error {
+  color: #fff;
+  background: #f22;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px;
+  min-width: 300px;
+  width: auto;
+  max-width: min(100%, 500px);
 }
 
 #rce {
@@ -15,7 +36,6 @@ h2 {
 
 .result {
   border-radius: 5px;
-  margin: 5px;
   width: calc(100% - 20px);
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
@@ -24,9 +44,7 @@ h2 {
 }
 
 button {
-  /* rpm-10 b0 */
   border-radius: 5px;
-  margin: 5px;
   padding: 5px;
   min-width: 100px;
   background: #aaf;

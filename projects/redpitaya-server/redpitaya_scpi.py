@@ -950,7 +950,7 @@ class scpi (object):
 
     def ese(self, value: int):
         """Standard Event Status Enable Command"""
-        return self.tx_txt(f'*ESE {value}')
+        return self.tx_txt('*ESE {}'.format(value))
 
     def ese_q(self):
         """Standard Event Status Enable Query"""

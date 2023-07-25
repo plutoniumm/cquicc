@@ -8,9 +8,7 @@
   <link rel="stylesheet" href="/assets/atomic.css">
   <link rel="stylesheet" href="/assets/global.css">
 
-  <script src="https://unpkg.com/htmx.org@1.9.3"
-    integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
-    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.3" crossorigin="anonymous"></script>
 
   <title>Redpitaya LocalServer</title>
 </head>
@@ -18,28 +16,29 @@
 <body class="mx-a">
   <h1 tx="red" class="w-100 mx-a">Redpitaya WebServer</h1>
 
-  <!-- <h2>Run Terminal</h2>
-  <div style="color:#888">
-    Be careful with this it is a <b>full remote code execution</b>. This means that you can do anything that the user
-    can do. IT WILL NOT stop you if you decide to do <code>rm -rf /</code>
-  </div>
-  <form id="rce" class="rx5 p-rel">
-    <textarea name="code" id="rce-code" rows="5" class="p10">ls -la</textarea>
-
-    <input type="submit" class="blur tc rpm-5 p-abs" style="bottom:0;right:0;--bg:#fff6;--sz:8px;color:#fff;"
-      value="Run">
-  </form> -->
-
   <h2>Specific Functions</h2>
   <main>
     <section>
       <h3>Blink LED</h3>
-      <button id="blink" hx-get="/blink" hx-target="#led-result" hx-swap="innerHTML" hx-trigger="click">Blink
-        LED1</button>
-      <div class="result" id="led-result">BLINK?</div>
+      <div class="f j-bw">
+        <button id="blink" flex hx-get="/blink?led=1" hx-target="#led-result1" hx-swap="innerHTML"
+          hx-trigger="click">Blink
+          LED1</button>
+        <div flex></div>
+        <div class="result p5" flex="5" id="led-result1">BLINK?</div>
+      </div>
+      <br>
+      <div class="f j-bw">
+        <button id="blink" flex hx-get="/blink?led=2" hx-target="#led-result2" hx-swap="innerHTML"
+          hx-trigger="click">Blink
+          LED2</button>
+        <div flex></div>
+        <div class="result p5" flex="5" id="led-result2">BLINK?</div>
+      </div>
     </section>
   </main>
 
+  <div id="error-holder" class="p-fix f-col"></div>
   <script src="/assets/handlers.js"></script>
 </body>
 

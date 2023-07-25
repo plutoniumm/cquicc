@@ -1,6 +1,13 @@
 import subprocess;
 from commands import check_scpi;
 
+def getParams(path:str):
+    params = {};
+    if '?' in path:
+        params = path.split('?')[1].split('&');
+        params = {x.split('=')[0]:x.split('=')[1] for x in params};
+    return params;
+
 def cli(command:str):
     print("Running command: ",command)
     try:
@@ -23,16 +30,17 @@ def cli(command:str):
         return False, e;
 
 def run_scpi():
-    return True, "ok";
-    running = check_scpi();
+    try:
+        running = check_scpi();
+    except Exception as e:
+        return False, "Unable to check if SCPI is running";
+
     if running:
         return True, "SCPI Server already running";
 
     success, out = cli("systemctl enable redpitaya_scpi");
+    print("CLI", success, out);
     if not success:
         return False, "Unable to enable scpi service";
-
-    if "Created symlink" in out:
-        return True, "SCPI Service enabled";
     else:
-        return False, "Unable to enable scpi service";
+        return True, "SCPI Service enabled";
