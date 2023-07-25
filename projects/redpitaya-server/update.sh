@@ -1,10 +1,15 @@
 cd /webapp/
-rm -rf /webapp/cquicc/ /webapp/server/
-git clone https://github.com/plutoniumm/cquicc.git --depth 1
+rm -rf server/
+sleep 1
+
+if [ ! -d "/webapp/cquicc" ]; then
+  git clone https://github.com/plutoniumm/cquicc.git --depth 1
+fi
 sleep 1
 
 # Get file out
-mv /webapp/cquicc/projects/redpitaya-server /webapp/server
+mv cquicc/projects/redpitaya-server server
 
-# copy start script
-cp /webapp/server/start.sh /webapp/start.sh
+rm -rf cquicc
+mv server/start.sh start.sh
+mv -f server/update.sh update.sh
