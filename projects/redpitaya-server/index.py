@@ -1,7 +1,7 @@
 import http.server
 from utils import run_scpi
 from commands import blink
-from response import rJSON, rHTML, rText, div
+from response import rJSON, rHTML, div, rFile
 
 PORT = 1337
 
@@ -14,8 +14,7 @@ class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
             return rHTML(self, open('index.html').read())
         elif self.path.startswith('/assets/'):
             file = self.path[1:]
-            print("File:", file)
-            return rText(self, open(file).read())
+            return rFile(self, file)
         elif self.path == '/blink':
             running, output = run_scpi()
             if not running:
