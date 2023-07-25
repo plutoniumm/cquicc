@@ -1,5 +1,5 @@
 import http.server
-from utils import run_scpi, getParams
+from utils import getParams
 from commands import blink
 from response import rJSON, rHTML, div, rFile
 
@@ -16,10 +16,7 @@ class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
             file = self.path[1:]
             return rFile(self, file)
         elif self.path.startswith('/blink'):
-            running, output = run_scpi()
-            if not running:
-                return rJSON(self, {"error": output}, 500)
-            else:
+            try:
                 params = getParams(self.path)
                 led = int(params.get('led', 1))
                 check = blink(2, 3, led)
@@ -27,6 +24,8 @@ class RedPitayaHandler(http.server.SimpleHTTPRequestHandler):
                 response = div("Couldn't Blink","color:#f22") if not check else div("Blunk","color:#2f2")
 
                 return rHTML(self, div(response))
+            except Exception as e:
+                return rHTML(self, div("Couldn't Blink","color:#f22"))
         else:
             return rHTML(self, "<h1>404 Not Found</h1>", 404)
 
@@ -38,11 +37,6 @@ def serve(port):
 
 if __name__ == "__main__":
     print("Starting RedPitaya Server on port", PORT)
-
-    running, output = run_scpi()
-    if not running:
-        print("Unable to start scpi:", output)
-        exit(1)
 
     try:
         serve(PORT)

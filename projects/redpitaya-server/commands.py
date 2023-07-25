@@ -29,14 +29,3 @@ def blink(interval:int, iters: int, led: int)->None:
   else:
     print("Failed to blink LED"+str(led))
     return False
-
-# check if scpi server running
-def check_scpi():
-  print("Checking if SCPI server is running")
-  try:
-    rp_s.tx_txt("*IDN?")
-    print("SCPI server is running")
-    return True
-  except:
-    print("SCPI server is not running")
-    return False

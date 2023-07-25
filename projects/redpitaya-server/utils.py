@@ -1,5 +1,4 @@
 import subprocess;
-from commands import check_scpi;
 
 def getParams(path:str):
     params = {};
@@ -28,19 +27,3 @@ def cli(command:str):
     except Exception as e:
         print("EXPLOSIONN")
         return False, e;
-
-def run_scpi():
-    try:
-        running = check_scpi();
-    except Exception as e:
-        return False, "Unable to check if SCPI is running";
-
-    if running:
-        return True, "SCPI Server already running";
-
-    success, out = cli("systemctl enable redpitaya_scpi");
-    print("CLI", success, out);
-    if not success:
-        return False, "Unable to enable scpi service";
-    else:
-        return True, "SCPI Service enabled";
