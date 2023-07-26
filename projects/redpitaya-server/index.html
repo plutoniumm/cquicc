@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="/assets/atomic.css">
   <link rel="stylesheet" href="/assets/global.css">
 
+  <link rel="apple-touch-icon" href="">
+  <link rel="icon" type="image/png" href="">
+
   <script src="https://unpkg.com/htmx.org@1.9.3" crossorigin="anonymous"></script>
 
   <title>Redpitaya LocalServer</title>
@@ -36,6 +39,25 @@
         <div class="result p5" flex="5" id="led-result2">BLINK?</div>
       </div>
     </section>
+
+    <section>
+      <h3>Plot from file</h3>
+      <p>
+        Attach a file with N values of x,y pairs. The server will plot the data.
+      </p>
+      <form hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML" hx-trigger="submit">
+        <input type="file" name="file" id="file">
+        <button type="submit">Plot</button>
+      </form>
+      <br>
+      <div class="result p5" id="plot-result">PLOT?</div>
+    </section>
+
+    <section>
+      <h3>Random Blinks Plot Realtime</h3>
+    </section>
+
+
   </main>
 
   <div id="error-holder" class="p-fix f-col"></div>

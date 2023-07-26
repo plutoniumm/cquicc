@@ -2,9 +2,16 @@ import sys
 from time import sleep
 import redpitaya_scpi as scpi
 
-scpi_uri = sys.argv[1];
-print("Connecting to: ", scpi_uri);
-rp_s = scpi.scpi(scpi_uri);
+try:
+  scpi_uri = sys.argv[1];
+except IndexError:
+  scpi_uri = ""
+
+if "." not in scpi_uri:
+  print("Starting without SCPI")
+else:
+  print("Connecting to: ", scpi_uri);
+  rp_s = scpi.scpi(scpi_uri);
 
 """
 LED:MMC - Orange LED | Memory Card LED
