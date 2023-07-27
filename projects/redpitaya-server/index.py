@@ -1,6 +1,7 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
 from utils import getParams, getFile
 from files import process_xy
+from time import sleep
 from commands import blink
 from response import rHTML, div, rFile, rText, rJSON
 
@@ -38,9 +39,14 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
         print("Receiving", self.path)
         if self.path.startswith('/plot'):
             file = getFile(self)
-            svg = process_xy(file)
+            png = process_xy(file)
 
-            return rText(self, svg)
+            sleep(2)
+
+            # base64 png
+            img = "<img src='{}' alt='Matplotlib Plot'/>".format(png)
+
+            return rHTML(self, img)
 
 
     def do_PUT(self):

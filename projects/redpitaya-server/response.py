@@ -6,6 +6,8 @@ contentTypes = {
     "json": "application/json",
     "css" : "text/css",
     "js"  : "application/javascript",
+    "svg" : "image/svg+xml",
+    "png" : "image/png"
 }
 
 def getContentType(file):

@@ -13,6 +13,22 @@ svg {
   border-radius: 5px;
 }
 
+img {
+  max-width: 100%;
+  height: 100%;
+}
+
+.spinner {
+  transform-origin: center;
+  animation: spinner .75s infinite linear
+}
+
+@keyframes spinner {
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
 .htmx-indicator {
   opacity: 0;
   transition: opacity 500ms ease-in;
