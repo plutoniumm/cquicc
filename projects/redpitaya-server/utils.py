@@ -1,4 +1,15 @@
 import subprocess;
+from requests_toolbelt import MultipartDecoder
+
+def getFile(req):
+    cLen = int(req.headers['Content-Length']);
+    cType = req.headers['Content-Type'];
+
+    data = req.rfile.read(cLen);
+    decoder = MultipartDecoder(data, cType);
+    for part in decoder.parts:
+        if part.headers[b'Content-Disposition'].startswith(b'form-data; name="file"'):
+            return part.content.decode('utf-8');
 
 def getParams(path:str):
     params = {};

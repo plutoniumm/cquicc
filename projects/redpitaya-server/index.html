@@ -45,12 +45,16 @@
       <p>
         Attach a file with N values of x,y pairs. The server will plot the data.
       </p>
-      <form hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML" hx-trigger="submit">
+
+      <form hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML" hx-encoding='multipart/form-data'
+        hx-indicator="#spinner">
         <input type="file" name="file" id="file">
         <button type="submit">Plot</button>
       </form>
       <br>
-      <div class="result p5" id="plot-result">PLOT?</div>
+      <div class="result p5" id="plot-result">
+        <img id="spinner" class="htmx-indicator" src="/assets/bars.svg" />
+      </div>
     </section>
 
     <section>

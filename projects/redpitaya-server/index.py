@@ -1,7 +1,8 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
-from utils import getParams
+from utils import getParams, getFile
+from files import process_xy
 from commands import blink
-from response import rHTML, div, rFile
+from response import rHTML, div, rFile, rText, rJSON
 
 PORT = 1337
 
@@ -34,7 +35,14 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
             return rHTML(self, "<h1>404 Not Found</h1>", 404)
 
     def do_POST(self):
-        return rHTML(self, "<h1>404 Not Found</h1>", 404)
+        print("Receiving", self.path)
+        if self.path.startswith('/plot'):
+            file = getFile(self)
+            svg = process_xy(file)
+
+            return rText(self, svg)
+
+
     def do_PUT(self):
         return rHTML(self, "<h1>404 Not Found</h1>", 404)
     def do_DELETE(self):

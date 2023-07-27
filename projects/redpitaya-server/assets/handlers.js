@@ -22,12 +22,17 @@ const createErrorNode = ( msg ) => {
   setTimeout( () => {
     errorNode.remove();
     errorNodes.splice( errorNodes.indexOf( errorNode ), 1 );
-  }, 3000 );
+  }, 6e3 );
 };
 
 document.body.addEventListener( "htmx:afterRequest", function ( e ) {
-  response = e.detail;
+  let error = "Unknown Error";
+  let response = e.detail;
+
   if ( response.error ) {
-    createErrorNode( "Unknown Error at " + response.pathInfo.requestPath )
+    if ( response.status == 500 ) {
+      error = "Server Error";
+    }
+    createErrorNode( error + " at " + response.pathInfo.requestPath )
   };
 } );
