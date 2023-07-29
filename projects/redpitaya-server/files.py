@@ -14,6 +14,7 @@ def process_xy(csv_str):
     print(x,"\n",y)
 
     plt.plot(x, y)
+    plt.legend()
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('Plot')
