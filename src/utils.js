@@ -7,6 +7,17 @@ import yaml from "js-yaml";
 
 import template from "./render.html?raw"
 
+const renderer = {
+  // code(string code, string infostring, boolean escaped)
+  code ( text, level ) {
+    if ( level === "mermaid" ) {
+      return `<pre class="mermaid">${ text }</pre>`;
+    }
+    return false;
+  }
+};
+
+
 export const defStyles = {
   "&": {
     fontSize: "18px",
@@ -30,7 +41,8 @@ const options = {
 
 marked
   .use( markedKatex( options.katex ) )
-  .use( markedHighlight( options.hljs ) );
+  .use( markedHighlight( options.hljs ) )
+  .use( { renderer } )
 
 export const render = ( text ) => {
   text = text

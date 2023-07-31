@@ -1,9 +1,13 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
+from websockets import serve
+import asyncio
+
 from utils import getParams, getFile
 from files import process_xy
 from time import sleep
 from commands import blink
 from response import rHTML, div, rFile, rText, rJSON
+from ws import websocket_handler
 
 PORT = 1337
 
@@ -17,6 +21,17 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
         print("Sending", self.path)
         if self.path == '/':
             return rHTML(self, open('index.html').read())
+        elif self.path == '/ws':
+            # Upgrade HTTP request to WebSocket
+            websocket = self.headers.get("Upgrade")
+            if websocket and websocket.lower() == 'websocket':
+                # Start the WebSocket server coroutine.
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                loop.run_until_complete(serve(websocket_handler, 'localhost', PORT))
+                loop.run_forever()
+            else:
+                self.send_error(400, "WebSocket upgrade required.")
         elif self.path.startswith('/assets/'):
             file = self.path[1:]
             return rFile(self, file)
@@ -56,23 +71,18 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
 
 
 def serve(port):
+    port = int(port)
+
     server_address = ('', port)
     httpd = HTTPServer(server_address, RedPitayaHandler)
     print("Serving at port", port)
     httpd.serve_forever()
 
-def serve_loop(port):
-    port = int(port)
-    try:
-        serve(port)
-    except OSError:
-        serve_loop(port+1)
-
 if __name__ == "__main__":
     print("Starting RedPitaya Server on port", PORT)
 
     try:
-        serve_loop(PORT)
+        serve(PORT)
     except KeyboardInterrupt:
         print("Stopping RedPitaya Server")
         exit(0)

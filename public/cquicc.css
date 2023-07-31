@@ -1,9 +1,9 @@
 html {
-  width: 21cm !important;
-  max-width: 21cm !important;
-  overflow-x: hidden;
   margin: 0 auto;
   background: #ccc;
+  width: 22cm !important;
+  max-width: 22cm !important;
+  overflow-x: hidden;
 }
 
 body {
@@ -17,6 +17,10 @@ body {
 
 /* .split will also act as a page counter */
 .split {
+  width: calc(21cm - 3em) !important;
+  max-width: 21cm !important;
+  overflow-x: hidden;
+
   display: flex;
   justify-content: space-between;
   word-wrap: break-word;

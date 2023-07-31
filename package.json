@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "predev": "rm -rf dist .svelte*",
     "dev": "vite",
     "build": "vite build",
-    "deploy": "npx gh-pages -d dist -t true && rm -rf dist"
+    "deploy": "npx gh-pages -d dist -t true",
+    "postdeploy": "rm -rf dist"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.4",
@@ -23,6 +25,7 @@
     "marked": "^5.1.1",
     "marked-highlight": "^2.0.1",
     "marked-katex-extension": "^3.0.0",
+    "mermaid": "^10.3.0",
     "sass": "^1.63.6",
     "svelte-codemirror-editor": "^1.1.0",
     "thememirror": "^2.0.1",

@@ -23,3 +23,8 @@ rm -rf cquicc
 ```bash
 ./update.sh
 ```
+
+### Setup
+- Install `request_toolbelt`
+- rm -rf certifi from `site-packages`/`dist-packages`
+- Run server.

@@ -1,3 +1,9 @@
+import os
+import matplotlib as mpl
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import base64
@@ -8,8 +14,8 @@ def process_xy(csv_str):
     df = pd.read_csv(csv_str, sep=",", names=['x','y'])
     df = df.dropna()
 
-    x = df['x'][1:]
-    y = df['y'][1:]
+    x = df['x'][1:].astype(float)
+    y = df['y'][1:].astype(float)
 
     print(x,"\n",y)
 

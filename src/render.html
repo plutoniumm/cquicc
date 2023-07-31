@@ -10,6 +10,22 @@
   <link rel="stylesheet" href="/cquicc.css">
   <link rel="stylesheet" href="/hljs.css">
 
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+    mermaid.initialize( {
+      securityLevel: 'antiscript',
+      theme: "base"
+    } );
+
+    // make sure to auto rerun
+    setTimeout( () => {
+      mermaid.init( undefined,
+        document.querySelectorAll( '.mermaid' )
+      )
+    }, 1000 );
+  </script>
+
   &head;
 </head>
 
