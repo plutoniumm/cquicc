@@ -8,8 +8,8 @@ def process_xy(csv_str):
     df = pd.read_csv(csv_str, sep=",", names=['x','y'])
     df = df.dropna()
 
-    x = df['x'].to_numpy()[1:]
-    y = df['y'].to_numpy()[1:]
+    x = df['x'][1:]
+    y = df['y'][1:]
 
     print(x,"\n",y)
 
