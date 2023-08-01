@@ -17,12 +17,12 @@
 .cm-line *,
 .cm-matchingBracket {
   font-variant-ligatures: contextual;
-  font-family: "Fira Code";
+  font-family: 'Courier New', Courier, monospace;
   font-weight: 300;
   font-size: 16px;
 }
 
 .cm-gutterElement {
-  font-family: "Fira Code";
+  font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
 }
