@@ -17,15 +17,14 @@ body {
 
 /* .split will also act as a page counter */
 .split {
-  width: calc(21cm - 3em) !important;
+  width: calc(21cm - 3em);
+  height: 29.7cm;
   max-width: 21cm !important;
-  overflow-x: hidden;
 
   display: flex;
-  justify-content: space-between;
-  word-wrap: break-word;
+  flex-wrap: wrap;
+  overflow: hidden;
   overflow-wrap: break-word;
-  margin: 5px 0;
   border-bottom: 2px solid #000;
 }
 
@@ -41,18 +40,23 @@ a:visited {
   content: counter(page);
   position: absolute;
   right: 3em;
-  bottom: 2.5em;
+  bottom: 1.5em;
   font: 700 16px Times;
 }
 
-img {
+img,
+svg {
+  display: block;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
 }
 
 .split>div {
   width: 49%;
   max-width: 49%;
+  padding: 0.5%;
+  height: 100%;
 }
 
 #topic {
@@ -84,6 +88,14 @@ hr {
   border: 1px solid #000;
   margin: 0;
   padding: 0;
+}
+
+.split>hr {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  margin-top: 2cm;
 }
 
 #title {

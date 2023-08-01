@@ -23,7 +23,19 @@
       mermaid.init( undefined,
         document.querySelectorAll( '.mermaid' )
       )
-    }, 1000 );
+      const split = document.querySelector( ".split" );
+      split.style.height = "calc(29.7cm - 3em - 4cm)";
+
+      // other splits after first
+      const splits = [
+        ...document.querySelectorAll( ".split" )
+      ].slice( 1 );
+      splits.forEach( split => {
+        const hr = document.createElement( "hr" );
+        console.log( split.firstChild );
+        split.insertBefore( hr, split.firstChild );
+      } );
+    }, 500 );
   </script>
 
   &head;
@@ -46,9 +58,7 @@
     </div>
   </section>
   <hr />
-  <section>
-    &body;
-  </section>
+  &body;
 </body>
 
 </html>
