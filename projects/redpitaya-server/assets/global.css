@@ -73,7 +73,7 @@ h2 {
 
 .result {
   border-radius: 5px;
-  width: calc(100% - 20px);
+  width: calc(100% - 10px);
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
   background: #222;

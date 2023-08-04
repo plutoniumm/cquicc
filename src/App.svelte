@@ -50,7 +50,7 @@
 <svelte:window on:keyup={keyup} />
 
 <div class="f j-ar p-fix" id="funcs">
-  <div class="rx10 ptr" on:click={print}>print</div>
+  <div class="rx10 ptr" on:click={print}>PDF</div>
 </div>
 <main class="f fw">
   <div class="editor">

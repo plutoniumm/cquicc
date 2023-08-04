@@ -46,22 +46,20 @@
         Attach a file with N values of x,y pairs. The server will plot the data.
       </p>
 
-      <form hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML" hx-encoding='multipart/form-data'
-        hx-indicator="#spinner">
+      <form class="f j-bw" hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML"
+        hx-encoding='multipart/form-data' hx-indicator="#spinner">
         <input type="file" name="file" id="file" required />
-        <button type="submit">Plot</button>
+
+        <div>
+          <button type="submit">Plot</button>
+          <button hx-get="/kill" hx-target="#kill-result" hx-swap="innerHTML" hx-trigger="click">Kill</button>
+        </div>
       </form>
-      <br>
-      <div class="result p5" id="plot-result">
+
+      <div class="result p5" id="plot-result" style="margin: 1em 0;">
         <img id="spinner" class="htmx-indicator spinner" src="/assets/bars.svg" />
       </div>
     </section>
-
-    <section>
-      <h3>Random Blinks Plot Realtime</h3>
-    </section>
-
-
   </main>
 
   <div id="error-holder" class="p-fix f-col"></div>

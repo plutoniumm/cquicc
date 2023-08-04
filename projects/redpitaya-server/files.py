@@ -23,7 +23,7 @@ def process_xy(csv_str):
     plt.legend()
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title('Plot')
+    plt.title('Plot: Iteration 5')
     plt.grid(True)
 
     buffer = BytesIO()
