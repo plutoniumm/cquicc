@@ -73,8 +73,13 @@ export const render = ( text ) => {
     year: 'numeric'
   } );
 
-  let html = marked( rest.join( "---" ) );
-  html = typeset( html );
+  let html =
+    typeset(
+      marked(
+        rest.join( "---" ),
+        { mangle: false, headerIds: false }
+      )
+    );
 
   html = template
     .replace( "&head;", "" )
