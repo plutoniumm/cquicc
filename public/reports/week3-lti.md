@@ -8,7 +8,7 @@ from: "MCQuICC, IIT Madras"
 
 ## Dataset
 LTI has provided us with a dataset of 200 rows with the following structure where `y` is the binary variable we want to predict
-with the rest being the features
+with the rest being the features[@1]
 
 - $y \in \{0,1\}$ binary var about engine condition
 - $x_i \in [-1,1]$ 6 features of the engine for $i \in$ [`Coolant Temp, Fuel Pressure, RPM, Oil Pressure, Coolant Pressure, Oil Temp`]
@@ -97,8 +97,8 @@ We will also repeat this step during prediction to get the test data to the same
 Note: This step is the most computationally expensive
 and the dominant factor in the runtime complexity of
 the algorithm. $O(N^2)$ since the size of the kernel
-matrix is $N*N$ where $N$ is the number of rows. For a
-dataset of 200 we run the Quantum Circuit $200*200 = 4*10^4$ times ASSUMING 1 SHOT ACCURACY
+matrix is $N\times N$ where $N$ is the number of rows. For a
+dataset of 200 we run the Quantum Circuit $200\times 200 = 4\times 10^4$ times ASSUMING 1 SHOT ACCURACY
 
 ### Classical Part
 This is a fairly standard part which has been
@@ -120,13 +120,13 @@ and
 
 the gradient descent is done subject to the constraints
 
-minimum: $\frac{1}{2} * ∑ ∑ (α_i α_j y_i y_j K(x_i, x_j)) - ∑ α_i$ \
+minimum: $\frac{1}{2} \times ∑ ∑ (α_i α_j y_i y_j K(x_i, x_j)) - ∑ α_i$ \
 subject to: $∑ α_i y_i = 0$ \
 &emsp;&emsp;&emsp;&emsp; $0 \le α_i \le C$ for all $i$
 
 ### Recap
 - We have a dataset of 200 rows with 6 features and 1 label
-- We run the Quantum Circuit $200*200 = 4*10^4$ times to generate the Kernel Matrix
+- We run the Quantum Circuit $200\times 200 = 4\times 10^4$ times to generate the Kernel Matrix
 - We use the Kernel Matrix to find the coefficients and bias for the Decision Function
 - We use the Decision Function to predict the labels for the test set
 
@@ -179,11 +179,11 @@ Memoisation also acts as a basic sanity check since for a well shuffled dataset 
 
 ### Parallelization (Quantum)
 #### Internal Parallelization
-Currently the model uses 1 single 6 Qubit ZZFeatureMap. This causes a significant depth slowing down the Quantum Layer. To start with the following is the effective diagram of a 6-ZZFeatureMap made up of 2-ZZFeatureMaps both with full entanglement
-+++
+Currently the model uses 1 single 6 Qubit ZZFeatureMap. This causes a significant depth slowing down the Quantum Layer. To start with the following is the effective diagram of a 6-ZZFeatureMap made up of 2-ZZFeatureMaps both +++with full entanglement.
+
 This circuit has just a depth of $10$ but still has entanglement between all Qubits. This slightly decouples the feature space but it might be a worthwhile tradeoff to make the circuit faster since it is now effectively $1/{5^{th}}$ the depth it was before
 
-<img src="https://i.imgur.com/vqAgDbH.png" style="height:6cm"/>
+<img src="https://i.imgur.com/vqAgDbH.png" alt="name" style="height:6cm"/>
 
 #### External Parallelization
 We can also parallelize the Quantum Circuit by running multiple Quantum Circuits in parallel. This is possible since the Quantum Circuits are independent of each other and can be run in parallel on larger machines
@@ -198,5 +198,6 @@ It is worth using a NoiseModel based simulator to see how close the results are 
 #### QUBO
 The current approach is to do a Quantum Feature Map and then classical optimisation. It is also worth approaching the problem where a different angle where we use a classical feature map and then convert that to a QUBO to anneal it
 
-
 /===
+
+[#1]: Testing ref

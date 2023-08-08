@@ -15,6 +15,18 @@ body {
   counter-reset: page;
 }
 
+cite {
+  font-style: normal;
+  position: relative;
+  bottom: 0.4em;
+  left: 0.1em;
+  font-size: 0.77em;
+}
+
+cite a {
+  color: #000 !important;
+}
+
 /* .split will also act as a page counter */
 .split {
   width: calc(21cm - 3em);

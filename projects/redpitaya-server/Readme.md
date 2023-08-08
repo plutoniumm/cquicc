@@ -28,3 +28,18 @@ rm -rf cquicc
 - Install `request_toolbelt`
 - rm -rf certifi from `site-packages`/`dist-packages`
 - Run server.
+
+
+```redmine/text
+I have attached the files for the Wireframes of how convergence UI should look
+
+Implementation
+- Attach File -> Start Plot -> Iterates
+- Each second plot is rerendered with iterations & new plot
+- Kill Plot -> Stop Iterating
+
+This might take some time to implement since HTTP Keep-Alive has a default timeout of 5s and it's not easy to enforce a longer timeout. Despite all attempts to avoid it, it seems this will have to be done with WebSockets
+
+
+
+```

@@ -1,5 +1,5 @@
 from http.server import SimpleHTTPRequestHandler, HTTPServer
-from websockets import serve
+from websockets import serve as wserve
 import asyncio
 
 from utils import getParams, getFile
@@ -22,16 +22,13 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
         if self.path == '/':
             return rHTML(self, open('index.html').read())
         elif self.path == '/ws':
-            # Upgrade HTTP request to WebSocket
-            websocket = self.headers.get("Upgrade")
-            if websocket and websocket.lower() == 'websocket':
-                # Start the WebSocket server coroutine.
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                loop.run_until_complete(serve(websocket_handler, 'localhost', PORT))
+            if self.headers.get('Upgrade', None) == 'websocket':
+                start_server = wserve(websocket_handler, '', PORT)
+                loop = asyncio.get_event_loop()
+                loop.run_until_complete(start_server)
                 loop.run_forever()
             else:
-                self.send_error(400, "WebSocket upgrade required.")
+                return rHTML(self, "<h1>404 Not Found</h1>", 404)
         elif self.path.startswith('/assets/'):
             file = self.path[1:]
             return rFile(self, file)
@@ -73,10 +70,12 @@ class RedPitayaHandler(SimpleHTTPRequestHandler):
 def serve(port):
     port = int(port)
 
+    # http server: 1337
     server_address = ('', port)
     httpd = HTTPServer(server_address, RedPitayaHandler)
     print("Serving at port", port)
     httpd.serve_forever()
+
 
 if __name__ == "__main__":
     print("Starting RedPitaya Server on port", PORT)

@@ -36,3 +36,69 @@ document.body.addEventListener( "htmx:afterRequest", function ( e ) {
     createErrorNode( error + " at " + response.pathInfo.requestPath )
   };
 } );
+
+let ws = null;
+function connectWS ( attempt, then, cb = console.log ) {
+  const host = new URL( window.location.href ).host;
+  ws = new WebSocket( `ws://${ host }/ws` );
+  ws.onopen = function () {
+    attempt = 0;
+    let data = typeof then == 'function' ? then() : then;
+
+    ws.send( JSON.stringify( { type: 'connect', data } ) );
+  };
+
+  ws.onmessage = function ( e ) {
+    const { data } = JSON.parse( e );
+
+    cb( data );
+  };
+
+  ws.onclose = function ( e ) {
+    console.log( 'Socket closed. Reconnecting for attempt:', attempt );
+
+    attempt += 1;
+    if ( attempt > 5 ) {
+      ws = null;
+      return console.log( 'Max retries reached' );
+    } else {
+      // start from 500ms and increment by 2x each attempt
+      let backoff = Math.pow( 2, attempt - 2 ) * 1000; // 1, 2, 4s
+      backoff += backoff * 0.5 * Math.random(); // 50% jitter
+      backoff = backoff | 0; // round to int
+
+      console.log( "Waiting", backoff / 1000, "s" );
+      setTimeout( () =>
+        connectWS( attempt, then, cb ),
+        backoff
+      );
+    }
+  };
+
+  ws.onerror = function ( err ) {
+    console.error( 'Socket encountered error: ', err.message, 'Closing socket' );
+    ws.close();
+  };
+};
+
+function then () {
+  return {
+    run: "start",
+    data: {
+      id: "test",
+      name: "Test",
+    }
+  };
+};
+function cb ( data ) {
+  console.log( data );
+};
+
+connectWS( 0, then, cb );
+
+function closeWS () {
+  if ( ws ) {
+    ws.close();
+    ws = null;
+  }
+}

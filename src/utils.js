@@ -48,7 +48,10 @@ export const render = ( text ) => {
   text = text
     .replaceAll( "/===", "</div></section>" )
     .replaceAll( "===", "<section class='split'><div>" )
-    .replaceAll( "+++", "\n\n</div><div>\n\n" );
+    .replaceAll( "+++", "\n\n</div><div>\n\n" )
+    .replace( /\[@(\d+)\]/g, ( _, id ) =>
+      `<cite><a href="#fn${ id }" id="ref${ id }">[${ id }]</a></cite>`
+    );
 
   const [ , meta, ...rest ] = text.split( "---" );
 
