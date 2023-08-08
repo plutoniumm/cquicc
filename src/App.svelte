@@ -13,7 +13,7 @@
   let frame, old, doc;
 
   const write = (text) => {
-    const { meta, html } = render(text);
+    const { html } = render(text);
 
     localStorage.setItem("cquicc-code", text);
 

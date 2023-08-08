@@ -8,7 +8,7 @@ html {
 
 body {
   font-family: "Computer Modern Serif", sans-serif;
-  padding: 1cm;
+  padding: 1cm 1.25cm;
   width: 100%;
   margin: 0;
   background: #fff;
@@ -115,6 +115,10 @@ hr {
   font-family: Helvetica;
   margin: 0;
   padding: 0;
+}
+
+.katex {
+  text-align: center;
 }
 
 .katex-html {

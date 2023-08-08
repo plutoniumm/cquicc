@@ -59,6 +59,10 @@ export const render = ( text ) => {
   if ( !m.date )
     m.date = new Date().toISOString();
 
+  m.vars = JSON.stringify( {
+    author: m.author,
+    from: m.from,
+  } );
   m.year = new Date( m.date ).getFullYear();
   m.date = new Date( m.date ).toLocaleDateString( 'en-GB', {
     month: 'long',
