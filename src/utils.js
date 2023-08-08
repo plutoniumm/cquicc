@@ -45,9 +45,12 @@ marked
   .use( { renderer } )
 
 export const render = ( text ) => {
+  const pre = "<div class='prep'></div>";
+  const post = "<div class='postp'></div>";
+
   text = text
-    .replaceAll( "/===", "</div></section>" )
-    .replaceAll( "===", "<section class='split'><div>" )
+    .replaceAll( "/===", "</div></section>" + post )
+    .replaceAll( "===", pre + "<section class='split'><div>" )
     .replaceAll( "+++", "\n\n</div><div>\n\n" )
     .replace( /\[@(\d+)\]/g, ( _, id ) =>
       `<cite><a href="#fn${ id }" id="ref${ id }">[${ id }]</a></cite>`

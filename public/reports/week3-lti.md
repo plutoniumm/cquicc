@@ -8,33 +8,34 @@ from: "MCQuICC, IIT Madras"
 
 ## Dataset
 LTI has provided us with a dataset of 200 rows with the following structure where `y` is the binary variable we want to predict
-with the rest being the features[@1]
+with the rest being the features
 
 - $y \in \{0,1\}$ binary var about engine condition
-- $x_i \in [-1,1]$ 6 features of the engine for $i \in$ [`Coolant Temp, Fuel Pressure, RPM, Oil Pressure, Coolant Pressure, Oil Temp`]
+- $x_i \in [-1,1]$ 6 features of the engine for $i \in$ \
+ [ `Coolant Temp, Fuel Pressure, RPM, Oil Pressure, Coolant Pressure, Oil Temp` ]
 
 This is a table of 7 columns and 200 rows The function we ran for them is as follows
-```py
+```ts
 sampler = Sampler()
 
-quantum_kernel = FidelityQuantumKer
-  fidelity=ComputeUncompute(sampler
-  feature_map=ZZFeatureMap(6, entan
+kernel = FidelityQuantumKernel(
+  fidelity=ComputeUncompute()
+  feature_map=ZZFeatureMap(6)
 )
-qsvc = QSVC(quantum_kernel=quantum_
+qsvc = QSVC(quantum_kernel=kernel)
 qsvc.fit(Xtrain, ytrain)
 ```
 
 The core of the entire algorithm is `qsvc.fit`, we will not go ahead and see how it works, in order to then be able to optimize it
 
 ## Overview
-Unlike other algorithms, QSVM does not operate in tandem
+Unlike other algorithms, Qiskit QSVM does not operate in tandem[@1]
 with a classical computers. It first runs purely on a
 quantum computer and then uses a classical computer
 to do the optimization and classification
 
 ## SVM Overview
-The general idea of an SVM is to have data points which we can draw a line (hyperplane) through and+++classify them into two classes. The SVM algorithm then finds the best possible hyperplane that separates the data into two classes.
+The general idea of an SVM is to have data points which we can draw a line (hyperplane) through +++and classify them into two classes. The SVM algorithm then finds the best possible hyperplane that separates the data into two classes
 
 <svg xmlns="http://www.w3.org/2000/svg" stroke="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 232 166" height="139" width="200"><g transform="translate(-212 -169)"><rect width="205.4" height="51.1" x="194" y="258" fill="#07f3" color="#000" rx="2.2" ry="2.3" transform="rotate(-6)"/><path fill="none" stroke="#000" d="M216 317h226"/><path d="m431 313 12 4-12 5c2-3 2-6 0-9z"/><path fill="none" stroke="#000" d="M216 317V173"/><path d="m212 183 4-12 5 12c-3-2-7-2-9 0z"/><text x="230" y="177" font-size="15"><tspan x="230" y="177">y</tspan><tspan x="436" y="336">x</tspan></text><g fill="#3139ae"><path d="M345 273a4 4 0 1 1-7-2 4 4 0 0 1 7 2z"/><path d="M308 298a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M303 278a4 4 0 1 1-8-2 4 4 0 0 1 8 2z"/><path d="M369 287a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M337 296a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M327 284a4 4 0 1 1-9 0 4 4 0 0 1 9 0z"/><path d="M360 304a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M387 305a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M387 275a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></g><g fill="#dd2a2b"><path d="M296 193h7v7h-7v-7z"/><path d="M324 219h7v7h-7v-7z"/><path d="M317 188h7v7h-7v-7z"/><path d="M295 210h6v7h-6v-7z"/><path d="M273 192h7v7h-7v-7z"/><path d="m264 226 7-1v7h-7v-6z"/><path d="M250 209h7v7h-7v-7z"/><path d="M342 191h7v7h-7v-7z"/></g><path fill="none" stroke="#0034ff" stroke-width="2" d="m225 260 204-23"/><text x="431" y="242" fill="#00f">A</text><text x="382" y="182" fill="#00f">B</text></g></svg>
 
@@ -106,10 +107,10 @@ optimised over the years to be very fast
 given the Kernel Matrix
 
 Simple gradient descent for the coefficients
-of each row in the Kernel Matrix to calculate the
-+++coefficients and bias for the Decision Function
+of +++each row in the Kernel Matrix to calculate the
+coefficients and bias for the Decision Function
 
-$f(x) = sign(∑(α_i y_i K(x_i, x) + b))$
+$$f(x) = sign(∑(α_i y_i K(x_i, x) + b))$$
 
 where
 - $α_i$ is the coefficient
@@ -140,10 +141,12 @@ The following solutions will all work only under the assumption that we're rewri
 The predefined QSVM function will not let us do most of these
 
 ### Rounding (Classical)
-For demonstration purposes below is one row of the features from the dataset
+For demonstration purposes below is one row  of
 
 /===
 ===
+
+the features from the dataset
 
 ```json
 [
@@ -179,7 +182,7 @@ Memoisation also acts as a basic sanity check since for a well shuffled dataset 
 
 ### Parallelization (Quantum)
 #### Internal Parallelization
-Currently the model uses 1 single 6 Qubit ZZFeatureMap. This causes a significant depth slowing down the Quantum Layer. To start with the following is the effective diagram of a 6-ZZFeatureMap made up of 2-ZZFeatureMaps both +++with full entanglement.
+Currently the model uses 1 single 6 Qubit ZZFeatureMap. This causes a significant depth slowing down the Quantum Layer. To start with+++ the following is the effective diagram of a 6-ZZFeatureMap made up of 2-ZZFeatureMaps both with full entanglement.
 
 This circuit has just a depth of $10$ but still has entanglement between all Qubits. This slightly decouples the feature space but it might be a worthwhile tradeoff to make the circuit faster since it is now effectively $1/{5^{th}}$ the depth it was before
 
@@ -196,8 +199,15 @@ It is worth using a NoiseModel based simulator to see how close the results are 
 
 ### Alternate Approaches
 #### QUBO
-The current approach is to do a Quantum Feature Map and then classical optimisation. It is also worth approaching the problem where a different angle where we use a classical feature map and then convert that to a QUBO to anneal it
+The current approach is to do a Quantum Feature Map and then classical optimisation. It is also worth approaching the problem where a different
 
 /===
+===
 
-[#1]: Testing ref
+angle where we use a classical feature map and then convert that to a QUBO to anneal it
+
+## Bibliography
+[1.
+Qiskit contributors. (2023). Qiskit: An Open-source Framework for Quantum Computing](#ref)
+
++++/===

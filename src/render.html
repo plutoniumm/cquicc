@@ -18,23 +18,26 @@
   </script>
   <script>
     loop( () => {
-      const split = document.querySelector( ".split" );
-      split.style.height = "calc(29.7cm - 3em - 4cm)";
+      $( ".split" ).style.height = "calc(29.7cm - 3em - 4cm)";
+      const vars = JSON.parse(
+        document.body.getAttribute( "vars" )
+          .replaceAll( "&quot;", "\"" )
+      )
 
       // process citations
       const processed = $$( "a[href*='ref']" ).forEach( e => {
-        const num = e.innerText.split( "." )[ 0 ];
-        const rest = e.innerHTML.split( "." ).slice( 1 ).join( "." );
+        let [ num, ...rest ] = e.innerText.split( "." );
+        rest = rest.join( "." );
 
         e.outerHTML =
           `<def id="fn${ num }">
-          <a href="${ e.href + num }" style="color:#000;">[${ num }]</a>
-          ${ rest }
+            <a href="${ e.href + num }" style="color:#000;">[${ num }]</a>
+            ${ rest }
           </def>`;
       } );
 
       // other splits after first
-      const splits = $$( ".split" ).slice( 1 ).forEach( ( split, index ) => {
+      $$( ".split" ).slice( 1 ).forEach( ( split, index ) => {
         const exists = document.querySelector( `#top${ index }` );
         if ( exists ) return;
 
@@ -42,13 +45,18 @@
         hr.id = `top${ index }`;
         split.insertBefore( hr, split.firstChild );
       } );
+
+      $$( ".postp" ).forEach( ( e, i ) => {
+        e.innerHTML = `<div>${ vars.author }, ${ vars.from }</div>
+        <div>${ i + 1 }</div>`
+      } );
     } );
   </script>
 
   &head;
 </head>
 
-<body class="flow-x-h" vars='&vars;'>
+<body class="flow-x-h p-rel" vars='&vars;'>
   <header class="f j-bw">
     <h1 class="m0 p0" id="title">&topic;</h1>
     <div id="year">&year;</div>
