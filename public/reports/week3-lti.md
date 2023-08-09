@@ -36,7 +36,7 @@ quantum computer and then uses a classical computer
 to do the optimization and classification
 
 ## SVM Overview
-The general idea of an SVM is to have data points from which we can draw a line (hyperplane) +++through and classify them into two classes. The SVM algorithm then finds the best possible hyperplane that separates the data into two classes.
+The general idea of an SVM is to have data points from which we can draw a line (hyperplane) +++through and classify them into two classes. The SVM algorithm then finds the best possible hyperplane that separates the data into two classes.[@2]
 
 <svg src="Wikimedia Commons" alt="Drawing a line between 2 classes" stroke="none" stroke-linecap="round" stroke-linejoin="round" viewbox="0 0 232 166" height="139" width="200">
 <g transform="translate(-212 -169)">
@@ -80,7 +80,7 @@ find a hyperplane
 
 !["A feature map transforms the data to a higher dimension to be able to better separate it"](https://upload.wikimedia.org/wikipedia/commons/d/d8/Kernel_yontemi_ile_veriyi_daha_fazla_dimensiyonlu_uzaya_tasima_islemi.png)
 
-This feature map is a function $φ$, which is difficult to find
+This feature map is a function $\phi$ , which is difficult to find
 classically. This is where the quantum computer comes in
 to find a better feature map. A feature map is a function
 which effectively lets us find the distance between two
@@ -107,49 +107,45 @@ graph LR
 
 
 ---
-|**Algorithm 1**: QSVM Internals
+|**Algorithm 1**: QSVM Internals [@1]
 ---
 ```psd
-for row x in $[0, N]$ rows
- for row y in $y > x$
-  do the $|\langle K(x)|K(y)\rangle|^2$
- done
-done
+**for** row x in $[0, N]$ rows
+ **for** row y in $y > x$
+  calculate $|\langle K(x)|K(y)\rangle|^2$
 ```
 ---
 
-And to calculate each of these values we run the following circuit
+And to calculate each of these values we run the following circuit of 6 qubits but 12 parameters $[x_1, x_2, \dots, x_6, y_1, y_2, \dots, y_6]$
 
 ---
 |**Algorithm 2**: $|\langle K(x)|K(y)\rangle|^2$
 ---
 ```psd
-for feature $x_i$ in $[0,6]$ from $x$
+**for** feature $x_i$ in $[0,6]$ from $x$
  init value $x_i$
  apply $H$
 done
-run $\text{ZZFeatureMap}(x1,..., x6)$
-for feature $y_i$ in $[0,6]$ from $y$
+run $\text{ZZFeatureMap}( x_i )$
+
+**for** feature $y_i$ in $[0,6]$ from $y$
  init value $y_i$
  apply $H$
 done
-run $\text{ZZFeatureMap}^T(y1,..., y6)$
 
-return measured value
+run $\text{ZZFeatureMap}^T( y_i )$
+
+return measurement
 ```
 ---
 
 
 ## Quantum Part
-We do not need the predictions at this stage
-
-In order to find the distance between any two points,
-we need to take each of those points two at a time and
-run them through a circuit. This circuit **is** the feature
-map and exists in Hilbert Space.
+To find the distance between any two points at a time,
+we run them through a circuit. This circuit **is** the feature map and exists in Hilbert Space.
 
 Therefore for each pair of row, we take all points and encode them in a quantum circuit as
-+++
+
 ```mermaid
 graph LR
   R1["Row_1"] --> C["ZZFeatureMap"]
@@ -157,11 +153,12 @@ graph LR
 
   C & C2 --> Compose --> M["Measure |0&rangle;<sup>n</sup>"]
 ```
-
++++
+<br/>
 <img src="https://i.imgur.com/31B1GXr.png" alt="QSVM Citcuit with U & U<sup>T</sup>" url="Higgs analysis with quantum classifiers, Belis et. al."/>
 
 $ZZFeatureMap$ is the feature map + entanglement. We do this for ${}^N C_2$ pairs of rows to calculate the Kernel Matrix
-which will be of the form $|\langle K(x)|K(y)\rangle|^2 = K_{x,y}$ and will be later used for gradient descent to find the optimum coefficients and bias values for the SVM. The kernel matrix tends to look as follows
+which will be of the form $|\langle K(x)|K(y)\rangle|^2 = K_{x,y}$ and will be later used for gradient descent to find the optimum coefficients and bias values for the SVM. The kernel matrix tends to look as follows[@3]
 
 $$
 \begin{bmatrix}
@@ -171,6 +168,25 @@ $$
   k_{N,1} & k_{N,2} & \dots & k_{N,N} \\
 \end{bmatrix}
 $$
+
+here [@3]
+
+$$
+k(x_{i},x_{j})=|\langle\Phi(x_{i})|\Phi(x_{j})\rangle|^{2}=|\langle 0^{n}|U^{\dagger}(x_{i})U(x_{j})|0^{n}\rangle|^{2}
+$$
+
+where
+
+$$
+U=\widetilde{U}_{\Phi(x)}H^{\otimes 2}\widetilde{U}_{\Phi(x)}H^{\otimes 2}
+$$
+
+and
+
+$$
+\widetilde{U}_{\Phi(x)}=\exp(i\Phi_{1}(x)ZI+i\Phi_{2}(x)IZ+i\Phi_{1,2}(x)ZZ)
+$$
+
 
 We will also repeat this step during prediction to get the test data to the same feature space as the training data.
 
@@ -183,18 +199,18 @@ dataset of 200 we run the Quantum Circuit $200\times 200 = 4\times 10^4$ times A
 ### Classical Part
 This is a fairly standard part which has been
 optimised over the years to be very fast
-given the Kernel Matrix
+given the Kernel Matrix.
 
-Simple gradient descent for the coefficients
-of each row in the Kernel Matrix to calculate the
-coefficients and bias for the Decision Function
-
-$$f(x) = \text{sign }(∑(α_i y_i K(x_i, x) + b))$$
-where
+Simple gradient descent for the coefficients of each
 
 /===
 ===
 
+of each row in the Kernel Matrix to calculate the
+coefficients and bias for the Decision Function[@2]
+
+$$f(x) = \text{sign }(∑(α_i y_i K(x_i, x) + b))$$
+where
 
 - $α_i$ is the coefficient
 - $b$ is the bias
@@ -224,8 +240,8 @@ The following solutions will all work only under the assumption that we're rewri
 The predefined QSVM function will not let us do most of these
 
 ### Rounding (Classical)
-For demonstration purposes, below is one row of the features from the dataset
-
+Consider a sample row from the dataset
++++
 ```json
 [
   -0.0863255013760815,
@@ -233,7 +249,7 @@ For demonstration purposes, below is one row of the features from the dataset
   0.03479271773272299
 ]
 ```
-+++
+
 We can see here how data is precise to 16 digits despite the fact that temperature and pressure are smoothly varying units &rarr; there exists a precision beyond which information is redundant
 
 It would make much more sense to find what this point is then round to that precision to save time and space. Lower Precision has 2 benefits
@@ -257,12 +273,13 @@ Memoisation also acts as a basic sanity check since for a well shuffled dataset 
 
 ### Parallelization (Quantum)
 #### Internal Parallelization
-Currently the model uses 1 single 6 Qubit ZZFeatureMap. This causes a significant depth slowing down the Quantum Layer. To start with the following is the effective diagram of a 6-ZZFeatureMap made up of 2-ZZFeatureMaps both with full entanglement.
-
-This circuit has just a depth of $10$ but still has entanglement between all Qubits. This slightly decouples the feature space but it might be a worthwhile tradeoff to make the circuit faster since it is now effectively $1/{5^{th}}$ the depth it was before
+Currently we use 1 single 6 Qubit ZZFeatureMap. This causes a high depth slowing down the Quantum Layer. A better attempt is the following is the 6-ZZFeatureMap made up of 2-ZZFeatureMaps to reduce the depth
 
 /===
 ===
+
+This circuit has just a depth of $10$ but still has entanglement between all Qubits. This slightly decouples the feature space but it might be a worthwhile tradeoff to make the circuit faster since it is now effectively $1/{5^{th}}$ the depth it was before
+
 
 <img src="https://i.imgur.com/vqAgDbH.png" url="Qiskit" alt="Depth can be reduced by using compound feature maps rather than simple ones" style="height:6cm"/>
 
@@ -281,12 +298,12 @@ on what the final results are expected to look like.
 ### Alternate Approaches
 #### QUBO
 The current approach is to do a Quantum Feature Map and then classical optimisation. It is also worth approaching the problem where a different
-
-
++++
 angle where we use a classical feature map and then convert that to a QUBO to anneal it
 
 ## Bibliography
-[1.
-Qiskit contributors. (2023). Qiskit: An Open-source Framework for Quantum Computing](#ref)
+[1. Qiskit contributors. (2023). "Qiskit: An Open-source Framework for Quantum Computing"](#ref)
+[2. Cortes, C., Vapnik, V. "Support-vector networks". *Mach Learn* 20, 273–297 (1995)](#ref)
+[3. Bang-Shien Chen, & Jann-Long Chern. (2022). "Generating quantum feature maps for SVM classifier"](#ref)
 
-+++/===
+/===

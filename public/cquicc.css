@@ -146,6 +146,10 @@ hr {
   margin: 10px 0 !important;
 }
 
+.def {
+  color: #000;
+}
+
 .ps {
   font-family: "Computer Modern Serif", sans-serif !important;
 }
@@ -157,5 +161,7 @@ hr {
 }
 
 m {
+  display: inline-block;
+  width: 3ch;
   font-family: "Courier New", Courier, monospace !important;
 }

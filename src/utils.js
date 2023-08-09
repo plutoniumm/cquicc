@@ -43,11 +43,10 @@ const options = {
         const rendered = code
           .split( "\n" )
           .map( ( e, i ) => {
-            return `<div class="ps"><m>${ i }:</m>&emsp;${ marked( e, mcf )
+            return `<div class="ps"><m>${ i }:</m>&ensp;${ marked( e, mcf )
               }</div>`;
           } )
           .join( "" );
-        console.log( rendered );
         return rendered;
       };
       const language = hljs.getLanguage( lang ) ? lang : 'plaintext';
