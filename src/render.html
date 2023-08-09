@@ -17,8 +17,9 @@
     loop( () => mermaid.init( undefined, $$( '.mermaid' ) ) )
   </script>
   <script>
-    let alerts = []; // type, text
     loop( () => {
+      let alerts = []; // type, text
+      // init
       $( ".split" ).style.height = "calc(29.7cm - 3em - 4cm)";
       const vars = JSON.parse(
         document.body.getAttribute( "vars" )
@@ -26,7 +27,7 @@
       )
 
       // process citations
-      const processed = $$( "a[href*='ref']" ).forEach( e => {
+      $$( "a[href*='ref']" ).forEach( e => {
         let [ num, ...rest ] = e.innerText.split( "." );
         rest = rest.join( "." );
 
@@ -47,32 +48,45 @@
         split.insertBefore( hr, split.firstChild );
       } );
 
+      // footer
       $$( ".postp" ).forEach( ( e, i ) => {
         e.innerHTML = `<div>${ vars.author }, ${ vars.from }</div>
         <div>${ i + 1 }</div>`
       } );
 
+      // images
       $$( "img,svg" ).forEach( e => {
-        const text = e.outerHTML.slice( 0, 100 );
-        const tag = e.tagName.toLowerCase();
+        if ( e.hasAttribute( "nocite" ) ) return 0;
+        if ( e.outerHTML.includes( "mermaid" ) ) return 0;
+
+        let id = e.getAttribute( "eid" );
+        if ( !id ) {
+          id = "p" + ( Math.random() * 1e6 | 0 ).toString( 36 );
+          e.setAttribute( "eid", id )
+        };
+
+        const cited = $( `#${ id }` );
+        if ( cited ) return 0;
 
         let url = e.getAttribute( "url" ) || e.getAttribute( "src" );
-        if ( !url )
-          return alerts.push( [ tag + "-src", "No url/src for: " + text ] );
-        url = new URL( url, window.location.href ).hostname;
+        if ( !url ) return alerts.push( [ "no-src", e ] );
+        try { url = new URL( url ).hostname; } catch ( e ) { }
 
         const alt = e.getAttribute( "alt" );
-        if ( !alt )
-          return alerts.push( [ tag + "-alt", "No alt for:" + text ] );
+        if ( !alt ) return alerts.push( [ "no-alt", e ] );
 
-        const grey = `<div class="img-expl">
+        const grey = `<div id="${ id }" class="img-expl">
           ${ alt.replaceAll( "\"", "" ) }, <i>${ url }</i>
         </div>`;
         e.insertAdjacentHTML( "afterend", grey );
       } );
 
+      $$( '.katex' ).forEach( e => {
+        e.outerHTML = `<span class="katex">${ e.querySelector( "math" ).outerHTML }</span>`;
+      } );
+
       alerts.forEach( ( [ type, text ] ) => {
-        console.log( `%c${ type }: $c${ text }`, "color: red;", "color: black;" );
+        console.warn( type, text );
       } )
     } );
   </script>
@@ -80,7 +94,7 @@
   &head;
 </head>
 
-<body class="flow-x-h p-rel" vars='&vars;'>
+<body class="flow-x-h p-rel" vars='&vars;' xmlns="http://www.w3.org/2000/svg">
   <header class="f j-bw">
     <h1 class="m0 p0" id="title">&topic;</h1>
     <div id="year">&year;</div>
@@ -93,7 +107,7 @@
       <div id="date">&date;</div>
     </div>
     <div class="p10" id="frontmatter-rhs">
-      <img src="/iitm.svg" height="100px" width="100px" alt="">
+      <img src="/iitm.svg" height="100px" width="100px" nocite>
     </div>
   </section>
   <hr />

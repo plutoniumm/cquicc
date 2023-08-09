@@ -28,7 +28,8 @@ export const defStyles = {
 
 const options = {
   katex: {
-    throwOnError: false
+    throwOnError: false,
+    output: "mathml",
   },
   hljs: {
     langPrefix: 'hljs language-',

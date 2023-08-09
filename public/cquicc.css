@@ -132,7 +132,8 @@ hr {
   text-align: center;
 }
 
-.katex-html {
+.katex::target-text,
+.katex>*:not(math) {
   display: none;
 }
 

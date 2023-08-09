@@ -1,3 +1,3 @@
-const $ = ( selector ) => document.querySelector( selector )
-const $$ = ( selector ) => [ ...document.querySelectorAll( selector ) ]
-const loop = ( fn ) => setTimeout( fn, 1000 );
+var $ = ( selector ) => document.querySelector( selector )
+var $$ = ( selector ) => [ ...document.querySelectorAll( selector ) ]
+var loop = ( fn ) => setTimeout( fn, 1000 );
