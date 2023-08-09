@@ -85,6 +85,11 @@
         e.outerHTML = `<span class="katex">${ e.querySelector( "math" ).outerHTML }</span>`;
       } );
 
+      $$( "h2" ).forEach( e => {
+        if ( e.innerHTML.charAt( 0 ) !== "|" ) return 0;
+        e.outerHTML = `<div>${ e.innerHTML.slice( 1 ) }</div><hr/>`;
+      } );
+
       alerts.forEach( ( [ type, text ] ) => {
         console.warn( type, text );
       } )

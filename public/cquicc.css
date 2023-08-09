@@ -140,3 +140,17 @@ hr {
 .language-json {
   padding: 0 1em !important;
 }
+
+.language-ps {
+  padding: 0 !important;
+  margin: 10px 0 !important;
+  line-height: 0.8em;
+}
+
+.ps {
+  font-family: "Computer Modern Serif", sans-serif !important;
+}
+
+m {
+  font-family: "Courier New", Courier, monospace !important;
+}

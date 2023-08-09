@@ -13,6 +13,14 @@ const renderer = {
     if ( level === "mermaid" ) {
       return `<pre class="mermaid">${ text }</pre>`;
     }
+    if ( level === "psd" ) {
+      const lines = [];
+      text.split( "\n" ).forEach( ( line, index ) => {
+        lines.push( `<div class="ps"><m>${ index }</m>&emsp;${ line }</div>` );
+      } );
+
+      return `<pre class="language-ps">${ lines.join( "\n" ) }</pre>`;
+    };
     return false;
   }
 };
@@ -50,6 +58,7 @@ export const render = ( text ) => {
   const post = "<div class='postp'></div>";
 
   text = text
+    .replaceAll( "___", "<hr/>" )
     .replaceAll( "/===", "</div></section>" + post )
     .replaceAll( "===", pre + "<section class='split'><div>" )
     .replaceAll( "+++", "\n\n</div><div>\n\n" )
