@@ -7,6 +7,8 @@ import yaml from "js-yaml";
 
 import template from "./render.html?raw"
 
+const mcf = { mangle: false, headerIds: false };
+
 const renderer = {
   // code(string code, string infostring, boolean escaped)
   code ( text, level ) {
@@ -14,12 +16,7 @@ const renderer = {
       return `<pre class="mermaid">${ text }</pre>`;
     }
     if ( level === "psd" ) {
-      const lines = [];
-      text.split( "\n" ).forEach( ( line, index ) => {
-        lines.push( `<div class="ps"><m>${ index }</m>&emsp;${ line }</div>` );
-      } );
-
-      return `<pre class="language-ps">${ lines.join( "\n" ) }</pre>`;
+      return `<pre class="language-ps">${ text }</pre>`;
     };
     return false;
   }
@@ -42,6 +39,17 @@ const options = {
   hljs: {
     langPrefix: 'hljs language-',
     highlight ( code, lang ) {
+      if ( lang === "psd" ) {
+        const rendered = code
+          .split( "\n" )
+          .map( ( e, i ) => {
+            return `<div class="ps"><m>${ i }:</m>&emsp;${ marked( e, mcf )
+              }</div>`;
+          } )
+          .join( "" );
+        console.log( rendered );
+        return rendered;
+      };
       const language = hljs.getLanguage( lang ) ? lang : 'plaintext';
       return hljs.highlight( code, { language } ).value;
     }
@@ -85,10 +93,7 @@ export const render = ( text ) => {
 
   let html =
     typeset(
-      marked(
-        rest.join( "---" ),
-        { mangle: false, headerIds: false }
-      )
+      marked( rest.join( "---" ), mcf )
     );
 
   html = template

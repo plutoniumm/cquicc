@@ -9,7 +9,12 @@
   <link rel="stylesheet" href="https://manav.ch/atomic.css">
   <link rel="stylesheet" href="/cquicc.css">
   <link rel="stylesheet" href="/hljs.css">
-  <script src="/process.js"></script>
+
+  <script>
+    var $ = ( selector ) => document.querySelector( selector )
+    var $$ = ( selector ) => [ ...document.querySelectorAll( selector ) ]
+    var loop = ( fn ) => setTimeout( fn, 1000 );
+  </script>
 
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';

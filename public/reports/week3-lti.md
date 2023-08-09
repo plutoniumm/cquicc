@@ -110,10 +110,10 @@ graph LR
 |**Algorithm 1**: QSVM Internals
 ---
 ```psd
-for row x in [0, N] rows
-  for row y in y > x
-    calculate the |<K(x)|K(y)>|^2
-  done
+for row x in $[0, N]$ rows
+ for row y in $y > x$
+  do the $|\langle K(x)|K(y)\rangle|^2$
+ done
 done
 ```
 ---
@@ -121,19 +121,19 @@ done
 And to calculate each of these values we run the following circuit
 
 ---
-|**Algorithm 2**: |<K(x)|K(y)>|^2
+|**Algorithm 2**: $|\langle K(x)|K(y)\rangle|^2$
 ---
 ```psd
-for feature xi in [0,6] from x
-  init value xi
-  apply H
+for feature $x_i$ in $[0,6]$ from $x$
+ init value $x_i$
+ apply $H$
 done
-run ZZFeatureMap([x1,..., x6])
-for feature yi in [0,6] from y
-  init value yi
-  apply H
+run $\text{ZZFeatureMap}(x1,..., x6)$
+for feature $y_i$ in $[0,6]$ from $y$
+ init value $y_i$
+ apply $H$
 done
-run ZZFeatureMap.T([y1,..., y6])
+run $\text{ZZFeatureMap}^T(y1,..., y6)$
 
 return measured value
 ```
