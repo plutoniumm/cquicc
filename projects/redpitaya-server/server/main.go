@@ -1,12 +1,11 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 
 	"github.com/fasthttp/router"
 	"github.com/fasthttp/websocket"
@@ -18,38 +17,62 @@ var (
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
-	filepath = "./data.json"
 )
 
 func handlePlot(ctx *fasthttp.RequestCtx) {
 	// recieves multipart/form-data & extracts file from form
+	errhold := ""
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		log.Println("Error extracting file from form:", err)
+		errhold = "extracting file from form"
+		log.Println(errhold, err)
 		return
 	}
 
-	f, err := file.Open()
+	dst, err := os.Create("data.txt")
 	if err != nil {
-		log.Println("Error opening file:", err)
+		errhold = "creating file"
+		log.Println(errhold, err)
 		return
 	}
-	defer f.Close()
+	defer dst.Close()
 
-	buf := new(bytes.Buffer)
-	_, err = io.Copy(buf, f)
+	src, err := file.Open()
 	if err != nil {
-		log.Println("Error copying file to buffer:", err)
+		errhold = "opening file"
+		log.Println(errhold, err)
+		return
+	}
+	defer src.Close()
+
+	_, err = io.Copy(dst, src)
+	if err != nil {
+		errhold = "copying file"
+		log.Println(errhold, err)
 		return
 	}
 
-	contents := buf.Bytes()
-	fmt.Println("Contents:", string(contents))
+	cmd := exec.Command("sh", "./runner.sh")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		errhold = "running script"
+		log.Println(errhold, err)
+		return
+	}
+
+	// start loop
+	sending = true
+	startSend()
 
 	// reply with "started plot"
 	ctx.SetContentType("text/plain")
 	ctx.SetStatusCode(fasthttp.StatusOK)
-	ctx.Write([]byte("<img id='spinner' class='spinner' src='/assets/bars.svg' />"))
+	if errhold != "" {
+		errhold = "<div class='errCont'>Error: " + errhold + "</div>"
+		ctx.Write([]byte(errhold))
+	} else {
+		ctx.Write(output)
+	}
 }
 
 func main() {
@@ -74,7 +97,6 @@ func main() {
 		ctx.SetContentType("text/html")
 		ctx.Write(data)
 	})
-
 	r.GET("/ws", func(ctx *fasthttp.RequestCtx) {
 		err := upgrader.Upgrade(ctx, func(conn *websocket.Conn) {
 			handleWS(conn)
@@ -86,6 +108,19 @@ func main() {
 
 		defer ctx.Response.ConnectionClose()
 	})
+	r.GET("/kill", func(ctx *fasthttp.RequestCtx) {
+		terminator()
+		ctx.SetContentType("text/plain")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.Write([]byte("killed"))
+	})
+	r.GET("/pkill", func(ctx *fasthttp.RequestCtx) {
+		ctx.SetContentType("text/plain")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+		ctx.Write([]byte("killed"))
+		os.Exit(0)
+	})
+
 	r.POST("/plot", handlePlot)
 
 	log.Println("Server listening on port " + PORT)

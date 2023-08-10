@@ -15,6 +15,38 @@ type Exec struct {
 	Data interface{} `json:"data"`
 }
 
+var (
+	conn     *websocket.Conn
+	filepath = "./data.json"
+	sending  = false
+)
+
+func startSend() {
+	for {
+		data, err := ioutil.ReadFile(filepath)
+		if err != nil {
+			log.Println("getJSON error:", err)
+			return
+		}
+
+		err = conn.WriteMessage(websocket.TextMessage, []byte(data))
+		if err != nil {
+			log.Println("Websocket write error:", err)
+			return
+		}
+
+		time.Sleep(1 * time.Second)
+
+		if !sending {
+			return
+		}
+	}
+}
+
+func terminator() {
+	sending = false
+}
+
 func handleWS(conn *websocket.Conn) {
 	for {
 		exec := Exec{}
@@ -25,30 +57,5 @@ func handleWS(conn *websocket.Conn) {
 		}
 
 		fmt.Println("Received message:", exec.Run)
-
-		switch string(exec.Run) {
-		case "start":
-			log.Println("Start sending data.json")
-			for {
-				data, err := ioutil.ReadFile(filepath)
-				if err != nil {
-					log.Println("getJSON error:", err)
-					return
-				}
-
-				err = conn.WriteMessage(websocket.TextMessage, []byte(data))
-				if err != nil {
-					log.Println("Websocket write error:", err)
-					return
-				}
-
-				time.Sleep(1 * time.Second)
-			}
-		case "stop":
-			log.Println("Stop sending data.json")
-			return
-		default:
-			fmt.Println(exec)
-		}
 	}
 }

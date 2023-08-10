@@ -57,6 +57,17 @@ h2 {
   left: 0;
 }
 
+.errCont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faaa;
+  color: #f44;
+  border-radius: 10px;
+  border: 2px solid #f44;
+  margin: 5px;
+}
+
 .error {
   color: #fff;
   background: #f22;
