@@ -1,16 +1,12 @@
-const base = new URL( window.location.href )
+const base = new URL( window.location.href );
+const WS_MAX_RECONNECT_ATTEMPTS = 10;
+const ERROR_TIMEOUT = 6e3;
 
-document.querySelectorAll( '[tx]' ).forEach( el => {
-  el.style.color = el.getAttribute( 'tx' );
-} );
-document.querySelectorAll( '[bg]' ).forEach( el => {
-  el.style.backgroundColor = el.getAttribute( 'bg' );
-} );
-document.querySelectorAll( '[flex]' ).forEach( el => {
-  el.style.flex = el.getAttribute( 'flex' ) || 1;
-} );
+$$( '[tx]' ).forEach( e => setStyle( e, 'color', "tx" ) );
+$$( '[bg]' ).forEach( e => setStyle( e, 'backgroundColor', "bg" ) );
+$$( '[flex]' ).forEach( e => setStyle( e, 'flex', "flex" ) );
 
-const errorHolder = document.querySelector( '#error-holder' );
+const errorHolder = $( '#error-holder' );
 const errorNodes = [];
 const createErrorNode = ( msg ) => {
   const errorNode = document.createElement( 'div' );
@@ -22,7 +18,7 @@ const createErrorNode = ( msg ) => {
   setTimeout( () => {
     errorNode.remove();
     errorNodes.splice( errorNodes.indexOf( errorNode ), 1 );
-  }, 6e3 );
+  }, ERROR_TIMEOUT );
 };
 
 document.body.addEventListener( "htmx:afterRequest", function ( e ) {
@@ -30,9 +26,8 @@ document.body.addEventListener( "htmx:afterRequest", function ( e ) {
   let response = e.detail;
 
   if ( response.error ) {
-    if ( response.status == 500 ) {
+    if ( response.status == 500 )
       error = "Server Error";
-    }
     createErrorNode( error + " at " + response.pathInfo.requestPath )
   };
 } );
@@ -49,8 +44,13 @@ function connectWS ( attempt, then, cb = console.log ) {
   };
 
   ws.onmessage = function ( e ) {
-    const { data } = JSON.parse( e );
-
+    let data;
+    try {
+      data = JSON.parse( e.data );
+    } catch ( err ) {
+      console.log( "Parse Error" );
+      data = e.data;
+    }
     cb( data );
   };
 
@@ -58,7 +58,7 @@ function connectWS ( attempt, then, cb = console.log ) {
     console.log( 'Socket closed. Reconnecting for attempt:', attempt );
 
     attempt += 1;
-    if ( attempt > 5 ) {
+    if ( attempt > WS_MAX_RECONNECT_ATTEMPTS ) {
       ws = null;
       return console.log( 'Max retries reached' );
     } else {
@@ -83,15 +83,14 @@ function connectWS ( attempt, then, cb = console.log ) {
 
 function then () {
   return {
-    run: "start",
+    run: "connected",
     data: {
-      id: "test",
-      name: "Test",
+      test: "check",
     }
   };
 };
 function cb ( data ) {
-  console.log( data );
+  console.log( "GOT: ", data );
 };
 
 connectWS( 0, then, cb );

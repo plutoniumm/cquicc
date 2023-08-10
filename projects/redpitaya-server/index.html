@@ -10,7 +10,15 @@
   <link rel="apple-touch-icon" href="">
   <link rel="icon" type="image/png" href="">
 
-  <script src="https://unpkg.com/htmx.org@1.9.3" crossorigin="anonymous"></script>
+  <script>
+    const $ = ( selector ) => document.querySelector( selector );
+    const $$ = ( selector ) => document.querySelectorAll( selector );
+    const setStyle = ( el, name, from ) => {
+      const value = el.getAttribute( from );
+      if ( !value ) return 0;
+      el.style.setProperty( name, value )
+    };
+  </script>
 
   <title>Redpitaya LocalServer</title>
 </head>
@@ -18,40 +26,19 @@
 <body class="mx-a" xmlns:svg="http://www.w3.org/2000/svg">
   <h1 tx="red" class="w-100 mx-a">Redpitaya WebServer</h1>
 
-  <h2>Specific Functions</h2>
   <main>
-    <section>
-      <h3>Blink LED</h3>
-      <div class="f j-bw">
-        <button id="blink" flex hx-get="/blink?led=1" hx-target="#led-result1" hx-swap="innerHTML"
-          hx-trigger="click">Blink
-          LED1</button>
-        <div flex></div>
-        <div class="result p5" flex="5" id="led-result1">BLINK?</div>
-      </div>
-      <br>
-      <div class="f j-bw">
-        <button id="blink" flex hx-get="/blink?led=2" hx-target="#led-result2" hx-swap="innerHTML"
-          hx-trigger="click">Blink
-          LED2</button>
-        <div flex></div>
-        <div class="result p5" flex="5" id="led-result2">BLINK?</div>
-      </div>
-    </section>
-
     <section>
       <h3>Plot from file</h3>
       <p>
-        Attach a file with N values of x,y pairs. The server will plot the data.
+        Attach a file with N values of x,y pairs. Th server will plot the data.
       </p>
 
-      <form class="f j-bw" hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML"
-        hx-encoding='multipart/form-data' hx-indicator="#spinner">
+      <form class="f j-bw" id="startPlot">
         <input type="file" name="file" id="file" required />
 
         <div>
           <button type="submit">Plot</button>
-          <button hx-get="/kill" hx-target="#kill-result" hx-swap="innerHTML" hx-trigger="click">Kill</button>
+          <button id="kill">Kill</button>
         </div>
       </form>
 
@@ -64,8 +51,11 @@
   </main>
 
   <div id="error-holder" class="p-fix f-col"></div>
+  <!-- setting up stuff -->
   <script src="/assets/handlers.js"></script>
   <script src="/assets/image.js"></script>
+  <!-- main stuff -->
+  <script src="/assets/events.js"></script>
 </body>
 
 </html>
