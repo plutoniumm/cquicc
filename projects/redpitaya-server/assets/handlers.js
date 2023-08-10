@@ -44,13 +44,8 @@ function connectWS ( attempt, then, cb = console.log ) {
   };
 
   ws.onmessage = function ( e ) {
-    let data;
-    try {
-      data = JSON.parse( e.data );
-    } catch ( err ) {
-      console.log( "Parse Error" );
-      data = e.data;
-    }
+    let data = e.data;
+    diffAndPlot( data );
     cb( data );
   };
 

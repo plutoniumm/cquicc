@@ -16,8 +16,8 @@ type Exec struct {
 }
 
 var (
-	conn     *websocket.Conn
-	filepath = "./data.json"
+	gconn    *websocket.Conn
+	filepath = "./send.txt"
 	sending  = false
 )
 
@@ -25,11 +25,11 @@ func startSend() {
 	for {
 		data, err := ioutil.ReadFile(filepath)
 		if err != nil {
-			log.Println("getJSON error:", err)
+			log.Println("getfile error:", err)
 			return
 		}
 
-		err = conn.WriteMessage(websocket.TextMessage, []byte(data))
+		err = gconn.WriteMessage(websocket.TextMessage, []byte(data))
 		if err != nil {
 			log.Println("Websocket write error:", err)
 			return
@@ -49,6 +49,7 @@ func terminator() {
 
 func handleWS(conn *websocket.Conn) {
 	for {
+		gconn = conn
 		exec := Exec{}
 		err := conn.ReadJSON(&exec)
 		if err != nil {

@@ -43,10 +43,6 @@ function makeChessboard ( n ) {
   return generateImage( values );
 };
 
-const chessboard = makeChessboard( 50 );
-const image = document.getElementById( "testsvg" );
-image.innerHTML = chessboard;
-
 const matrixDiff = ( matA, matB ) => {
   const arr = [];
   for ( let i = 0;i < matA.length;i++ ) {
@@ -56,7 +52,7 @@ const matrixDiff = ( matA, matB ) => {
     };
     arr.push( subArr );
   };
-  return diff;
+  return arr;
 };
 
 function toEncodedString ( values ) {
