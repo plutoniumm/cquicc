@@ -5,7 +5,7 @@ const binary_randoms = ( len ) => {
   crypto.getRandomValues( array );
   for ( let i = 0;i < len;i++ ) {
     array[ i ] = array[ i ] % 2;
-  }
+  };
 
   return array;
 }
@@ -21,8 +21,8 @@ function generateImage ( values ) {
           values[ i ][ j ] ? "#000" : "#fff"
         )
       );
-    }
-  }
+    };
+  };
 
   return `<svg width="${ 2 * values.length }" height="${ 2 * values[ 0 ].length }">
     ${ image.join( "" ) }
@@ -36,9 +36,9 @@ function makeChessboard ( n ) {
     const array = new Int8Array( n );
     for ( let j = 0;j < n;j++ ) {
       array[ j ] = ( i + j ) % 2;
-    }
+    };
     values.push( array );
-  }
+  };
 
   return generateImage( values );
 };
@@ -53,8 +53,8 @@ const matrixDiff = ( matA, matB ) => {
     const subArr = new Int8Array( matA[ 0 ].length );
     for ( let j = 0;j < matA[ 0 ].length;j++ ) {
       subArr[ j ] = matA[ i ][ j ] - matB[ i ][ j ];
-    }
+    };
     arr.push( subArr );
-  }
+  };
   return diff;
-}
+};
