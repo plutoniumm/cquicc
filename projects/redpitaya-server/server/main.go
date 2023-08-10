@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -17,6 +20,37 @@ var (
 	}
 	filepath = "./data.json"
 )
+
+func handlePlot(ctx *fasthttp.RequestCtx) {
+	// recieves multipart/form-data & extracts file from form
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		log.Println("Error extracting file from form:", err)
+		return
+	}
+
+	f, err := file.Open()
+	if err != nil {
+		log.Println("Error opening file:", err)
+		return
+	}
+	defer f.Close()
+
+	buf := new(bytes.Buffer)
+	_, err = io.Copy(buf, f)
+	if err != nil {
+		log.Println("Error copying file to buffer:", err)
+		return
+	}
+
+	contents := buf.Bytes()
+	fmt.Println("Contents:", string(contents))
+
+	// reply with "started plot"
+	ctx.SetContentType("text/plain")
+	ctx.SetStatusCode(fasthttp.StatusOK)
+	ctx.Write([]byte("<img id='spinner' class='spinner' src='/assets/bars.svg' />"))
+}
 
 func main() {
 	r := router.New()
@@ -52,6 +86,7 @@ func main() {
 
 		defer ctx.Response.ConnectionClose()
 	})
+	r.POST("/plot", handlePlot)
 
 	log.Println("Server listening on port " + PORT)
 	log.Fatal(fasthttp.ListenAndServe(":"+PORT, r.Handler))

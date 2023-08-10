@@ -10,6 +10,8 @@
   <link rel="apple-touch-icon" href="">
   <link rel="icon" type="image/png" href="">
 
+  <script src="https://unpkg.com/htmx.org@1.9.4" crossorigin="anonymous"></script>
+
   <script>
     const $ = ( selector ) => document.querySelector( selector );
     const $$ = ( selector ) => document.querySelectorAll( selector );
@@ -33,7 +35,8 @@
         Attach a file with N values of x,y pairs. Th server will plot the data.
       </p>
 
-      <form class="f j-bw" id="startPlot">
+      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML"
+        hx-encoding="multipart/form-data" hx-trigger="submit">
         <input type="file" name="file" id="file" required />
 
         <div>
@@ -42,9 +45,7 @@
         </div>
       </form>
 
-      <div class="result p5" id="plot-result" style="margin: 1em 0;">
-        <img id="spinner" class="htmx-indicator spinner" src="/assets/bars.svg" />
-      </div>
+      <div class="p5 tc m20" id="plot-result"></div>
     </section>
 
     <div id="testsvg"></div>

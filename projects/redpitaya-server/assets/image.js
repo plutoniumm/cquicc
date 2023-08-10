@@ -8,7 +8,7 @@ const binary_randoms = ( len ) => {
   };
 
   return array;
-}
+};
 
 function generateImage ( values ) {
   var image = [];
@@ -57,4 +57,28 @@ const matrixDiff = ( matA, matB ) => {
     arr.push( subArr );
   };
   return diff;
+};
+
+function toEncodedString ( values ) {
+  // push everything into a single array
+  const single = new Int8Array( values.length * values[ 0 ].length );
+  for ( let i = 0;i < values.length;i++ ) {
+    for ( let j = 0;j < values[ 0 ].length;j++ ) {
+      single[ i * values[ 0 ].length + j ] = values[ i ][ j ];
+    };
+  }
+
+  // take 8 bits at a time
+  const encoded = [];
+  for ( let i = 0;i < single.length;i += 8 ) {
+    let num = 0;
+    for ( let j = 0;j < 8;j++ ) {
+      num = num * 2 + single[ i + j ];
+    };
+    encoded.push( num );
+  }
+
+  // convert to base64
+  const base64 = btoa( String.fromCharCode.apply( null, encoded ) );
+  return base64;
 };

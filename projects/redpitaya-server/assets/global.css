@@ -20,7 +20,10 @@ img {
 
 .spinner {
   transform-origin: center;
-  animation: spinner .75s infinite linear
+  animation: spinner .75s infinite linear;
+  filter: invert(1);
+  width: 100px;
+  height: 100px;
 }
 
 @keyframes spinner {
@@ -76,7 +79,6 @@ h2 {
   width: calc(100% - 10px);
   font-size: 16px;
   font-family: 'Courier New', Courier, monospace;
-  background: #222;
   color: #888;
 }
 
