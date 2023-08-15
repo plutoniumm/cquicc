@@ -8,71 +8,55 @@ import (
 	"os/exec"
 
 	"github.com/fasthttp/router"
-	"github.com/fasthttp/websocket"
 	"github.com/valyala/fasthttp"
 )
 
-var (
-	upgrader = websocket.FastHTTPUpgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-)
+func gErr(err string) []byte {
+	err = "<div class='errCont'>Error: " + err + "</div>"
+	return []byte(err)
+}
 
-func handlePlot(ctx *fasthttp.RequestCtx) {
-	// recieves multipart/form-data & extracts file from form
-	errhold := ""
-	file, err := ctx.FormFile("file")
+func handlePlot(c *fasthttp.RequestCtx) {
+	// get ready to exit anytime
+	c.SetContentType("text/plain")
+	c.SetStatusCode(fasthttp.StatusOK)
+
+	file, err := c.FormFile("file")
 	if err != nil {
-		errhold = "extracting file from form"
-		log.Println(errhold, err)
+		c.Write(gErr("extracting file from form"))
 		return
 	}
 
-	dst, err := os.Create("data.txt")
+	dst, err := os.Create("./data/input.txt")
 	if err != nil {
-		errhold = "creating file"
-		log.Println(errhold, err)
+		c.Write(gErr("creating file"))
 		return
 	}
 	defer dst.Close()
 
 	src, err := file.Open()
 	if err != nil {
-		errhold = "opening file"
-		log.Println(errhold, err)
+		c.Write(gErr("opening file"))
 		return
 	}
 	defer src.Close()
 
 	_, err = io.Copy(dst, src)
 	if err != nil {
-		errhold = "copying file"
-		log.Println(errhold, err)
+		c.Write(gErr("copying file"))
 		return
 	}
 
-	cmd := exec.Command("sh", "./runner.sh")
-	output, err := cmd.CombinedOutput()
+	cmd := exec.Command("sh", "./main.sh")
+	_, err = cmd.CombinedOutput()
 	if err != nil {
-		errhold = "running script"
-		log.Println(errhold, err)
+		c.Write(gErr("running script"))
 		return
 	}
 
-	// start loop
-	sending = true
-	startSend()
-
-	// reply with "started plot"
-	ctx.SetContentType("text/plain")
-	ctx.SetStatusCode(fasthttp.StatusOK)
-	if errhold != "" {
-		errhold = "<div class='errCont'>Error: " + errhold + "</div>"
-		ctx.Write([]byte(errhold))
-	} else {
-		ctx.Write(output)
-	}
+	spinner := "<div class='spinner w-100'><img class='mx-a' src='bars.svg' alt='loading' /></div>"
+	c.Write([]byte(spinner))
+	return
 }
 
 func main() {
@@ -85,6 +69,7 @@ func main() {
 		PORT = "1337"
 	}
 
+	r.ServeFiles("/data/{filepath:*}", "./data")
 	r.ServeFiles("/assets/{filepath:*}", "./assets")
 
 	// index.html
@@ -96,23 +81,6 @@ func main() {
 
 		ctx.SetContentType("text/html")
 		ctx.Write(data)
-	})
-	r.GET("/ws", func(ctx *fasthttp.RequestCtx) {
-		err := upgrader.Upgrade(ctx, func(conn *websocket.Conn) {
-			handleWS(conn)
-		})
-		if err != nil {
-			log.Println("Websocket upgrade error:", err)
-			return
-		}
-
-		defer ctx.Response.ConnectionClose()
-	})
-	r.GET("/kill", func(ctx *fasthttp.RequestCtx) {
-		terminator()
-		ctx.SetContentType("text/plain")
-		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.Write([]byte("killed"))
 	})
 	r.GET("/pkill", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")

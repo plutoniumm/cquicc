@@ -10,24 +10,7 @@ const binary_randoms = ( len ) => {
   return array;
 };
 
-function generateImage ( values ) {
-  var image = [];
-  const px = 10;
-  for ( let i = 0;i < values.length;i++ ) {
-    for ( let j = 0;j < values[ 0 ].length;j++ ) {
-      image.push(
-        rect(
-          px * i, px * j, px, px,
-          values[ i ][ j ] ? "#000" : "#fff"
-        )
-      );
-    };
-  };
 
-  return `<svg width="${ 2 * values.length }" height="${ 2 * values[ 0 ].length }">
-    ${ image.join( "" ) }
-  </svg>`;
-};
 
 function makeChessboard ( n ) {
   let values = [];
