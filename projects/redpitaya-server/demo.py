@@ -23,8 +23,9 @@ def generate_values():
 
 def calculate_loss(x):
   x = 100-x
-  jitter = 0.25 * x
-  y = round(10 - sqrt(x) + jitter, 2)
+  rt = sqrt(x)
+  jitter = 0.25 * rt
+  y = round(10 - rt + jitter, 2)
 
   return str(x) + "," + str(y) + "\n"
 
