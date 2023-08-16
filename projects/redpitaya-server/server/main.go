@@ -12,7 +12,7 @@ import (
 )
 
 func handlePlot(c *fasthttp.RequestCtx) {
-	// get ready to exit anytime
+	fmt.Println("Got plot request")
 	c.SetContentType("text/plain")
 	c.SetStatusCode(fasthttp.StatusOK)
 
@@ -21,6 +21,8 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		gErr("extracting file from form", c)
 		return
 	}
+
+	fmt.Println("Got file: " + file.Filename)
 
 	dst, err := os.Create("./data/input.txt")
 	if err != nil {
@@ -42,7 +44,7 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		return
 	}
 
-	fmt.Println("Got & wrote file: " + file.Filename)
+	fmt.Println("Got & wrote file")
 
 	// run the script
 	cmd := runFn([]string{"sh", "./main.sh", "start"})
