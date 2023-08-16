@@ -12,6 +12,6 @@ mv cquicc/projects/redpitaya-server server
 
 rm -rf cquicc
 
-mv server/assets/start.sh start.sh
-chmod +777 start.sh
+# the main server running stuff
+mv server/server/red start
 mv -f server/assets/update.sh update.sh
