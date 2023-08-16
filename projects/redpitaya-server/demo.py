@@ -1,7 +1,7 @@
 from math import sqrt
 from random import randint,random
 from time import sleep
-import os
+from os import remove
 
 DATA_FILE = "./data/send.txt"
 LOSS_FILE = "./data/loss.txt"
@@ -17,9 +17,7 @@ def generate_values():
   for x in ITERS:
     for y in ITERS:
       RND = str(randint(0, 1))
-
-      temp = str(x) + "," + str(y) + "," + RND + "\n"
-      result += temp
+      result += str(x) + "," + str(y) + "," + RND + "\n"
 
   return result
 
@@ -30,8 +28,9 @@ def calculate_loss(x):
   return str(x) + "," + str(y) + "\n"
 
 # first delete .txt files
-os.remove(DATA_FILE)
-os.remove(LOSS_FILE)
+remove(DATA_FILE)
+remove(LOSS_FILE)
+print("Deleted old files")
 
 loops = SAFETY_CUTOFF
 while loops > 0:
