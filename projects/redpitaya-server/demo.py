@@ -1,5 +1,5 @@
 from math import sqrt
-from random import randint,random
+from random import randint
 from time import sleep
 from os import remove
 
@@ -22,15 +22,19 @@ def generate_values():
   return result
 
 def calculate_loss(x):
-  jitter = (random() / 32768.0) * 0.1 * x
-  y = round(sqrt(x) + jitter, 2)
+  x = 100-x
+  jitter = 0.25 * x
+  y = round(10 - sqrt(x) + jitter, 2)
 
   return str(x) + "," + str(y) + "\n"
 
 # first delete .txt files
-remove(DATA_FILE)
-remove(LOSS_FILE)
-print("Deleted old files")
+try:
+  remove(DATA_FILE)
+  remove(LOSS_FILE)
+  print("Deleted old files")
+except:
+  print("No old files")
 
 loops = SAFETY_CUTOFF
 while loops > 0:

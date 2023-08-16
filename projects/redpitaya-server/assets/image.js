@@ -1,6 +1,5 @@
 const canvas = $( "#pCanvas" );
 const ctx = canvas.getContext( "2d" );
-
 const lossPlot = $( "#lCanvas" ).getContext( "2d" );
 
 /**
@@ -20,9 +19,14 @@ function generateHeat ( values ) {
   };
 };
 
+
 let chart = null;
-function generateLoss ( values ) {
-  if ( chart ) chart.destroy();
+async function generateLoss ( values ) {
+  if ( chart ) {
+    chart.data.datasets[ 0 ].data = values;
+    chart.update();
+    return 0;
+  }
   try {
     chart = new Chart( lossPlot, {
       type: 'scatter',
@@ -32,18 +36,15 @@ function generateLoss ( values ) {
           data: values,
           backgroundColor: '#f683',
           borderColor: '#f68',
-          borderWidth: 1
+          borderWidth: 1,
         } ]
       },
       options: {
         responsive: true,
-        animation: { duration: 0 },
-        hover: { animationDuration: 0 },
-        responsiveAnimationDuration: 0,
       },
     } );
   } catch ( e ) {
-    if ( !( values?.length > 1 ) ) {
+    if ( !( values?.length > -1 ) ) {
       createErrorNode( "No Data Recieved. Stopping Plot" );
       END();
     } else {

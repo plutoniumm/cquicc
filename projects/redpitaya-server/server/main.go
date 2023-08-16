@@ -53,8 +53,7 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		return
 	}
 
-	spinner := "<div class='spinner w-100'><img class='mx-a' src='assets/bars.svg' alt='loading' /></div>"
-	c.Write([]byte(spinner))
+	c.Write([]byte(""))
 	return
 }
 

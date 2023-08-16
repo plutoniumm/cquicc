@@ -40,8 +40,7 @@ setInterval( () => {
   console.log( "Updating...", iter++ );
   work( "start" ).then( d => {
     const { data, loss } = JSON.parse( d );
-    generateHeat( data );
-    generateLoss( loss );
+    const t = [ generateLoss( loss ), generateHeat( data ) ]
   } ).catch( e => {
     createErrorNode( "Connection Error", e.message );
     calling = false;

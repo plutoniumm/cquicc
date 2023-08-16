@@ -17,10 +17,14 @@ const getValues = ( str ) => str.trim().split( "\n" )
  @returns {Promise<string[]>}
 */
 const getData = async () => {
-  const data = await Promise.all( [
+  let data = [];
+  data = await Promise.all( [
     p( '/data/send.txt' ),
     p( '/data/loss.txt' )
-  ] );
+  ] ).catch( e => {
+    console.log( e );
+    data = [];
+  } );
 
   return data.map( getValues );
 };
