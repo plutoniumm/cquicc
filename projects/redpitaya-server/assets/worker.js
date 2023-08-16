@@ -1,6 +1,3 @@
-// *************
-// INITIAL DEFS
-// *************
 /**
  @param {string} file
  @returns {Promise<string>}
@@ -12,16 +9,6 @@ const p = ( file ) => fetch( file ).then( r => r.text() );
 */
 const getValues = ( str ) => str.trim().split( "\n" )
   .map( r => r.split( "," ).map( v => +( v.trim() ) ) );
-
-/**
- * @param {number} x
- * @param {number} y
- * @param {number} w
- * @param {number} h
- * @param {string} color
- * @returns {string}
-*/
-const rect = ( x, y, w, h, color = "#000" ) => `<rect x="${ x }" y="${ y }" width="${ w }" height="${ h }" fill="${ color }" />`;
 
 // *************
 // MAIN FUNCTIONS
@@ -38,8 +25,6 @@ const getData = async () => {
   return data.map( getValues );
 };
 
-
-
 async function main () {
   const [ data, loss ] = await getData();
 
@@ -49,8 +34,4 @@ async function main () {
     )
   } ) );
 };
-
-self.onmessage = async function ( e ) {
-  const data = await main();
-  self.postMessage( data );
-};
+self.onmessage = () => main();

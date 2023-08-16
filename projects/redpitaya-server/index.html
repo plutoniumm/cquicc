@@ -10,13 +10,13 @@
   <link rel="apple-touch-icon" href="">
   <link rel="icon" type="image/png" href="">
 
-  <script async src="https://unpkg.com/htmx.org@1.9.4" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script async src="/assets/vendors/htmx.js"></script>
+  <script async src="/assets/vendors/chart.js"></script>
 
   <script>
     const worker = new Worker( '/assets/worker.js' );
-    const $ = ( selector ) => document.querySelector( selector );
-    const $$ = ( selector ) => document.querySelectorAll( selector );
+    const $ = ( s ) => document.querySelector( s );
+    const $$ = ( s ) => document.querySelectorAll( s );
     const setStyle = ( el, name, from ) => {
       const value = el.getAttribute( from );
       if ( !value ) return 0;
@@ -28,7 +28,10 @@
       msg = typeof msg === 'string' ? msg : JSON.stringify( msg );
       worker.postMessage( msg );
       worker.onmessage = ( e ) => resolve( e.data );
-      worker.onerror = ( e ) => reject( e );
+      worker.onerror = ( e ) => {
+        END();
+        reject( e );
+      };
     } );
   </script>
 
@@ -40,18 +43,25 @@
 
   <main>
     <section>
+      <div class="f fw j-bw m20">
+        <div>Reconnect to Existing</div>
+        <button id="connect" onclick="BEGIN()">Connect</button>
+        <p class="w-100" style="font-size: 0.8em;color:#888;">
+          Be careful about this. It will start a listen loop. However just press kill to stop it if you have no session
+          running
+        </p>
+      </div>
+
       <h3>Plot from file</h3>
       <p>
         Attach a file with N values of x,y pairs. Th server will plot the data.
       </p>
-
-      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-target="#plot-result" hx-swap="innerHTML"
-        hx-encoding="multipart/form-data" hx-trigger="submit">
+      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-encoding="multipart/form-data" hx-trigger="submit">
         <input type="file" name="file" id="file" required />
 
-        <div>
-          <button type="submit">Plot</button>
-          <button id="kill">Kill</button>
+        <div id="commands">
+          <button id="plotB" type="submit">Plot</button>
+          <button id="kill" onclick="END()">Kill</button>
         </div>
       </form>
 
@@ -70,13 +80,21 @@
   <script src="/assets/image.js"></script>
 
   <script>
-    work( "start" ).then( d => {
-      const { data, loss } = JSON.parse( d );
-      const heatmap = generateHeat( data );
-      const lossplot = generateLoss( loss );
-    } ).catch( e => {
-      console.log( "E:", e );
-    } );
+    const commands = $( '#commands' );
+    commands.addEventListener( 'click', ( e ) => {
+      switch ( e.target.id ) {
+        case 'plotB':
+          const file = $( '#file' );
+          if ( !file.files[ 0 ] ) {
+            alert( 'Please attach a file' );
+            return 0;
+          }
+          BEGIN()
+          break;
+        default:
+          break;
+      }
+    } )
   </script>
 </body>
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -76,30 +77,20 @@ func main() {
 		ctx.SetContentType("text/html")
 		ctx.Write(data)
 	})
-	r.GET("/kill/:type", func(ctx *fasthttp.RequestCtx) {
+	r.GET("/kill/{type}", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")
 		ctx.SetStatusCode(fasthttp.StatusOK)
 
 		killType := ctx.UserValue("type").(string)
-
+		fmt.Println("Got kill request for: " + killType)
 		switch killType {
-		case "system":
-			cmd := runFn([]string{"shutdown", "now"})
-			if cmd != "200" {
-				gErr("Couldn't Shutdown: "+cmd, ctx)
-				return
-			}
-			// no confirmation sent if shutdown works
-
 		case "parent":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
 			if cmd != "200" {
-				gErr("Child will be orphaned: "+cmd, ctx)
-				return
+				fmt.Println("Couldn't Kill Child: " + cmd)
 			}
-			ctx.Write([]byte("Server killed"))
-			// send confirmation before exiting
 			os.Exit(0)
+			return
 
 		case "child":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
@@ -109,6 +100,7 @@ func main() {
 			}
 			ctx.Write([]byte("He was taken from us too soon."))
 		}
+		return
 	})
 
 	r.POST("/plot", handlePlot)

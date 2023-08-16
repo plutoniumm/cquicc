@@ -1,5 +1,5 @@
 from math import sqrt
-from random import random
+from random import randint,random
 from time import sleep, time_ns
 
 DATA_FILE = "./data/send.txt"
@@ -12,12 +12,10 @@ ITERS = 50
 ITERS = range(ITERS + 1)
 def generate_values():
   result = ""
-  NUM = time_ns() % 32768
 
   for x in ITERS:
     for y in ITERS:
-      NUM = ((NUM * 11345 + 12345) % 32768) // 100
-      RND = str(NUM % 2)
+      RND = str(randint(0, 1))
 
       temp = str(x) + "," + str(y) + "," + RND + "\n"
       result += temp
@@ -28,7 +26,7 @@ def calculate_loss(x):
   jitter = (random() / 32768.0) * 0.1 * x
   y = round(sqrt(x) + jitter, 2)
 
-  return "\n" + str(x) + "," + str(y)
+  return str(x) + "," + str(y) + "\n"
 
 
 loops = SAFETY_CUTOFF

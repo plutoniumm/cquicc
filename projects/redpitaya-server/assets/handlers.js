@@ -31,3 +31,29 @@ document.body.addEventListener( "htmx:afterRequest", function ( e ) {
     createErrorNode( error + " at " + response.pathInfo.requestPath )
   };
 } );
+
+
+let calling = false;
+let iter = 0;
+setInterval( () => {
+  if ( !calling ) return;
+  console.log( "Updating...", iter++ );
+  work( "start" ).then( d => {
+    const { data, loss } = JSON.parse( d );
+    generateHeat( data );
+    generateLoss( loss );
+  } ).catch( e => {
+    createErrorNode( "Connection Error", e.message );
+    calling = false;
+    iter = 0;
+  } );
+}, 1e3 );
+
+const BEGIN = () => {
+  calling = true;
+}
+const END = () => {
+  calling = false;
+  iter = 0;
+  fetch( '/kill/child' );
+}
