@@ -43,9 +43,11 @@ const getData = async () => {
 async function main () {
   const [ data, loss ] = await getData();
 
-  self.postMessage( JSON.stringify(
-    { data, loss }
-  ) );
+  self.postMessage( JSON.stringify( {
+    data, loss: loss.map(
+      ( [ x, y ] ) => ( { x, y } )
+    )
+  } ) );
 };
 
 self.onmessage = async function ( e ) {

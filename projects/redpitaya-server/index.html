@@ -10,7 +10,8 @@
   <link rel="apple-touch-icon" href="">
   <link rel="icon" type="image/png" href="">
 
-  <script src="https://unpkg.com/htmx.org@1.9.4" crossorigin="anonymous"></script>
+  <script async src="https://unpkg.com/htmx.org@1.9.4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     const worker = new Worker( '/assets/worker.js' );
@@ -54,16 +55,17 @@
         </div>
       </form>
 
-      <div class="p5 tc m20" id="plot-result">
+      <div class="p5 tc m20">
         <canvas id="pCanvas" class="rx2" width="500px" height="500px"></canvas>
+      </div>
+      <div class="p5 tc m20">
+        <canvas id="lCanvas" class="rx2" width="500px" height="500px"></canvas>
       </div>
     </section>
 
-    <div id="testsvg"></div>
   </main>
 
   <div id="error-holder" class="p-fix f-col"></div>
-  <!-- setting up stuff -->
   <script src="/assets/handlers.js"></script>
   <script src="/assets/image.js"></script>
 
