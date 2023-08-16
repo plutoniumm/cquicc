@@ -10,11 +10,13 @@ const p = ( file ) => fetch( file ).then( r => r.text() );
  @returns {Promise<string[]>}
 */
 const getData = async () => {
-  return await Promise.all( [
-    p( '/data/data.txt' ),
+  const data = await Promise.all( [
+    p( '/data/send.txt' ),
     p( '/data/loss.txt' )
   ] );
-}
+
+  return data;
+};
 
 /**
   @param {number[][]} values
@@ -40,21 +42,14 @@ function generateImage ( values ) {
 };
 
 
-
-
-
-
-
-
-
 async function main () {
   const [ datafile, lossfile ] = await getData();
-}
 
-
-
-
-
+  self.postMessage( JSON.stringify( {
+    data: datafile,
+    loss: lossfile
+  } ) );
+};
 
 self.onmessage = async function ( e ) {
   const data = await main();

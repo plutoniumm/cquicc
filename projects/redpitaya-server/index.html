@@ -13,6 +13,7 @@
   <script src="https://unpkg.com/htmx.org@1.9.4" crossorigin="anonymous"></script>
 
   <script>
+    const worker = new Worker( '/assets/worker.js' );
     const $ = ( selector ) => document.querySelector( selector );
     const $$ = ( selector ) => document.querySelectorAll( selector );
     const setStyle = ( el, name, from ) => {
@@ -20,6 +21,20 @@
       if ( !value ) return 0;
       el.style.setProperty( name, value )
     };
+
+    // promisify the worker
+    const work = ( msg ) => new Promise( ( resolve, reject ) => {
+      msg = typeof msg === 'string' ? msg : JSON.stringify( msg );
+      worker.postMessage( msg );
+      worker.onmessage = ( e ) => resolve( e.data );
+      worker.onerror = ( e ) => reject( e );
+    } );
+
+    work( "start" ).then( ( data ) => {
+      console.log( "D: ", data );
+    } ).catch( ( e ) => {
+      console.log( "E:", e );
+    } );
   </script>
 
   <title>Redpitaya LocalServer</title>

@@ -48,7 +48,7 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		return
 	}
 
-	spinner := "<div class='spinner w-100'><img class='mx-a' src='bars.svg' alt='loading' /></div>"
+	spinner := "<div class='spinner w-100'><img class='mx-a' src='assets/bars.svg' alt='loading' /></div>"
 	c.Write([]byte(spinner))
 	return
 }
@@ -86,7 +86,6 @@ func main() {
 		case "system":
 			cmd := runFn([]string{"shutdown", "now"})
 			if cmd != "200" {
-				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 				gErr("Couldn't Shutdown: "+cmd, ctx)
 				return
 			}
@@ -95,7 +94,6 @@ func main() {
 		case "parent":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
 			if cmd != "200" {
-				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 				gErr("Child will be orphaned: "+cmd, ctx)
 				return
 			}
@@ -106,7 +104,6 @@ func main() {
 		case "child":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
 			if cmd != "200" {
-				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
 				gErr("Couldn't Kill Child: "+cmd, ctx)
 				return
 			}
