@@ -84,7 +84,6 @@
 
   <script>
     $( '#commands' ).addEventListener( 'click', ( e ) => {
-      e.preventDefault();
       if ( e.target.id === 'plotB' ) {
         if ( !$( '#file' ).files[ 0 ] ) {
           alert( 'Please attach a file' );
