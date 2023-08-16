@@ -42,12 +42,16 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		return
 	}
 
+	fmt.Println("Got & wrote file: " + file.Filename)
+
 	// run the script
 	cmd := runFn([]string{"sh", "./main.sh", "start"})
 	if cmd != "200" {
 		gErr("running script", c)
 		return
 	}
+
+	fmt.Println("Script ran successfully")
 
 	spinner := "<div class='spinner w-100'><img class='mx-a' src='assets/bars.svg' alt='loading' /></div>"
 	c.Write([]byte(spinner))
