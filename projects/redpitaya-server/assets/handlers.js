@@ -54,6 +54,5 @@ const BEGIN = () => {
 const END = () => {
   calling = false;
   iter = 0;
-  fetch( '/kill/child' )
-    .catch( e => console.log( "Killed" ) );
+  fetch( '/kill/child' ).catch( e => console.log( "Killed" ) );
 }
