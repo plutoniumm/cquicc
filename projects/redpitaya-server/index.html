@@ -29,12 +29,6 @@
       worker.onmessage = ( e ) => resolve( e.data );
       worker.onerror = ( e ) => reject( e );
     } );
-
-    work( "start" ).then( ( data ) => {
-      console.log( "D: ", data );
-    } ).catch( ( e ) => {
-      console.log( "E:", e );
-    } );
   </script>
 
   <title>Redpitaya LocalServer</title>
@@ -60,7 +54,9 @@
         </div>
       </form>
 
-      <div class="p5 tc m20" id="plot-result"></div>
+      <div class="p5 tc m20" id="plot-result">
+        <canvas id="pCanvas" class="rx2" width="500px" height="500px"></canvas>
+      </div>
     </section>
 
     <div id="testsvg"></div>
@@ -70,6 +66,16 @@
   <!-- setting up stuff -->
   <script src="/assets/handlers.js"></script>
   <script src="/assets/image.js"></script>
+
+  <script>
+    work( "start" ).then( d => {
+      const { data, loss } = JSON.parse( d );
+      const heatmap = generateHeat( data );
+      const lossplot = generateLoss( loss );
+    } ).catch( e => {
+      console.log( "E:", e );
+    } );
+  </script>
 </body>
 
 </html>

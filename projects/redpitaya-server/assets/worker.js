@@ -1,11 +1,31 @@
-// fetch datafile, fetch loss file
-// datafile => grid svg & lossfile => loss plot
+// *************
+// INITIAL DEFS
+// *************
 /**
  @param {string} file
  @returns {Promise<string>}
 */
 const p = ( file ) => fetch( file ).then( r => r.text() );
+/**
+ * @param {string} str
+ * @returns {number[][]}
+*/
+const getValues = ( str ) => str.trim().split( "\n" )
+  .map( r => r.split( "," ).map( v => +( v.trim() ) ) );
 
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {number} w
+ * @param {number} h
+ * @param {string} color
+ * @returns {string}
+*/
+const rect = ( x, y, w, h, color = "#000" ) => `<rect x="${ x }" y="${ y }" width="${ w }" height="${ h }" fill="${ color }" />`;
+
+// *************
+// MAIN FUNCTIONS
+// *************
 /**
  @returns {Promise<string[]>}
 */
@@ -15,40 +35,17 @@ const getData = async () => {
     p( '/data/loss.txt' )
   ] );
 
-  return data;
+  return data.map( getValues );
 };
 
-/**
-  @param {number[][]} values
-  @returns {string}
-*/
-function generateImage ( values ) {
-  var image = [];
-  const px = 10;
-  for ( let i = 0;i < values.length;i++ ) {
-    for ( let j = 0;j < values[ 0 ].length;j++ ) {
-      image.push(
-        rect(
-          px * i, px * j, px, px,
-          values[ i ][ j ] ? "#000" : "#fff"
-        )
-      );
-    };
-  };
-
-  return `<svg width="${ 2 * values.length }" height="${ 2 * values[ 0 ].length }">
-    ${ image.join( "" ) }
-  </svg>`;
-};
 
 
 async function main () {
-  const [ datafile, lossfile ] = await getData();
+  const [ data, loss ] = await getData();
 
-  self.postMessage( JSON.stringify( {
-    data: datafile,
-    loss: lossfile
-  } ) );
+  self.postMessage( JSON.stringify(
+    { data, loss }
+  ) );
 };
 
 self.onmessage = async function ( e ) {

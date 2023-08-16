@@ -1,63 +1,57 @@
-const rect = ( x, y, w, h, fill ) => `<rect x="${ x }" y="${ y }" width="${ w }" height="${ h }" fill="${ fill }" />`;
+const canvas = $( "#pCanvas" );
+const ctx = canvas.getContext( "2d" );
 
-const binary_randoms = ( len ) => {
-  const array = new Uint8Array( len );
-  crypto.getRandomValues( array );
-  for ( let i = 0;i < len;i++ ) {
-    array[ i ] = array[ i ] % 2;
-  };
+const lossplot = $( "#lossplot" );
 
-  return array;
-};
+/**
+  @param {number[][]} values
+  @returns {string}
+*/
+function generateHeat ( values ) {
+  // chessboard from nxn values on canvas
+  const n = Math.sqrt( values.length );
+  const w = canvas.width / n; // width of each square
+  const h = w;
+  console.log( values );
 
-
-
-function makeChessboard ( n ) {
-  let values = [];
-  // fill it with 0 and 1
-  for ( let i = 0;i < n;i++ ) {
-    const array = new Int8Array( n );
-    for ( let j = 0;j < n;j++ ) {
-      array[ j ] = ( i + j ) % 2;
-    };
-    values.push( array );
-  };
-
-  return generateImage( values );
-};
-
-const matrixDiff = ( matA, matB ) => {
-  const arr = [];
-  for ( let i = 0;i < matA.length;i++ ) {
-    const subArr = new Int8Array( matA[ 0 ].length );
-    for ( let j = 0;j < matA[ 0 ].length;j++ ) {
-      subArr[ j ] = matA[ i ][ j ] - matB[ i ][ j ];
-    };
-    arr.push( subArr );
-  };
-  return arr;
-};
-
-function toEncodedString ( values ) {
-  // push everything into a single array
-  const single = new Int8Array( values.length * values[ 0 ].length );
+  // draw chessboard
   for ( let i = 0;i < values.length;i++ ) {
-    for ( let j = 0;j < values[ 0 ].length;j++ ) {
-      single[ i * values[ 0 ].length + j ] = values[ i ][ j ];
-    };
-  }
+    const x = i % n;
+    const y = Math.floor( i / n );
+    const row = values[ i ];
 
-  // take 8 bits at a time
-  const encoded = [];
-  for ( let i = 0;i < single.length;i += 8 ) {
-    let num = 0;
-    for ( let j = 0;j < 8;j++ ) {
-      num = num * 2 + single[ i + j ];
-    };
-    encoded.push( num );
+    ctx.fillStyle = row[ 2 ] ? "red" : "blue";
+    ctx.fillRect( x * w, y * h, w, h );
   }
-
-  // convert to base64
-  const base64 = btoa( String.fromCharCode.apply( null, encoded ) );
-  return base64;
 };
+
+function generateLoss ( values ) {
+  // data is of form [x1,y1],[x2,y2],...
+  const data = values;
+
+  // Create an SVG element
+  const svg = document.createElement( "svg" );
+  svg.setAttribute( "width", "500" );
+  svg.setAttribute( "height", "500" );
+  const path = document.createElement( "path" );
+
+  // Generate the d attribute for the path by converting data points to a smooth line
+  const d = "M" + data.map( ( point, index ) => {
+    if ( index === 0 ) {
+      return `${ point[ 0 ] },${ point[ 1 ] }`;
+    } else {
+      const prevPoint = data[ index - 1 ];
+      const dx = ( point[ 0 ] - prevPoint[ 0 ] ) / 2;
+      return `C ${ prevPoint[ 0 ] + dx },${ prevPoint[ 1 ] } ${ point[ 0 ] - dx },${ point[ 1 ] } ${ point[ 0 ] },${ point[ 1 ] }`;
+    }
+  } ).join( " " );
+
+  // Set the d attribute of the path
+  path.setAttribute( "d", d );
+  path.setAttribute( "fill", "none" );
+  path.setAttribute( "stroke", "blue" );
+  path.setAttribute( "stroke-width", "2" );
+
+  svg.appendChild( path );
+  document.body.appendChild( svg );
+}
