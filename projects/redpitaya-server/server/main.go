@@ -5,16 +5,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"os/exec"
 
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 )
-
-func gErr(err string) []byte {
-	err = "<div class='errCont'>Error: " + err + "</div>"
-	return []byte(err)
-}
 
 func handlePlot(c *fasthttp.RequestCtx) {
 	// get ready to exit anytime
@@ -23,34 +17,34 @@ func handlePlot(c *fasthttp.RequestCtx) {
 
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.Write(gErr("extracting file from form"))
+		gErr("extracting file from form", c)
 		return
 	}
 
 	dst, err := os.Create("./data/input.txt")
 	if err != nil {
-		c.Write(gErr("creating file"))
+		gErr("creating file", c)
 		return
 	}
 	defer dst.Close()
 
 	src, err := file.Open()
 	if err != nil {
-		c.Write(gErr("opening file"))
+		gErr("opening file", c)
 		return
 	}
 	defer src.Close()
 
 	_, err = io.Copy(dst, src)
 	if err != nil {
-		c.Write(gErr("copying file"))
+		gErr("copying file", c)
 		return
 	}
 
-	cmd := exec.Command("sh", "./main.sh")
-	_, err = cmd.CombinedOutput()
-	if err != nil {
-		c.Write(gErr("running script"))
+	// run the script
+	cmd := runFn([]string{"sh", "./main.sh", "start"})
+	if cmd != "200" {
+		gErr("running script", c)
 		return
 	}
 
@@ -82,11 +76,42 @@ func main() {
 		ctx.SetContentType("text/html")
 		ctx.Write(data)
 	})
-	r.GET("/pkill", func(ctx *fasthttp.RequestCtx) {
+	r.GET("/kill/:type", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")
 		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.Write([]byte("killed"))
-		os.Exit(0)
+
+		killType := ctx.UserValue("type").(string)
+
+		switch killType {
+		case "system":
+			cmd := runFn([]string{"shutdown", "now"})
+			if cmd != "200" {
+				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+				gErr("Couldn't Shutdown: "+cmd, ctx)
+				return
+			}
+			// no confirmation sent if shutdown works
+
+		case "parent":
+			cmd := runFn([]string{"sh", "./main.sh", "stop"})
+			if cmd != "200" {
+				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+				gErr("Child will be orphaned: "+cmd, ctx)
+				return
+			}
+			ctx.Write([]byte("Server killed"))
+			// send confirmation before exiting
+			os.Exit(0)
+
+		case "child":
+			cmd := runFn([]string{"sh", "./main.sh", "stop"})
+			if cmd != "200" {
+				ctx.SetStatusCode(fasthttp.StatusInternalServerError)
+				gErr("Couldn't Kill Child: "+cmd, ctx)
+				return
+			}
+			ctx.Write([]byte("He was taken from us too soon."))
+		}
 	})
 
 	r.POST("/plot", handlePlot)

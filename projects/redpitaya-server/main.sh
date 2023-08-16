@@ -1,14 +1,15 @@
 #!/bin/bash
-pid=0
+gpid=0
 
-run(){
-  ./a.out &
-  pid=$!
-  echo "pid: $pid"
+command="python3 demo.py"
+
+start() {
+  bash -c "exec -a ICING $command" &
+  echo "$gpid"
 }
 
 stop(){
-  kill -9 $pid
+  pkill -9 -f ICING
 }
 
 "$@"
