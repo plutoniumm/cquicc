@@ -51,8 +51,6 @@ func handlePlot(c *fasthttp.RequestCtx) {
 		return
 	}
 
-	fmt.Println("Script ran successfully")
-
 	spinner := "<div class='spinner w-100'><img class='mx-a' src='assets/bars.svg' alt='loading' /></div>"
 	c.Write([]byte(spinner))
 	return

@@ -1,6 +1,7 @@
 from math import sqrt
 from random import randint,random
-from time import sleep, time_ns
+from time import sleep
+import os
 
 DATA_FILE = "./data/send.txt"
 LOSS_FILE = "./data/loss.txt"
@@ -28,12 +29,16 @@ def calculate_loss(x):
 
   return str(x) + "," + str(y) + "\n"
 
+# first delete .txt files
+os.remove(DATA_FILE)
+os.remove(LOSS_FILE)
 
 loops = SAFETY_CUTOFF
 while loops > 0:
   with \
   open(DATA_FILE, "w") as fp, \
   open(LOSS_FILE, "a") as fp2:
+    print("Running loop " + str(loops))
     fp.write(generate_values())
     fp2.write(calculate_loss(loops))
 
