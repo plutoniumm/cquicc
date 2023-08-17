@@ -8,7 +8,7 @@ $$( '[flex]' ).forEach( e => setStyle( e, 'flex', "flex" ) );
 
 const errorHolder = $( '#error-holder' );
 const errorNodes = [];
-const createErrorNode = ( msg, type = "error" ) => {
+const createErrorNode = ( msg, type = "error", time = ERROR_TIMEOUT ) => {
   msg = typeof msg == "string" ? msg : msg.message;
   const errorNode = document.createElement( 'div' );
   errorNode.classList.add( type );
@@ -19,7 +19,7 @@ const createErrorNode = ( msg, type = "error" ) => {
   setTimeout( () => {
     errorNode.remove();
     errorNodes.splice( errorNodes.indexOf( errorNode ), 1 );
-  }, ERROR_TIMEOUT );
+  }, time );
 };
 
 document.body.addEventListener( "htmx:afterRequest", function ( e ) {
@@ -62,7 +62,9 @@ const BEGIN = () => {
 }
 const END = ( reason = "unspecified" ) => {
   console.log( "Ending Reason: ", reason );
-  calling = false;
+  toggle();
   iter = 0;
   fetch( '/kill/child' ).catch( e => console.log( "Killed" ) );
 }
+
+createErrorNode( "Loaded Server Handler", "success", 500 )

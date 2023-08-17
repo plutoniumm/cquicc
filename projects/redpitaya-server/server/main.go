@@ -10,6 +10,12 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+func csp(ctx *fasthttp.RequestCtx) *fasthttp.RequestCtx {
+	cspValue := "default-src 'self'; script-src-elem 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:;object-src 'none';"
+	ctx.Response.Header.Set("Content-Security-Policy", cspValue)
+	return ctx
+}
+
 func main() {
 	r := router.New()
 
@@ -31,7 +37,7 @@ func main() {
 		}
 
 		ctx.SetContentType("text/html")
-		ctx.Write(data)
+		csp(ctx).Write(data)
 	})
 	r.GET("/start", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")
@@ -42,7 +48,7 @@ func main() {
 			gErr("Couldn't start proc: "+cmd, ctx)
 			return
 		}
-		ctx.Write([]byte("Started proc."))
+		csp(ctx).Write([]byte("Started proc."))
 		return
 	})
 	r.GET("/kill/{type}", func(ctx *fasthttp.RequestCtx) {
@@ -66,7 +72,7 @@ func main() {
 				gErr("Couldn't kill proc: "+cmd, ctx)
 				return
 			}
-			ctx.Write([]byte("He was taken from us too soon."))
+			csp(ctx).Write([]byte("He was taken from us too soon."))
 		}
 		return
 	})

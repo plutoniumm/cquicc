@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+
 
   <link rel="stylesheet" href="/assets/atomic.css">
   <link rel="stylesheet" href="/assets/global.css">
@@ -48,7 +51,7 @@
       <div id="commands" class="f j-bw">
         <button id="plotB" type="submit">Refresh</button>
         <span>
-          AutoRefresh: <input type="checkbox" onclick="toggle()">
+          AutoRefresh: <input id="autoRefBool" type="checkbox" onclick="toggle()">
         </span>
         <span>
           Refresh every <input id="rate" style="width: 6ch;" type="number" value="1" max="60"> seconds
@@ -78,10 +81,14 @@
 
   <script>
     const rate = $( '#rate' );
+    const autoRef = $( '#autoRefBool' );
+    calling = autoRef.checked;
+
     function toggle () {
       calling = !calling;
       if ( calling ) rate.removeAttribute( 'disabled' )
       else rate.setAttribute( 'disabled', true );
+      autoRef.checked = calling;
     };
 
     $( '#commands' ).addEventListener( 'click', ( e ) => {
@@ -103,6 +110,8 @@
       else if ( target === "kparent" )
         fetch( "/kill/parent" )
           .catch( e => createErrorNode( "Server Closed", "success" ) );
+
+      END( "Manual Ending" );
     } )
 
     setTimeout( () => window.scrollTo( 0, 0 ), 100 )

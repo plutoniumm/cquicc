@@ -56,3 +56,5 @@ async function generateLoss ( values ) {
     }
   };
 };
+
+createErrorNode( "Loaded Image Processor", "success", 500 )
