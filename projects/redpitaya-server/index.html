@@ -55,9 +55,9 @@
         </span>
       </div>
       <h3>Stop</h3>
-      <div class="f j-bw">
-        <button onclick="()=>{fetch('/kill/child').catch(createErrorNode)}">Stop Plot</button>
-        <button onclick="()=>{fetch('/kill/parent').catch(createErrorNode)}">Stop Server</button>
+      <div class="f j-bw" id="kills">
+        <button id="kchild">Stop Plot</button>
+        <button id="kparent">Stop Server</button>
       </div>
 
 
@@ -90,10 +90,20 @@
         else {
           console.log( "manual refresh" );
           update();
-          fetch( '/start' ).catch( createErrorNode );
         }
+        fetch( '/start' ).catch( createErrorNode );
       };
     } );
+
+    $( "#kills" ).addEventListener( "click", ( e ) => {
+      const target = e.target.id;
+      if ( target === "kchild" )
+        fetch( "/kill/child" )
+          .catch( createErrorNode );
+      else if ( target === "kparent" )
+        fetch( "/kill/parent" )
+          .catch( e => createErrorNode( "Server Closed", "success" ) );
+    } )
 
     setTimeout( () => window.scrollTo( 0, 0 ), 100 )
   </script>

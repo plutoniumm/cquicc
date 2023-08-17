@@ -8,10 +8,10 @@ $$( '[flex]' ).forEach( e => setStyle( e, 'flex', "flex" ) );
 
 const errorHolder = $( '#error-holder' );
 const errorNodes = [];
-const createErrorNode = ( msg ) => {
+const createErrorNode = ( msg, type = "error" ) => {
   msg = typeof msg == "string" ? msg : msg.message;
   const errorNode = document.createElement( 'div' );
-  errorNode.classList.add( 'error' );
+  errorNode.classList.add( type );
   errorNode.innerText = msg;
   errorHolder.appendChild( errorNode );
   errorNodes.push( errorNode );

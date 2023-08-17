@@ -41,15 +41,23 @@ h2 {
   margin: 5px;
 }
 
-.error {
+.error,
+.success {
   color: #fff;
-  background: #f22;
   border-radius: 3px;
   padding: 5px;
   margin: 5px;
   min-width: 300px;
   width: auto;
   max-width: min(100%, 500px);
+}
+
+.error {
+  background: #f22;
+}
+
+.success {
+  background: #2f2;
 }
 
 button {

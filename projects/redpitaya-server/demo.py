@@ -26,13 +26,15 @@ def generate_values(n):
 
   return result
 
-def calculate_loss(x):
-  x = 100-x
-  rt = sqrt(x)
-  jitter = 0.25 * rt
-  y = round(10 - rt + jitter, 2)
+def calculate_loss(n):
+  result = ""
+  for x in range(100-n):
+    rt = sqrt(x)
+    jitter = 0.25 * rt
+    y = round(10 - rt + jitter, 2)
+    result += str(x) + "," + str(y) + "\n"
 
-  return str(x) + "," + str(y) + "\n"
+  return result
 
 # first delete .csv files
 try:
@@ -44,14 +46,16 @@ except:
 
 loops = SAFETY_CUTOFF
 while loops > 0:
-  with \
-  open(DATA_FILE, "w") as fp, \
-  open(LOSS_FILE, "a") as fp2:
-    print("Running loop " + str(loops))
-    fp.write(generate_values(25))
-    fp2.write(calculate_loss(loops))
+  print("Running loop " + str(loops))
+  sleep(0.5)
 
-    loops -= 1
-    fp.close()
-    fp2.close()
-    sleep(1)
+  fp = open(DATA_FILE, "w")
+  fp.write(generate_values(25))
+  fp.close()
+
+  fp2 = open(LOSS_FILE, "w")
+  fp2.write(calculate_loss(loops))
+  fp2.close()
+
+  loops -= 1
+  sleep(0.5)

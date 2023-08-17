@@ -26,7 +26,12 @@ const getData = async () => {
     data = [];
   } );
 
-  return data.map( getValues );
+  try {
+    return data.map( getValues );
+  } catch ( e ) {
+    console.log( e );
+    return [];
+  }
 };
 
 async function main () {
