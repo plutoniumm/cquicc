@@ -33,7 +33,6 @@ const getData = async () => {
     console.log( data[ 0 ] );
     grid = [];
   }
-  console.log( data[ 1 ] );
   try {
     loss = getValues( data[ 1 ] );
   } catch ( e ) {

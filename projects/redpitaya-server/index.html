@@ -14,6 +14,7 @@
   <link rel="icon" type="image/png" href="">
 
   <script async src="/assets/vendors/chart.js"></script>
+  <script async src="/assets/vendors/htmx.js"></script>
 
   <script>
     const worker = new Worker( '/assets/worker.js' );
@@ -48,8 +49,15 @@
   <main>
     <section>
       <h3>Plot</h3>
+      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-encoding="multipart/form-data" hx-trigger="submit">
+        <input type="file" name="file" id="file" required />
+        Enter N: <input type="number" name="n" id="n" value="100" min="1" max="100" required />
+
+        <div id="commands">
+          <button id="plotB" type="submit">Plot</button>
+        </div>
+      </form>
       <div id="commands" class="f j-bw">
-        <button id="plotB" type="submit">Refresh</button>
         <span>
           AutoRefresh: <input id="autoRefBool" type="checkbox" onclick="toggle()">
         </span>
@@ -94,11 +102,7 @@
     $( '#commands' ).addEventListener( 'click', ( e ) => {
       if ( e.target.id === 'plotB' ) {
         if ( calling ) BEGIN()
-        else {
-          console.log( "manual refresh" );
-          update();
-        }
-        fetch( '/start' ).catch( createErrorNode );
+        else update();
       };
     } );
 
