@@ -27,6 +27,7 @@ const getData = async () => {
   } );
 
   let loss, grid;
+  console.log( data );
   try {
     grid = getValues( data[ 0 ] );
   } catch ( e ) {
@@ -35,6 +36,9 @@ const getData = async () => {
   }
   try {
     loss = getValues( data[ 1 ] );
+    if ( loss )
+      loss = loss
+        .map( ( [ x, y ] ) => ( { x, y } ) );
   } catch ( e ) {
     console.log( data[ 1 ] );
     loss = [];
@@ -45,10 +49,8 @@ const getData = async () => {
 async function main () {
   const [ data, loss ] = await getData();
 
-  self.postMessage( JSON.stringify( {
-    data, loss: loss.map(
-      ( [ x, y ] ) => ( { x, y } )
-    )
-  } ) );
+  self.postMessage( JSON.stringify(
+    { data, loss }
+  ) );
 };
 self.onmessage = () => main();
