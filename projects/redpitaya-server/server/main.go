@@ -33,6 +33,18 @@ func main() {
 		ctx.SetContentType("text/html")
 		ctx.Write(data)
 	})
+	r.GET("/start", func(ctx *fasthttp.RequestCtx) {
+		ctx.SetContentType("text/plain")
+		ctx.SetStatusCode(fasthttp.StatusOK)
+
+		cmd := runFn([]string{"sh", "./main.sh", "start"})
+		if cmd != "200" {
+			gErr("Couldn't start proc: "+cmd, ctx)
+			return
+		}
+		ctx.Write([]byte("Started proc."))
+		return
+	})
 	r.GET("/kill/{type}", func(ctx *fasthttp.RequestCtx) {
 		ctx.SetContentType("text/plain")
 		ctx.SetStatusCode(fasthttp.StatusOK)

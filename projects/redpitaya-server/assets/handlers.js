@@ -47,7 +47,6 @@ async function update () {
 // variable rate
 const autoUpdate = () => {
   const Rrate = rate.value || 1;
-  console.log( "Rate", Rrate, calling );
   setTimeout( () => {
     if ( calling ) {
       console.log( "Updating...", iter++ );

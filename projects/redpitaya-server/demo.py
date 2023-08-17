@@ -3,21 +3,26 @@ from random import randint
 from time import sleep
 from os import remove
 
-DATA_FILE = "./data/send.csv"
-LOSS_FILE = "./data/loss.csv"
+DATA_FILE = "./data/spingrid.csv"
+LOSS_FILE = "./data/convergence.csv"
 
 SAFETY_CUTOFF = 100
-ITERS = 50
+
+def rand():
+  return str(randint(0, 1))
 
 # MAIN
-ITERS = range(ITERS + 1)
-def generate_values():
+def generate_values(n):
   result = ""
+  # create nxn binary matrix
+  # format 1,0,1,1,0...1\n1,0,1...
 
-  for x in ITERS:
-    for y in ITERS:
-      RND = str(randint(0, 1))
-      result += str(x) + "," + str(y) + "," + RND + "\n"
+  for x in range(n+1):
+    for y in range(n+1):
+      result += rand()
+      if y < n:
+        result += ","
+    result += "\n"
 
   return result
 
@@ -43,8 +48,10 @@ while loops > 0:
   open(DATA_FILE, "w") as fp, \
   open(LOSS_FILE, "a") as fp2:
     print("Running loop " + str(loops))
-    fp.write(generate_values())
+    fp.write(generate_values(25))
     fp2.write(calculate_loss(loops))
 
-    sleep(1)
     loops -= 1
+    fp.close()
+    fp2.close()
+    sleep(1)

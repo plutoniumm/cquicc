@@ -7,16 +7,18 @@ const lossPlot = $( "#lCanvas" ).getContext( "2d" );
   @returns {string}
 */
 function generateHeat ( values ) {
-  const n = Math.sqrt( values.length );
+  const n = values.length;
   const w = canvas.width / n; // width of each square
   const h = w;
 
+  // inputs n rows of with n
   for ( let i = 0;i < values.length;i++ ) {
-    const [ x, y, val ] = values[ i ];
-
-    ctx.fillStyle = val ? "red" : "blue";
-    ctx.fillRect( x * w, y * h, w, h );
-  };
+    for ( let j = 0;j < values[ 0 ].length;j++ ) {
+      const el = values[ i ][ j ];
+      ctx.fillStyle = el ? "#000" : "#fff";
+      ctx.fillRect( j * w, i * h, w, h );
+    }
+  }
 };
 
 

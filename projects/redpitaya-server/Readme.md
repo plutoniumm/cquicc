@@ -1,6 +1,6 @@
 # RedPitaya LocalServer
 ## Run
-Add whatever scripts/programs need to be run to `runner.sh`. It will be called everytime `/plot` is POST to. And every second send.csv will be sent
+Add whatever scripts/programs need to be run to `runner.sh`. It will be called everytime `/plot` is POST to. And every second spingrid.csv will be sent
 
 ## Todo
 - Add toaster

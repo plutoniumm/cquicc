@@ -19,8 +19,8 @@ const getValues = ( str ) => str.trim().split( "\n" )
 const getData = async () => {
   let data = [];
   data = await Promise.all( [
-    p( '/data/send.csv' ),
-    p( '/data/loss.csv' )
+    p( '/data/spingrid.csv' ),
+    p( '/data/convergence.csv' )
   ] ).catch( e => {
     console.log( e );
     data = [];
