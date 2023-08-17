@@ -49,9 +49,10 @@
   <main>
     <section>
       <h3>Plot</h3>
-      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-encoding="multipart/form-data" hx-trigger="submit">
+      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-encoding="multipart/form-data" hx-trigger="submit"
+        hx-target="#dump">
         <input type="file" name="file" id="file" required />
-        Enter N: <input type="number" name="n" id="n" value="100" min="1" max="100" required />
+        Enter N: <input type="number" name="n" id="n" value="25" min="1" max="100" required />
 
         <div id="commands">
           <button id="plotB" type="submit">Plot</button>
@@ -71,7 +72,9 @@
         <button id="kparent">Stop Server</button>
       </div>
 
-
+      <div class="d-n">
+        <div id="dump"></div>
+      </div>
       <!-- RENDERING BOXES -->
       <div class="p5 tc m20">
         <canvas id="pCanvas" class="rx2" width="500px" height="500px"></canvas>

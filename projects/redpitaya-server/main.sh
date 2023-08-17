@@ -5,7 +5,7 @@ command="python3 demo.py"
 
 start() {
   pkill -9 -f ICING
-  bash -c "exec -a ICING $command" &
+  bash -c "exec -a ICING $command $1" &
   echo "$gpid"
 }
 

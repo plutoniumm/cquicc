@@ -2,6 +2,7 @@ from math import sqrt
 from random import randint
 from time import sleep
 from os import remove
+import sys
 
 DATA_FILE = "./data/spingrid.csv"
 LOSS_FILE = "./data/convergence.csv"
@@ -14,8 +15,6 @@ def rand():
 # MAIN
 def generate_values(n):
   result = ""
-  # create nxn binary matrix
-  # format 1,0,1,1,0...1\n1,0,1...
 
   for x in range(n+1):
     for y in range(n+1):
@@ -49,8 +48,10 @@ while loops > 0:
   print("Running loop " + str(loops))
   sleep(0.5)
 
+  n = int(sys.argv[1])
+
   fp = open(DATA_FILE, "w")
-  fp.write(generate_values(25))
+  fp.write(generate_values(n))
   fp.close()
 
   fp2 = open(LOSS_FILE, "w")
