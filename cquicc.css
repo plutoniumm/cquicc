@@ -8,23 +8,37 @@ html {
 
 body {
   font-family: "Computer Modern Serif", sans-serif;
-  padding: 1cm;
+  padding: 1cm 1.25cm;
   width: 100%;
   margin: 0;
   background: #fff;
   counter-reset: page;
 }
 
+cite {
+  font-style: normal;
+  position: relative;
+  bottom: 0.4em;
+  left: 0.1em;
+  font-size: 0.77em;
+}
+
+cite a {
+  color: #000 !important;
+}
+
 /* .split will also act as a page counter */
 .split {
   width: calc(21cm - 3em);
-  height: 29.7cm;
+  height: 30.5cm;
   max-width: 21cm !important;
 
+  text-align: justify;
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
   overflow-wrap: break-word;
+  position: relative;
   border-bottom: 2px solid #000;
 }
 
@@ -34,14 +48,18 @@ a:visited {
   color: blue;
 }
 
-.split::after {
-  counter-increment: page;
-  display: block;
-  content: counter(page);
-  position: absolute;
-  right: 3em;
-  bottom: 1.5em;
+.prep,
+.postp {
   font: 700 16px Times;
+  position: relative;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.postp {
+  margin-top: 5px;
 }
 
 img,
@@ -52,10 +70,16 @@ svg {
   margin: 0 auto;
 }
 
+.img-expl {
+  padding: 0 10%;
+  width: 80%;
+  font-size: 0.9em;
+  color: #444;
+}
+
 .split>div {
-  width: 49%;
-  max-width: 49%;
-  padding: 0.5%;
+  width: 48%;
+  padding: 0 1%;
   height: 100%;
 }
 
@@ -95,7 +119,7 @@ hr {
   height: 0;
   margin: 0;
   padding: 0;
-  margin-top: 2cm;
+  margin-top: 1.5cm;
 }
 
 #title {
@@ -104,6 +128,40 @@ hr {
   padding: 0;
 }
 
-.katex-html {
+.katex {
+  text-align: center;
+}
+
+.katex::target-text,
+.katex>*:not(math) {
   display: none;
+}
+
+.language-json {
+  padding: 0 1em !important;
+}
+
+.language-ps {
+  padding: 0 !important;
+  margin: 10px 0 !important;
+}
+
+.def {
+  color: #000;
+}
+
+.ps {
+  font-family: "Computer Modern Serif", sans-serif !important;
+}
+
+.ps p {
+  display: inline-block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+m {
+  display: inline-block;
+  width: 3ch;
+  font-family: "Courier New", Courier, monospace !important;
 }
