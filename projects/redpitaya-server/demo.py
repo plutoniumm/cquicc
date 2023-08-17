@@ -3,8 +3,8 @@ from random import randint
 from time import sleep
 from os import remove
 
-DATA_FILE = "./data/send.txt"
-LOSS_FILE = "./data/loss.txt"
+DATA_FILE = "./data/send.csv"
+LOSS_FILE = "./data/loss.csv"
 
 SAFETY_CUTOFF = 100
 ITERS = 50
@@ -29,7 +29,7 @@ def calculate_loss(x):
 
   return str(x) + "," + str(y) + "\n"
 
-# first delete .txt files
+# first delete .csv files
 try:
   remove(DATA_FILE)
   remove(LOSS_FILE)

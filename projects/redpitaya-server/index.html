@@ -56,17 +56,12 @@
         <button id="kill" onclick="END()">Kill</button>
       </div>
 
-      <h3>Plot from file</h3>
-      <p>
-        Attach a file with N values of x,y pairs. Th server will plot the data.
-      </p>
-      <form class="f j-bw" id="startPlot" hx-post="/plot" hx-encoding="multipart/form-data" hx-trigger="submit">
-        <input type="file" name="file" id="file" required />
-
+      <h3>Plot</h3>
+      <div class="f j-bw" id="startPlot">
         <div id="commands">
           <button id="plotB" type="submit">Plot</button>
         </div>
-      </form>
+      </div>
 
       <div class="p5 tc m20">
         <canvas id="pCanvas" class="rx2" width="500px" height="500px"></canvas>
@@ -85,10 +80,6 @@
   <script>
     $( '#commands' ).addEventListener( 'click', ( e ) => {
       if ( e.target.id === 'plotB' ) {
-        if ( !$( '#file' ).files[ 0 ] ) {
-          alert( 'Please attach a file' );
-          return 0;
-        };
         BEGIN();
       };
     } );

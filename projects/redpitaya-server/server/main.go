@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -10,52 +9,6 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/valyala/fasthttp"
 )
-
-func handlePlot(c *fasthttp.RequestCtx) {
-	fmt.Println("Got plot request")
-	c.SetContentType("text/plain")
-	c.SetStatusCode(fasthttp.StatusOK)
-
-	file, err := c.FormFile("file")
-	if err != nil {
-		gErr("extracting file from form", c)
-		return
-	}
-
-	fmt.Println("Got file: " + file.Filename)
-
-	dst, err := os.Create("./data/input.txt")
-	if err != nil {
-		gErr("creating file", c)
-		return
-	}
-	defer dst.Close()
-
-	src, err := file.Open()
-	if err != nil {
-		gErr("opening file", c)
-		return
-	}
-	defer src.Close()
-
-	_, err = io.Copy(dst, src)
-	if err != nil {
-		gErr("copying file", c)
-		return
-	}
-
-	fmt.Println("Got & wrote file")
-
-	// run the script
-	cmd := runFn([]string{"sh", "./main.sh", "start"})
-	if cmd != "200" {
-		gErr("running script", c)
-		return
-	}
-
-	c.Write([]byte(""))
-	return
-}
 
 func main() {
 	r := router.New()
@@ -90,7 +43,7 @@ func main() {
 		case "parent":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
 			if cmd != "200" {
-				fmt.Println("Couldn't Kill Child: " + cmd)
+				fmt.Println("Couldn't kill proc: " + cmd)
 			}
 			os.Exit(0)
 			return
@@ -98,15 +51,13 @@ func main() {
 		case "child":
 			cmd := runFn([]string{"sh", "./main.sh", "stop"})
 			if cmd != "200" {
-				gErr("Couldn't Kill Child: "+cmd, ctx)
+				gErr("Couldn't kill proc: "+cmd, ctx)
 				return
 			}
 			ctx.Write([]byte("He was taken from us too soon."))
 		}
 		return
 	})
-
-	r.POST("/plot", handlePlot)
 
 	log.Println("Server listening on port " + PORT)
 	log.Fatal(fasthttp.ListenAndServe(":"+PORT, r.Handler))
