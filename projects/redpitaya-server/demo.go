@@ -26,11 +26,13 @@ func generateValues(n int) string {
 	for x := 0; x < n; x++ {
 		for y := 0; y < n; y++ {
 			result.WriteString(rando())
-			if y < n {
+			if y < n-1 {
 				result.WriteString(",")
 			}
 		}
-		result.WriteString("\n")
+		if x < n-1 {
+			result.WriteString("\n")
+		}
 	}
 
 	return result.String()
@@ -42,7 +44,12 @@ func calculateLoss(n int) string {
 		rt := math.Sqrt(float64(x))
 		jitter := 0.25 * rt
 		y := 10 - rt + jitter
-		result.WriteString(strconv.Itoa(x) + "," + strconv.FormatFloat(y, 'f', 2, 64) + "\n")
+
+		res := strconv.Itoa(x) + "," + strconv.FormatFloat(y, 'f', 2, 64)
+		if x < 99-n {
+			res += "\n"
+		}
+		result.WriteString(res)
 	}
 
 	return result.String()
@@ -51,16 +58,13 @@ func calculateLoss(n int) string {
 func main() {
 	// Delete old files
 	err := os.Remove(DATA_FILE)
-	if err == nil {
-		fmt.Println("Deleted old files")
-	} else {
-		fmt.Println("No old files")
-	}
+	err = os.Remove(LOSS_FILE)
+	if err != nil {
+	} // we dont care
 
 	loops := SAFETY_CUTOFF
 	for loops > 0 {
 		fmt.Printf("Running loop %d\n", loops)
-		time.Sleep(500 * time.Millisecond)
 
 		n, _ := strconv.Atoi(os.Args[1])
 
@@ -73,6 +77,6 @@ func main() {
 		fp2.Close()
 
 		loops--
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(time.Second)
 	}
 }

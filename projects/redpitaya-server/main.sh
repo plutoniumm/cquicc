@@ -1,7 +1,8 @@
 #!/bin/bash
 gpid=0
 
-command="python3 demo.py"
+# command="python3 demo.py"
+command="./demo"
 
 start() {
   pkill -9 -f ICING
