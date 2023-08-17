@@ -10,7 +10,6 @@
   <link rel="apple-touch-icon" href="">
   <link rel="icon" type="image/png" href="">
 
-  <script async src="/assets/vendors/htmx.js"></script>
   <script async src="/assets/vendors/chart.js"></script>
 
   <script>
@@ -23,13 +22,15 @@
       el.style.setProperty( name, value )
     };
 
+    let calling = false;
+
     // promisify the worker
     const work = ( msg ) => new Promise( ( resolve, reject ) => {
       msg = typeof msg === 'string' ? msg : JSON.stringify( msg );
       worker.postMessage( msg );
       worker.onmessage = ( e ) => resolve( e.data );
       worker.onerror = ( e ) => {
-        END();
+        END( "Worker Error" );
         reject( e );
       };
     } );
@@ -43,26 +44,18 @@
 
   <main>
     <section>
-      <div class="f m20">
-        <div class="f fw j-bw" style="margin-right: 20px;">
-          <div>Reconnect to Existing</div>
-          <button id="connect" onclick="BEGIN()">Reconnect</button>
-          <p class="w-100" style="font-size: 0.8em;color:#888;">
-            Be careful about this. It will start a listen loop. However just press kill to stop it if you have no
-            session
-            running
-          </p>
-        </div>
-        <button id="kill" onclick="END()">Kill</button>
-      </div>
-
       <h3>Plot</h3>
-      <div class="f j-bw" id="startPlot">
-        <div id="commands">
-          <button id="plotB" type="submit">Plot</button>
-        </div>
+      <div id="commands" class="f j-bw">
+        <button id="plotB" type="submit">Refresh</button>
+        <span>
+          AutoRefresh: <input type="checkbox" onclick="toggle()">
+        </span>
+        <span>
+          Refresh every <input id="rate" style="width: 6ch;" type="number" value="1" max="60"> seconds
+        </span>
       </div>
 
+      <!-- RENDERING BOXES -->
       <div class="p5 tc m20">
         <canvas id="pCanvas" class="rx2" width="500px" height="500px"></canvas>
       </div>
@@ -78,9 +71,20 @@
   <script src="/assets/image.js"></script>
 
   <script>
+    const rate = $( '#rate' );
+    function toggle () {
+      calling = !calling;
+      if ( calling ) rate.removeAttribute( 'disabled' )
+      else rate.setAttribute( 'disabled', true );
+    };
+
     $( '#commands' ).addEventListener( 'click', ( e ) => {
       if ( e.target.id === 'plotB' ) {
-        BEGIN();
+        if ( calling ) BEGIN()
+        else {
+          console.log( "manual refresh" );
+          update();
+        }
       };
     } );
     setTimeout( () => {

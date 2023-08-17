@@ -46,11 +46,11 @@ async function generateLoss ( values ) {
   } catch ( e ) {
     if ( !( values?.length > -1 ) ) {
       createErrorNode( "No Data Recieved. Stopping Plot" );
-      END();
+      END( "No Data Recieved" );
     } else {
       console.log( e );
       createErrorNode( "Unknown Error in LossPlot. Stopping" );
-      END();
+      END( "Unknown Error in LossPlot" );
     }
   };
 };

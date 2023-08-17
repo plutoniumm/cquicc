@@ -33,25 +33,35 @@ document.body.addEventListener( "htmx:afterRequest", function ( e ) {
 } );
 
 
-let calling = false;
+
 let iter = 0;
-setInterval( () => {
-  if ( !calling ) return;
-  console.log( "Updating...", iter++ );
+async function update () {
   work( "start" ).then( d => {
     const { data, loss } = JSON.parse( d );
     const t = [ generateLoss( loss ), generateHeat( data ) ]
   } ).catch( e => {
     createErrorNode( "Connection Error", e.message );
-    calling = false;
-    iter = 0;
   } );
-}, 1e3 );
+}
+
+// variable rate
+const autoUpdate = () => {
+  const Rrate = rate.value || 1;
+  console.log( "Rate", Rrate, calling );
+  setTimeout( () => {
+    if ( calling ) {
+      console.log( "Updating...", iter++ );
+      update();
+    };
+    autoUpdate( rate );
+  }, Rrate * 1000 );
+}; autoUpdate();
 
 const BEGIN = () => {
   calling = true;
 }
-const END = () => {
+const END = ( reason = "unspecified" ) => {
+  console.log( "Ending Reason: ", reason );
   calling = false;
   iter = 0;
   fetch( '/kill/child' ).catch( e => console.log( "Killed" ) );
