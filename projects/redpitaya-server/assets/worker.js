@@ -27,7 +27,6 @@ const getData = async () => {
   } );
 
   let loss, grid;
-  console.log( data );
   try {
     grid = getValues( data[ 0 ] );
   } catch ( e ) {
