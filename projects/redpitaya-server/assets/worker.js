@@ -19,19 +19,28 @@ const getValues = ( str ) => str.trim().split( "\n" )
 const getData = async () => {
   let data = [];
   data = await Promise.all( [
-    p( '/data/spingrid.csv' ),
-    p( '/data/convergence.csv' )
+    p( '/data/spingrid.csv' ), // grid
+    p( '/data/convergence.csv' ) // loss
   ] ).catch( e => {
     console.log( e );
     data = [];
   } );
 
+  let loss, grid;
   try {
-    return data.map( getValues );
+    grid = getValues( data[ 0 ] );
   } catch ( e ) {
-    console.log( e );
-    return [];
+    console.log( data[ 0 ] );
+    grid = [];
   }
+  console.log( data[ 1 ] );
+  try {
+    loss = getValues( data[ 1 ] );
+  } catch ( e ) {
+    console.log( data[ 1 ] );
+    loss = [];
+  }
+  return [ grid, loss ];
 };
 
 async function main () {
