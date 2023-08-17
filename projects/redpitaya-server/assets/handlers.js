@@ -9,6 +9,7 @@ $$( '[flex]' ).forEach( e => setStyle( e, 'flex', "flex" ) );
 const errorHolder = $( '#error-holder' );
 const errorNodes = [];
 const createErrorNode = ( msg ) => {
+  msg = typeof msg == "string" ? msg : msg.message;
   const errorNode = document.createElement( 'div' );
   errorNode.classList.add( 'error' );
   errorNode.innerText = msg;
