@@ -38,7 +38,7 @@ document.body.addEventListener( "htmx:afterRequest", function ( e ) {
 let iter = 0;
 async function update () {
   work( "start" ).then( d => {
-    const { data, loss } = JSON.parse( d );
+    const [ data, loss ] = JSON.parse( d );
     const t = [ generateLoss( loss ), generateHeat( data ) ]
   } ).catch( e => {
     createErrorNode( "Connection Error", e.message );

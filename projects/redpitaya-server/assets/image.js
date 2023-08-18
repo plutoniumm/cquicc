@@ -7,6 +7,12 @@ const lossPlot = $( "#lCanvas" ).getContext( "2d" );
   @returns {string}
 */
 function generateHeat ( values ) {
+  if ( !values || !values[ 0 ] ) return null;
+  if (
+    values.length < 2 ||
+    values[ 0 ].length < 2
+  ) return null;
+
   const n = values.length;
   const w = canvas.width / n; // width of each square
   const h = w;
@@ -24,6 +30,12 @@ function generateHeat ( values ) {
 
 let chart = null;
 async function generateLoss ( values ) {
+  if ( values.length < 2 ) return null;
+  if (
+    typeof values[ 0 ].x != "number" ||
+    typeof values[ 0 ].y != "number"
+  ) return null;
+
   if ( chart ) {
     chart.data.datasets[ 0 ].data = values;
     chart.update();

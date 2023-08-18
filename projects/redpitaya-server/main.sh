@@ -2,7 +2,7 @@
 gpid=0
 
 # command="python3 demo.py"
-command="./demo"
+command="sh ./demo.sh"
 
 start() {
   pkill -9 -f ICING
@@ -11,6 +11,7 @@ start() {
 }
 
 stop(){
+  rm -f ./data/convergence.csv ./data/spingrid.csv
   pkill -9 -f ICING
 }
 
