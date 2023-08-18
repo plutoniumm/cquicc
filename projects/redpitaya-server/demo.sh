@@ -1,9 +1,9 @@
 #!/bin/bash
-function rando {
+rando() {
     echo $((RANDOM % 2))
 }
 
-function generateValues {
+generateValues() {
     local n=$1
     local result=""
 
@@ -22,7 +22,7 @@ function generateValues {
     echo -e "$result"
 }
 
-function calculateLoss {
+calculateLoss() {
     local n=$1
     local result=""
 
@@ -55,5 +55,5 @@ while [ "$loops" -gt 0 ]; do
     generateValues "$n" > "$DATA_FILE"
     calculateLoss "$loops" > "$LOSS_FILE"
     loops=$((loops - 1))
-    sleep 1
+    sleep 0.5
 done
