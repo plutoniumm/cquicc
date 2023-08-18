@@ -2,7 +2,7 @@
 gpid=0
 
 # command="python3 demo.py"
-command="sh ./demo.sh"
+command="bash ./demo.sh"
 
 start() {
   pkill -9 -f ICING

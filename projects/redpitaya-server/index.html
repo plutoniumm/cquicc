@@ -95,8 +95,9 @@
     const autoRef = $( '#autoRefBool' );
     calling = autoRef.checked;
 
-    function toggle () {
-      calling = !calling;
+    function toggle ( custom = null ) {
+      if ( custom !== null ) calling = custom
+      else calling = !calling;
       if ( calling ) rate.removeAttribute( 'disabled' )
       else rate.setAttribute( 'disabled', true );
       autoRef.checked = calling;

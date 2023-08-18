@@ -57,12 +57,10 @@ const autoUpdate = () => {
   }, Rrate * 1000 );
 }; autoUpdate();
 
-const BEGIN = () => {
-  calling = true;
-}
+const BEGIN = () => calling = true;
 const END = ( reason = "unspecified" ) => {
   console.log( "Ending Reason: ", reason );
-  toggle();
+  toggle( false );
   iter = 0;
   fetch( '/kill/child' ).catch( e => console.log( "Killed" ) );
 }
