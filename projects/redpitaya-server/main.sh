@@ -11,8 +11,11 @@ start() {
 }
 
 stop(){
-  rm -f ./data/convergence.csv ./data/spingrid.csv
   pkill -9 -f ICING
+
+  date=$(date +%s)
+  mv ./data/convergence.csv ./data/convergence_$date.csv
+  mv ./data/spingrid.csv ./data/spingrid_$date.csv
 }
 
 "$@"

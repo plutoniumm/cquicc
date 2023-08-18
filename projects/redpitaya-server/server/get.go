@@ -13,8 +13,9 @@ func dataHandler(ctx *fasthttp.RequestCtx) {
 	ctx.SetContentType("text/plain")
 	ctx.SetStatusCode(fasthttp.StatusOK)
 
+	file := ctx.UserValue("file").(string)
 	// if no file is specified, return list of files
-	if ctx.UserValue("file") == nil {
+	if file == "*" {
 		files, err := ioutil.ReadDir("./data")
 		if err != nil {
 			log.Fatal(err)
@@ -28,9 +29,6 @@ func dataHandler(ctx *fasthttp.RequestCtx) {
 		csp(ctx).Write([]byte(list))
 		return
 	}
-
-	// otherwise, return the file
-	file := ctx.UserValue("file").(string)
 
 	data, err := ioutil.ReadFile("./data/" + file)
 	if err != nil {
