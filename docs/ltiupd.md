@@ -1,10 +1,11 @@
 ---
 topic: "LTI Current State"
-author: "Manav Seksaria,<br/>Supervisor: Prof. Anil Prabhakar"
+author: "Manav Seksaria"
 from: "MCQuICC, IIT Madras"
 ---
+===
 
-# Problem Statement
+## Problem Statement
 LTI has given a dataset with 6 features of 200 rows and 1 feature which is the be the prediction for the same. This makes it a 7x200 dataset
 
 Currently we're using QSVM to this and the following is the current state of it
@@ -20,32 +21,42 @@ Index
 ### Classical SVM
 Using a classical SVM with RBF Kernel, we get the following results
 
-| Test | Train | Accuracy | Run by | Source |
-| --- | --- | --- | --- | --- |
-| 900 | 300 | 0.65 | LTIM | `.xlsx` $\in$ Email@1/8/23 |
-| 960 | 240 | 0.63 | CQuICC | Run on 29/8/23 |
-| 160 | 40 | 0.5 | CQuICC | Run on 29/8/23 |
+| Test | Train | Accuracy | Source |
+| --- | --- | --- | --- |
+| 900 | 300 | 0.65 | LTIM `.xlsx`* |
+| 960 | 240 | 0.63 | `classical.py` |
+| 160 | 40 | 0.5 | `classical.py` |
+
+*Email dated 1/8/23
 
 As we can see from here both 200 rows and 1200 rows have perfectly random and marginally better than random accuracy respectively
 
 ### Simulated QSVM
 Using a simulated QSVM, where Ideal Quantum Simulator to create the precomputed kernel matrix, we get the following results
-
-| Test | Train | Accuracy | Run by | Source |
-| --- | --- | --- | --- | --- |
-| 150 | 50 | 0.5 | LTIM | `.xlsx` $\in$ Email@1/8/23 |
-| 150 | 50 | 0.42 | LTIM Run 2 | `.ipynb` $\in$ Message@25/8/23 |
-| | | | | *All run on 24/8/23* |
-| 160 | 40 | 0.63 | CQuICC | `6-ZZFeatureMap` |
-| 160 | 40 | 0.45 | CQuICC | `2-ZZFeatureMap*3` |
-| 160 | 40 | 0.45 | CQuICC | `3-ZZFeatureMap*2` |
-| 960 | 240 | X | CQuICC | `6-ZZ` run on 29/8/23 |
++++
+| Test | Train | Accuracy | Source |
+| --- | --- | --- | --- |
+| 150 | 50 | 0.5 | LTIM `.xlsx`* |
+| 150 | 50 | 0.42 | `assets/lti200.pdf` |
+| | | | *Run by CQuICC* |
+| 160 | 40 | 0.63 | `6-ZZFeatureMap` |
+| 160 | 40 | 0.45 | `2-ZZFeatureMap*3` |
+| 160 | 40 | 0.45 | `3-ZZFeatureMap*2` |
+| 960 | 240 | 0.46 | `6-ZZFeatureMap` |
 
 ### Real QSVM
 No runs. We got terminated
 
 ### Simulated QUBO
+All of the following were run by CQuICC on 29/8/23 and logs are in the repository
 
+| Test | Train | Accuracy | Sigma |
+| --- | --- | --- | --- |
+| 960 | 240 | 0.63 | 10 |
+| 960 | 240 | 0.63 | 20 |
+| 960 | 240 | 0.63 | 50 |
+| 960 | 240 | 0.63 | 100 |
+| 960 | 240 | 0.63 | 200 |
 
 
 ### Real QUBO
@@ -53,17 +64,4 @@ No runs necessary. Not viable
 
 
 ## Conclusions
-
-
-
-
-
-
-<!-- PARTH XLSX -->
-| Type | Test | Train | Accuracy |
-| --- | --- | --- | --- |
-| SVM - RBF | 900 | 300 | 0.6466 |
-| Logistic Regression | 900 | 300 | 0.6633 |
-| Naive Bayes Classifier | 900 | 300 | 0.6282 |
-| QSVM | 150 | 50 | 0.5 |
-| QSVM Run 2 | 150 | 50 | 0.42 |
+/===
