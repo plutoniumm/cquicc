@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://manav.ch/atomic.css">
 
   <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/revealmod.css">
 
   <script src="/reveal.js"></script>
   <script src="/basics.js"></script>
@@ -18,7 +19,6 @@
     loop( () => mermaid.init( undefined, $$( '.mermaid' ) ) )
   </script>
   <script>
-    loop( () => { } );
     if ( window.location.search.match( /print-pdf/gi ) ) {
       var link = document.createElement( 'link' );
       link.rel = 'stylesheet';
@@ -44,6 +44,10 @@
 
 <script>
   Reveal.initialize();
+  Reveal.slide( localStorage.getItem( 'currslide' ) || 0 );
+  Reveal.addEventListener( 'slidechanged', ( e ) => {
+    localStorage.setItem( 'currslide', e.indexh );
+  } );
 </script>
 <style>
   body {
