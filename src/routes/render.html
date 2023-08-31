@@ -106,11 +106,11 @@
         if ( cited ) return 0;
 
         let url = e.getAttribute( "url" ) || e.getAttribute( "src" );
-        if ( !url ) return alerts.push( [ "no-src", e ] );
+        if ( !url ) return alerts.push( [ "no-src", e.outerHTML ] );
         try { url = new URL( url ).hostname; } catch ( e ) { }
 
         const alt = e.getAttribute( "alt" );
-        if ( !alt ) return alerts.push( [ "no-alt", e ] );
+        if ( !alt ) return alerts.push( [ "no-alt", e.outerHTML ] );
 
         const grey = `<div id="${ id }" class="img-expl">
           ${ alt.replaceAll( "\"", "" ) }, <i>${ url }</i>

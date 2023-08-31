@@ -3,19 +3,18 @@
 
   import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
   import { languages } from "@codemirror/language-data";
-  import Template from "./basic.md?raw";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
   import { defStyles, render } from "./utils";
 
-  let value = Template;
+  let value = "";
   let frame, old, doc;
 
-  const write = (text) => {
+  const write = (text, store = true) => {
     const { html } = render(text);
 
-    localStorage.setItem("cquicc-code", text);
+    if (store) localStorage.setItem("cquicc-code", text);
 
     doc.open();
     doc.write(html);
@@ -30,14 +29,20 @@
     write(current);
   };
 
-  onMount(() => {
+  onMount(async () => {
     if (!doc) doc = frame.contentWindow.document;
+
+    const demo = new URLSearchParams(location.search).get("demo");
     const code = localStorage.getItem("cquicc-code");
 
-    if (code) {
+    if (code && !demo) {
       write(code);
       value = code;
-    } else write(Template);
+    } else {
+      const Template = await import("./basic.md?raw");
+      write(Template.default, false);
+      value = Template.default;
+    }
 
     document.title += (-new Date()).toString(36);
   });
