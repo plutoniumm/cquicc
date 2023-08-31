@@ -3,14 +3,13 @@
   "version": "1.2.0",
   "type": "module",
   "scripts": {
-    "predev": "rm -rf dist .svelte*",
+    "predev": "rm -rf build .svelte*",
     "dev": "vite",
     "build": "vite build",
-    "deploy": "npx gh-pages -d dist -t true",
-    "postdeploy": "rm -rf dist"
+    "deploy": "npx gh-pages -d build -t true",
+    "postdeploy": "rm -rf build"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^2.0.4",
     "@tsconfig/svelte": "^5.0.0",
     "svelte": "^4.0.5",
     "typescript": "^5.0.2",
@@ -19,6 +18,8 @@
   "dependencies": {
     "@codemirror/lang-markdown": "^6.2.0",
     "@codemirror/language-data": "^6.3.1",
+    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/kit": "^1.24.0",
     "highlight.js": "^11.8.0",
     "jquery": "^3.7.0",
     "js-yaml": "^4.1.0",

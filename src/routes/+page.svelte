@@ -38,6 +38,8 @@
       write(code);
       value = code;
     } else write(Template);
+
+    document.title += (-new Date()).toString(36);
   });
 
   const print = () => window.frames[0].print();
