@@ -6,7 +6,6 @@ import typeset from "typeset";
 import yaml from "js-yaml";
 
 import template from "./render.html?raw"
-
 const mcf = { mangle: false, headerIds: false };
 
 const renderer = {

@@ -21,6 +21,24 @@
       if ( p ) window.scrollTo( 0, parseInt( p ) );
     };
 
+    function makeAlerts ( list ) {
+      console.log( list, AlertsDiv );
+      if ( !list.length ) {
+        AlertsDiv.parentElement.classList.add( "o-0" );
+        return 0;
+      } else {
+        AlertsDiv.parentElement.classList.remove( "o-0" );
+
+        list = list.map( ( [ type, text ], index ) => `
+        <div class="alert"">${ index }. ${ type }: <br />
+          <div class="p0">${ text }</div>
+        </div>
+        `);
+        console.log( list );
+        AlertsDiv.innerHTML = list.join( "" );
+      }
+    };
+
     window.addEventListener( 'scroll', setScroll );
     window.addEventListener( 'load', getScroll );
   </script>
@@ -41,7 +59,8 @@
       )
 
       // process citations
-      $$( "a[href*='ref']" ).forEach( e => {
+      const cites = $$( "a[href*='ref']" );
+      cites.forEach( e => {
         let [ num, ...rest ] = e.innerText.split( "." );
         rest = rest.join( "." );
 
@@ -52,6 +71,9 @@
             ${ rest }
           </div>`;
       } );
+      // alert if no citations
+      if ( !cites.length )
+        alerts.push( [ "no-cites", "Dawg you got no citations?" ] );
 
       // other splits after first
       $$( ".split" ).slice( 1 ).forEach( ( split, index ) => {
@@ -96,18 +118,17 @@
         e.insertAdjacentHTML( "afterend", grey );
       } );
 
+      // code
       $$( '.katex' ).forEach( e => {
         e.outerHTML = `<span class="katex">${ e.querySelector( "math" ).outerHTML }</span>`;
       } );
-
+      // headings in pseudocode gen
       $$( "h2" ).forEach( e => {
         if ( e.innerHTML.charAt( 0 ) !== "|" ) return 0;
         e.outerHTML = `<div>${ e.innerHTML.slice( 1 ) }</div><hr/>`;
       } );
 
-      alerts.forEach( ( [ type, text ] ) => {
-        console.warn( type, text );
-      } )
+      makeAlerts( alerts );
     } );
   </script>
 
@@ -115,6 +136,10 @@
 </head>
 
 <body class="flow-x-h p-rel" vars='&vars;' xmlns="http://www.w3.org/2000/svg">
+  <details class="p-fix noprint mx-a rpm-10 blur f fw j-ar">
+    <summary>Alerts</summary>
+    <div id="alerts"></div>
+  </details>
   <header class="f j-bw">
     <h1 class="m0 p0" id="title">&topic;</h1>
     <div id="year">&year;</div>
@@ -133,5 +158,9 @@
   <hr />
   &body;
 </body>
+
+<script>
+  var AlertsDiv = $( "#alerts" );
+</script>
 
 </html>
