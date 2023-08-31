@@ -13,6 +13,7 @@ body {
   margin: 0;
   background: #fff;
   counter-reset: page;
+  z-index: 1;
 }
 
 cite {
@@ -164,4 +165,28 @@ m {
   display: inline-block;
   width: 3ch;
   font-family: "Courier New", Courier, monospace !important;
+}
+
+
+.noprint {
+  --bg: #223a;
+  --sz: 4px;
+  bottom: 1em;
+  z-index: 2;
+  color: #fff;
+  width: calc(19cm - 40px);
+  font: 400 16px Helvetica;
+}
+
+.alerts .p0 {
+  font-weight: 100;
+  margin: 7px 0;
+}
+
+@media print {
+
+  .noprint,
+  .noprint * {
+    display: none !important;
+  }
 }
