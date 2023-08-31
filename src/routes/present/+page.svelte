@@ -6,7 +6,8 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
-  import { defStyles, render } from "./utils";
+  import { defStyles } from "../utils";
+  import { render } from "./utils";
 
   let value = "";
   let frame, old, doc;
@@ -14,7 +15,7 @@
   const write = (text, store = true) => {
     const { html } = render(text);
 
-    if (store) localStorage.setItem("cquicc-code", text);
+    if (store) localStorage.setItem("cquicc-present", text);
 
     doc.open();
     doc.write(html);
@@ -33,7 +34,7 @@
     if (!doc) doc = frame.contentWindow.document;
 
     const demo = new URLSearchParams(location.search).get("demo");
-    const code = localStorage.getItem("cquicc-code");
+    const code = localStorage.getItem("cquicc-present");
 
     if (code && !demo) {
       write(code);
@@ -43,11 +44,23 @@
       write(Template, false);
       value = Template;
     }
-
     document.title += (-new Date()).toString(36);
   });
 
-  const print = () => window.frames[0].print();
+  const print = () => {
+    // toggle ?print-pdf
+    const url = /print-pdf/g.test(location.search)
+      ? location.href.replace(/\?print-pdf/g, "")
+      : location.href + "?print-pdf";
+
+    // reload with new url
+    window.location.href = url;
+  };
+  const triggerPrint = () => {
+    if (/print-pdf/g.test(location.search)) {
+      window.frames[0].print();
+    }
+  };
 
   const keyup = (e) => {
     if (e.key === "p" && e.ctrlKey) print();
@@ -56,8 +69,9 @@
 
 <svelte:window on:keyup={keyup} />
 
-<div class="f j-ar p-fix" id="funcs">
-  <div class="rx10 ptr" on:click={print}>PDF</div>
+<div class="f j-ar p-fix w-50" id="funcs">
+  <div class="rx10 ptr" on:click={print}>TogglePrint</div>
+  <div class="rx10 ptr" on:click={triggerPrint}>Print</div>
 </div>
 <main class="f fw">
   <div class="editor">

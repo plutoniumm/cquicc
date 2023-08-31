@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
+
+  <link rel="stylesheet" href="css/reveal.css">
+
+  <script src="/reveal.js"></script>
+  <script src="/basics.js"></script>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize( { securityLevel: 'antiscript', theme: "base" } );
+    loop( () => mermaid.init( undefined, $$( '.mermaid' ) ) )
+  </script>
+  <script>
+    loop( () => { } );
+    if ( window.location.search.match( /print-pdf/gi ) ) {
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = 'css/pdf.css';
+      document.getElementsByTagName( 'head' )[ 0 ].appendChild( link );
+    }
+  </script>
+
+  &head;
+</head>
+
+<body vars='&vars;' xmlns="http://www.w3.org/2000/svg">
+  <main class="reveal">
+    <article class="slides">
+      <section>
+        <h2>&topic;</h2>
+      </section>
+      &body;
+    </article>
+  </main>
+</body>
+
+<script>
+  Reveal.initialize();
+</script>
+<style>
+  body {
+    background-color: #ccc;
+  }
+
+  .reveal .slides {
+    background: #fff;
+  }
+</style>
+
+</html>
