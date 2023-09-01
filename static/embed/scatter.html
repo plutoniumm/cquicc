@@ -1,0 +1,86 @@
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<div id="myDiv" style="width:100%;height:100%"></div>
+<script>
+  const rand = ( min = 0, max = 1 ) => Math.random() * ( max - min ) + min;
+
+  const size = 400;
+  const brk = 80;
+
+  const exp = ( x, y ) => Math.exp( ( x ** 2 + y ** 2 ) );
+  const coordinates = [];
+  for ( let i = 0;i < size;i++ ) {
+    let theta = rand( 0, 2 * Math.PI );
+    let r;
+
+    if ( i < brk ) r = rand( 0, 0.8 );
+    else r = rand( 0.66, 1 );
+
+    let x = r * Math.cos( theta );
+    let y = r * Math.sin( theta );
+    coordinates.push( { x, y, z: exp( x, y ) } );
+  }
+  let X = coordinates.map( e => e.x );
+  let Y = coordinates.map( e => e.y );
+  let Z = coordinates.map( e => e.z );
+
+  var trace1 = {
+    x: X.slice( 0, brk ), y: Y.slice( 0, brk ), z: Z.slice( 0, brk ),
+    mode: 'markers',
+    marker: {
+      color: "red",
+      size: 4
+    },
+    type: 'scatter3d'
+  };
+  var trace2 = {
+    x: X.slice( brk ), y: Y.slice( brk ), z: Z.slice( brk ),
+    mode: 'markers',
+    marker: {
+      color: 'blue',
+      size: 4
+    },
+    type: 'scatter3d'
+  };
+
+  Plotly.newPlot( 'myDiv', [ trace1, trace2 ], {
+    margin: { l: 0, r: 0, b: 0, t: 0 },
+    scene: {
+      camera: {
+        eye: { x: 0, y: 0, z: 2 }
+      }
+    }
+  } );
+
+  function restyle1 () {
+    var plot = document.getElementById( 'myDiv' );
+    var data = plot.data[ 0 ];
+    var sizes = [];
+    for ( var i = 0;i < data.x.length;i++ ) {
+      sizes[ i ] = 12;
+    }
+    Plotly.restyle( 'myDiv', {
+      marker: {
+        size: sizes,
+        line: {
+          color: 'rgba(217, 217, 217, 0.14)',
+          width: 0.5
+        },
+        opacity: 0.8
+      }
+    }, [ 0 ] );
+  }
+  function restyle2 () {
+    var plot = document.getElementById( 'myDiv' );
+    var data = plot.data[ 0 ];
+    Plotly.restyle( 'myDiv', {
+      marker: {
+        size: 12,
+        line: {
+          color: 'rgba(217, 217, 217, 0.14)',
+          width: 0.5
+        },
+        opacity: 0.8
+      }
+    }, [ 0 ] );
+  }
+</script>

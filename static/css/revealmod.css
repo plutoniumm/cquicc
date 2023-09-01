@@ -1,7 +1,20 @@
-.slides section {
-  margin: 0 auto;
+@media screen {
+  .slides section {
+    margin: 0 auto;
+  }
 }
 
 table {
   margin: 5px auto;
+}
+
+ul,
+ol {
+  max-width: min(100%, 600px) !important;
+  text-align: left !important;
+  margin: 10px auto !important;
+}
+
+li {
+  margin: 5px 0;
 }

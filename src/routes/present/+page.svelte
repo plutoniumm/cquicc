@@ -10,6 +10,7 @@
   import { render } from "./utils";
 
   let value = "";
+  let TA = "";
   let frame, old, doc;
 
   const write = (text, store = true) => {
@@ -72,6 +73,12 @@
 <div class="f j-ar p-fix w-50" id="funcs">
   <div class="rx10 ptr" on:click={print}>TogglePrint</div>
   <div class="rx10 ptr" on:click={triggerPrint}>Print</div>
+  <div
+    class="rx10 ptr"
+    on:click={() => (TA = window.frames[0].document.body.innerHTML)}
+  >
+    GetCode
+  </div>
 </div>
 <main class="f fw">
   <div class="editor">
@@ -98,8 +105,33 @@
     style="background:#888;"
   />
 </main>
+{#if TA.length}
+  <div class="p-fix blur tc" id="popup">
+    <textarea name="code" bind:value={TA} class="rpm-10 flow-y-s" />
+    <button
+      class="d-b rx20 mx-a ptr"
+      on:click={() => (TA = "")}
+      style="color:#fff;background:#f00;width:50px;">X</button
+    >
+  </div>
+{/if}
 
 <style lang="scss">
+  #popup {
+    z-index: 100000;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    --bg: #2222;
+    --sz: 16px;
+    textarea {
+      width: 80%;
+      height: 80%;
+      background: #222;
+      color: #fff;
+    }
+  }
   #funcs {
     color: #fff;
     bottom: 20px;
