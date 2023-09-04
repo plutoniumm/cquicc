@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CodeMirror from "svelte-codemirror-editor";
+  import CodeMirror, { Renderer } from "sveltemirror";
 
   import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
   import { languages } from "@codemirror/language-data";
@@ -7,42 +7,25 @@
   import { onMount } from "svelte";
 
   import { defStyles } from "../utils";
-  import { render } from "./utils";
+  import { render as rander, prerender } from "./utils";
 
   let value = "";
   let TA = "";
-  let frame, old, doc;
 
-  const write = (text, store = true) => {
-    const { html } = render(text);
+  const preprocess = (text) => {
+    const { html } = rander(text || "");
+    localStorage.setItem("cquicc-present", text);
 
-    if (store) localStorage.setItem("cquicc-present", text);
-
-    doc.open();
-    doc.write(html);
-    doc.close();
-  };
-
-  const handleChange = () => {
-    const current = value;
-    if (old === current) return 0;
-
-    old = current;
-    write(current);
+    return html;
   };
 
   onMount(async () => {
-    if (!doc) doc = frame.contentWindow.document;
-
-    const demo = new URLSearchParams(location.search).get("demo");
     const code = localStorage.getItem("cquicc-present");
 
-    if (code && !demo) {
-      write(code);
+    if (code.length > 1) {
       value = code;
     } else {
       const Template = (await import("./basic.md?raw")).default;
-      write(Template, false);
       value = Template;
     }
     document.title += (-new Date()).toString(36);
@@ -58,9 +41,7 @@
     window.location.href = url;
   };
   const triggerPrint = () => {
-    if (/print-pdf/g.test(location.search)) {
-      window.frames[0].print();
-    }
+    if (/print-pdf/g.test(location.search)) window.frames[0].print();
   };
 
   const keyup = (e) => {
@@ -71,11 +52,11 @@
 <svelte:window on:keyup={keyup} />
 
 <div class="f j-ar p-fix w-50" id="funcs">
-  <div class="rx10 ptr" on:click={print}>TogglePrint</div>
-  <div class="rx10 ptr" on:click={triggerPrint}>Print</div>
+  <div class="rx10 p10 ptr" on:click={print}>TogglePrint</div>
+  <div class="rx10 p10 ptr" on:click={triggerPrint}>Print</div>
   <div
-    class="rx10 ptr"
-    on:click={() => (TA = window.frames[0].document.body.innerHTML)}
+    class="rx10 p10 ptr"
+    on:click={() => (TA = prerender(window.frames[0].document.body))}
   >
     GetCode
   </div>
@@ -89,21 +70,16 @@
         codeLanguages: languages,
         completeHTMLTags: true,
       })}
-      theme={dracula}
+      extensions={[dracula]}
       basic={true}
       styles={defStyles}
       lineWrapping={true}
       placeholder="Type some markdown here..."
-      on:change={handleChange}
     />
   </div>
-  <iframe
-    id="mfWHAT"
-    bind:this={frame}
-    frameborder="0"
-    title="Editor Output"
-    style="background:#888;"
-  />
+  <div class="frame">
+    <Renderer bind:value {preprocess} />
+  </div>
 </main>
 {#if TA.length}
   <div class="p-fix blur tc" id="popup">
@@ -138,7 +114,6 @@
     right: 20px;
     z-index: 10000;
     .rx10 {
-      padding: 10px;
       background: #2af;
       transition: opacity 0.2s ease-in-out;
       &:hover {
@@ -156,12 +131,12 @@
   .editor {
     width: var(--split);
   }
-  iframe {
+  .frame {
     width: calc(100% - var(--split));
   }
 
   .editor,
-  iframe {
+  .frame {
     height: 100%;
     background: #ccc;
     overflow-y: scroll;

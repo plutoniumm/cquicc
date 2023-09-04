@@ -29,6 +29,7 @@
     "mermaid": "^10.3.0",
     "sass": "^1.63.6",
     "svelte-codemirror-editor": "^1.1.0",
+    "sveltemirror": "^1.1.0",
     "thememirror": "^2.0.1",
     "typeset": "^0.3.3"
   }

@@ -10,7 +10,11 @@ const excludes = [
 export default {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter()
+    adapter: adapter(),
+    alias: {
+      "$docs": "static/docs",
+      "$ppt": "static/present"
+    },
   },
   onwarn: ( warning, handler ) => {
     if ( excludes.includes( warning.code ) ) return;

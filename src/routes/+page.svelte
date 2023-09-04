@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CodeMirror from "svelte-codemirror-editor";
+  import CodeMirror, { Renderer } from "sveltemirror";
 
   import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
   import { languages } from "@codemirror/language-data";
@@ -9,38 +9,19 @@
   import { defStyles, render } from "./utils";
 
   let value = "";
-  let frame, old, doc;
-
-  const write = (text, store = true) => {
-    const { html } = render(text);
-
-    if (store) localStorage.setItem("cquicc-code", text);
-
-    doc.open();
-    doc.write(html);
-    doc.close();
-  };
-
-  const handleChange = () => {
-    const current = value;
-    if (old === current) return 0;
-
-    old = current;
-    write(current);
+  const preprocess = (text) => {
+    const { html } = render(text || "");
+    localStorage.setItem("cquicc-code", text);
+    return html;
   };
 
   onMount(async () => {
-    if (!doc) doc = frame.contentWindow.document;
-
-    const demo = new URLSearchParams(location.search).get("demo");
     const code = localStorage.getItem("cquicc-code");
 
-    if (code && !demo) {
-      write(code);
+    if (code.length > 1) {
       value = code;
     } else {
       const Template = (await import("./basic.md?raw")).default;
-      write(Template, false);
       value = Template;
     }
 
@@ -48,7 +29,6 @@
   });
 
   const print = () => window.frames[0].print();
-
   const keyup = (e) => {
     if (e.key === "p" && e.ctrlKey) print();
   };
@@ -63,26 +43,22 @@
   <div class="editor">
     <CodeMirror
       bind:value
-      lang={markdown({
-        base: markdownLanguage,
-        codeLanguages: languages,
-        completeHTMLTags: true,
-      })}
-      theme={dracula}
-      basic={true}
+      extensions={[
+        markdown({
+          base: markdownLanguage,
+          codeLanguages: languages,
+          completeHTMLTags: true,
+        }),
+        dracula,
+      ]}
       styles={defStyles}
       lineWrapping={true}
       placeholder="Type some markdown here..."
-      on:change={handleChange}
     />
   </div>
-  <iframe
-    id="mfWHAT"
-    bind:this={frame}
-    frameborder="0"
-    title="Editor Output"
-    style="background:#888;"
-  />
+  <div class="frame">
+    <Renderer bind:value {preprocess} />
+  </div>
 </main>
 
 <style lang="scss">
@@ -110,12 +86,12 @@
   .editor {
     width: var(--split);
   }
-  iframe {
+  .frame {
     width: calc(100% - var(--split));
   }
 
   .editor,
-  iframe {
+  .frame {
     height: 100%;
     background: #ccc;
     overflow-y: scroll;

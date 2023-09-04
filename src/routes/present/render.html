@@ -16,7 +16,12 @@
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize( { securityLevel: 'antiscript', theme: "base" } );
-    loop( () => mermaid.init( undefined, $$( '.mermaid' ) ) )
+    loop( () => {
+      mermaid.init( undefined, $$( '.mermaid' ) )
+
+      // extract all mermaids SVG
+      const svgs = $$( '.mermaid svg' );
+    } )
   </script>
   <script>
     if ( window.location.search.match( /print-pdf/gi ) ) {
@@ -27,7 +32,6 @@
       document.getElementsByTagName( 'head' )[ 0 ].appendChild( link );
     }
   </script>
-
   &head;
 </head>
 
@@ -49,7 +53,7 @@
     localStorage.setItem( 'currslide', e.indexh );
   } );
 </script>
-<style>
+<style class="killCSS">
   body {
     background-color: #ccc;
   }

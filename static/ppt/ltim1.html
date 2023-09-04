@@ -1,0 +1,451 @@
+<head>
+  <script src="/reveal.js"></script>
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
+  <link rel="stylesheet" href="/css/reveal.css">
+  <link rel="stylesheet" href="/css/revealmod.css">
+</head>
+
+<body>
+  <main class="reveal slide center has-horizontal-slides ready" role="application" data-transition-speed="default"
+    data-background-transition="fade">
+    <article class="slides" style="width: 960px; height: 700px; zoom: 1.088;">
+      <section class="past" style="top: 298px; display: none;" hidden="" aria-hidden="true">
+        <h2>QSVM for LTIM at MCQuICC</h2>
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="past" style="top: 239px; display: none;">
+        <h3>Received Dataset</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Coolant T</th>
+              <th>Fuel P</th>
+              <th>LOG(Engine rpm)</th>
+              <th>LOG(Lub oil P)</th>
+              <th>LOG(Coolant P)</th>
+              <th>lub oil T</th>
+              <th>Engine Condition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>-0.7727</td>
+              <td>0.3442</td>
+              <td>0.4828</td>
+              <td>-0.2438</td>
+              <td>0.2430</td>
+              <td>0.5634</td>
+              <td><strong>1</strong></td>
+            </tr>
+            <tr>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+            </tr>
+            <tr>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>1200 rows</td>
+              <td>...</td>
+              <td>...</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+            </tr>
+            <tr>
+              <td>-0.0863</td>
+              <td>-0.0622</td>
+              <td>-0.3165</td>
+              <td>-0.2442</td>
+              <td>0.5177</td>
+              <td>0.0347</td>
+              <td><strong>0</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="past" style="top: 150.5px; display: none;">
+        <h3>Objectives</h3>
+        <ul>
+          <li>Classify engine condition</li>
+          <li>Use SVM for classification</li>
+          <li>Compare QSVM with classical SVM</li>
+        </ul>
+        <br>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Kernel_Machine.svg" height="200px">
+        <div>Kernel Machine</div>
+
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="past" style="top: 350px; display: none;">
+        <p>We want a more accurate curvy line for which we need to transform the feature space. This is where the kernel
+          trick comes in.</p>
+        <p><br><br></p>
+        <div class="f j-ar">
+          <div>
+
+            <ul>
+              <li>Go to a higher dimension</li>
+              <li>Find a linear separator</li>
+              <li>Project back to original space</li>
+            </ul>
+            <p>More mathematically</p>
+            <ul>
+              <li>Find a feature map <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>ϕ</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\phi</annotation>
+                    </semantics>
+                  </math></span> such that <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>ϕ</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                        <mo>⋅</mo>
+                        <mi>ϕ</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>j</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                        <mo>=</mo>
+                        <mi>K</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo separator="true">,</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>j</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\phi(x_i) \cdot \phi(x_j) = K(x_i, x_j)</annotation>
+                    </semantics>
+                  </math></span></li>
+              <li>Generate a kernel matrix <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>K</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">K</annotation>
+                    </semantics>
+                  </math></span> such that <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <msub>
+                          <mi>K</mi>
+                          <mrow>
+                            <mi>i</mi>
+                            <mi>j</mi>
+                          </mrow>
+                        </msub>
+                        <mo>=</mo>
+                        <mi>K</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo separator="true">,</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>j</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                      </mrow>
+                      <annotation encoding="application/x-tex">K_{ij} = K(x_i, x_j)</annotation>
+                    </semantics>
+                  </math></span></li>
+              <li>Find all support vectors i.e <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <msub>
+                          <mi>α</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo>∵</mo>
+                        <mo>∑</mo>
+                        <msub>
+                          <mi>α</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <msub>
+                          <mi>y</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo>=</mo>
+                        <mn>0</mn>
+                      </mrow>
+                      <annotation encoding="application/x-tex">\alpha_i \because \sum \alpha_i y_i = 0</annotation>
+                    </semantics>
+                  </math></span></li>
+              <li>Find the bias <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>b</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">b</annotation>
+                    </semantics>
+                  </math></span> such that <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <msub>
+                          <mi>y</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo stretchy="false">(</mo>
+                        <mo>∑</mo>
+                        <msub>
+                          <mi>α</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <msub>
+                          <mi>y</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mi>K</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mo separator="true">,</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>j</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                        <mo>+</mo>
+                        <mi>b</mi>
+                        <mo stretchy="false">)</mo>
+                        <mo>=</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <annotation encoding="application/x-tex">y_i(\sum \alpha_i y_i K(x_i, x_j) + b) = 1</annotation>
+                    </semantics>
+                  </math></span></li>
+              <li>We can now predict <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <msub>
+                          <mi>Y</mi>
+                          <mrow>
+                            <mi>O</mi>
+                            <mi>U</mi>
+                            <mi>T</mi>
+                          </mrow>
+                        </msub>
+                        <mo>=</mo>
+                        <mtext>sign</mtext>
+                        <mo stretchy="false">(</mo>
+                        <mo>∑</mo>
+                        <msub>
+                          <mi>α</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <msub>
+                          <mi>y</mi>
+                          <mi>i</mi>
+                        </msub>
+                        <mi>K</mi>
+                        <mo stretchy="false">(</mo>
+                        <msub>
+                          <mi>X</mi>
+                          <mrow>
+                            <mi>I</mi>
+                            <mi>N</mi>
+                          </mrow>
+                        </msub>
+                        <mo separator="true">,</mo>
+                        <msub>
+                          <mi>x</mi>
+                          <mi>j</mi>
+                        </msub>
+                        <mo stretchy="false">)</mo>
+                        <mo>+</mo>
+                        <mi>b</mi>
+                        <mo stretchy="false">)</mo>
+                      </mrow>
+                      <annotation encoding="application/x-tex">Y_{OUT} = \text{sign}(\sum \alpha_i y_i K(X_{IN}, x_j) +
+                        b)</annotation>
+                    </semantics>
+                  </math></span></li>
+            </ul>
+          </div>
+          <div>
+            <iframe height="200" style="width: 100%;" data-show-tab-bar="no" scrolling="no"
+              title="3D Scatter Plot with Plotly.js Charts" src="/embed/scatter.html" frameborder="no" loading="lazy"
+              allowtransparency="true" allowfullscreen="true">
+            </iframe>
+          </div>
+
+        </div>
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="past" style="top: 182.5px; display: block;">
+        <h2>Two Approaches</h2>
+        <div class="f j-ar">
+          <div>
+            <h3>Quantum Precomputed + Classical SGD</h3>
+
+            <p>⚛ Quantum precomputed kernel <br>
+              ↓ <br>
+              💻 Classical SGD</p>
+            <p><br></p>
+
+            <p><strong>Advantages</strong></p>
+            <ul>
+              <li>Better feature space</li>
+              <li>More noise resistant</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Classical RBF + Annealing</h3>
+
+            <p>💻 Classical RBF kernel <br>
+              ↓ <br>
+              ⚛ Quantum Annealing for minima</p>
+            <p><br></p>
+
+            <p><strong>Advantages</strong></p>
+            <ul>
+              <li>More feasible on current hardware</li>
+              <li>Faster</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="past" style="top: 188px; display: block;">
+        <h2>Quantum Precomputed Kernel Mechanism</h2>
+        <ul>
+          <li>Each Pair of rows <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML">
+                <semantics>
+                  <mrow>
+                    <msup>
+                      <mrow></mrow>
+                      <mi>N</mi>
+                    </msup>
+                    <msub>
+                      <mi>C</mi>
+                      <mn>2</mn>
+                    </msub>
+                  </mrow>
+                  <annotation encoding="application/x-tex">{}^NC_2</annotation>
+                </semantics>
+              </math></span> of 6 features each is fed to a quantum circuit as 12 parameters</li>
+        </ul>
+        <img src="https://i.imgur.com/31B1GXr.png" alt="QSVM Citcuit with U &amp; U<sup>T</sup>"
+          url="Higgs analysis with quantum classifiers, Belis et. al." height="100px">
+
+        <pre class="mermaid"
+          data-processed="true"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8.000000953674316 543.1099243164062 132.4056625366211" style="max-width: 543.1099243164062px;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1693823425402"><style>#mermaid-1693823425402{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1693823425402 .error-icon{fill:hsl(220.5882352941, 100%, 98.3333333333%);}#mermaid-1693823425402 .error-text{fill:rgb(8.5000000002, 5.7500000001, 0);stroke:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425402 .edge-thickness-normal{stroke-width:2px;}#mermaid-1693823425402 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1693823425402 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1693823425402 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1693823425402 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1693823425402 .marker{fill:#0b0b0b;stroke:#0b0b0b;}#mermaid-1693823425402 .marker.cross{stroke:#0b0b0b;}#mermaid-1693823425402 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1693823425402 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1693823425402 .cluster-label text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425402 .cluster-label span,#mermaid-1693823425402 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425402 .label text,#mermaid-1693823425402 span,#mermaid-1693823425402 p{fill:#333;color:#333;}#mermaid-1693823425402 .node rect,#mermaid-1693823425402 .node circle,#mermaid-1693823425402 .node ellipse,#mermaid-1693823425402 .node polygon,#mermaid-1693823425402 .node path{fill:#fff4dd;stroke:hsl(40.5882352941, 60%, 83.3333333333%);stroke-width:1px;}#mermaid-1693823425402 .flowchart-label text{text-anchor:middle;}#mermaid-1693823425402 .node .label{text-align:center;}#mermaid-1693823425402 .node.clickable{cursor:pointer;}#mermaid-1693823425402 .arrowheadPath{fill:#0b0b0b;}#mermaid-1693823425402 .edgePath .path{stroke:#0b0b0b;stroke-width:2.0px;}#mermaid-1693823425402 .flowchart-link{stroke:#0b0b0b;fill:none;}#mermaid-1693823425402 .edgeLabel{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);text-align:center;}#mermaid-1693823425402 .edgeLabel rect{opacity:0.5;background-color:hsl(-79.4117647059, 100%, 93.3333333333%);fill:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-1693823425402 .labelBkg{background-color:rgba(243.9999999999, 220.9999999998, 255, 0.5);}#mermaid-1693823425402 .cluster rect{fill:hsl(220.5882352941, 100%, 98.3333333333%);stroke:hsl(220.5882352941, 60%, 88.3333333333%);stroke-width:1px;}#mermaid-1693823425402 .cluster text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425402 .cluster span,#mermaid-1693823425402 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425402 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(220.5882352941, 100%, 98.3333333333%);border:1px solid hsl(220.5882352941, 60%, 88.3333333333%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1693823425402 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1693823425402 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-R1 LE-C" id="L-R1-C-0" d="M60.927154541015625,15.499195098876953L65.0938212076823,15.499195098876953C69.26048787434895,15.499195098876953,77.5938212076823,15.499195098876953,86.91807746887207,15.499195098876953C96.24233373006184,15.499195098876953,106.55751291910808,15.499195098876953,111.71510251363118,15.499195098876953L116.8726921081543,15.499195098876953"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-R2 LE-C2" id="L-R2-C2-0" d="M60.927154541015625,98.70203018188477L65.0938212076823,98.70203018188477C69.26048787434895,98.70203018188477,77.5938212076823,98.70203018188477,85.92715454101562,98.70203018188477C94.26048787434895,98.70203018188477,102.5938212076823,98.70203018188477,106.76048787434895,98.70203018188477L110.92715454101562,98.70203018188477"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-C LE-Compose" id="L-C-Compose-0" d="M233.67932510375977,15.499195098876953L238.83691469828287,15.499195098876953C243.994504292806,15.499195098876953,254.3096834818522,15.499195098876953,266.2186301969385,19.849565505981445C278.1275769120248,24.199935913085938,291.6302911531511,32.90067672729492,298.3816482737143,37.251047134399414L305.13300539427746,41.601417541503906"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-C2 LE-Compose" id="L-C2-Compose-0" d="M239.62486267089844,98.70203018188477L243.7915293375651,98.70203018188477C247.95819600423178,98.70203018188477,256.2915293375651,98.70203018188477,267.2095531247949,94.35165977478027C278.1275769120248,90.00128936767578,291.6302911531511,81.3005485534668,298.3816482737143,76.9501781463623L305.13300539427746,72.59980773925781"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Compose LE-M" id="L-Compose-M-0" d="M368.74767303466797,57.10061264038086L372.91433970133465,57.10061264038086C377.0810063680013,57.10061264038086,385.41433970133465,57.10061264038086,393.74767303466797,57.10061264038086C402.0810063680013,57.10061264038086,410.41433970133465,57.10061264038086,414.5810063680013,57.10061264038086L418.74767303466797,57.10061264038086"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(30.463577270507812, 15.499195098876953)" id="flowchart-R1-0" class="node default default flowchart-label"><rect height="30.998390197753906" width="60.927154541015625" y="-15.499195098876953" x="-30.463577270507812" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-22.963577270507812, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="45.927154541015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Row_1</span></div></foreignObject></g></g><g transform="translate(175.27600860595703, 15.499195098876953)" id="flowchart-C-1" class="node default default flowchart-label"><rect height="30.998390197753906" width="116.80663299560547" y="-15.499195098876953" x="-58.403316497802734" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-50.903316497802734, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="101.80663299560547"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">ZZFeatureMap</span></div></foreignObject></g></g><g transform="translate(30.463577270507812, 98.70203018188477)" id="flowchart-R2-2" class="node default default flowchart-label"><rect height="30.998390197753906" width="60.927154541015625" y="-15.499195098876953" x="-30.463577270507812" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-22.963577270507812, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="45.927154541015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Row_2</span></div></foreignObject></g></g><g transform="translate(175.27600860595703, 98.70203018188477)" id="flowchart-C2-3" class="node default default flowchart-label"><rect height="35.40728187561035" width="128.69771575927734" y="-17.703640937805176" x="-64.34885787963867" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-56.84885787963867, -10.203640937805176)" style="" class="label"><rect></rect><foreignObject height="20.40728187561035" width="113.69771575927734"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">ZZFeatureMap<sup>-1</sup></span></div></foreignObject></g></g><g transform="translate(329.1862678527832, 57.10061264038086)" id="flowchart-Compose-6" class="node default default flowchart-label"><rect height="30.998390197753906" width="79.12281036376953" y="-15.499195098876953" x="-39.561405181884766" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-32.061405181884766, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="64.12281036376953"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Compose</span></div></foreignObject></g></g><g transform="translate(472.9287910461426, 57.10061264038086)" id="flowchart-M-7" class="node default default flowchart-label"><rect height="35.40728187561035" width="108.36223602294922" y="-17.703640937805176" x="-54.18111801147461" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-46.68111801147461, -10.203640937805176)" style="" class="label"><rect></rect><foreignObject height="20.40728187561035" width="93.36223602294922"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Measure |0⟩<sup>n</sup></span></div></foreignObject></g></g></g></g></g></svg></pre>
+      </section>
+      <section data-auto-animate="" class="present" style="top: 43.5px; display: block;">
+        <h2>QUBO Annealing Mechanism</h2>
+        <div style="min-height:50vh">
+
+          <pre class="mermaid"
+            data-processed="true"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8.000000953674316 230.4341583251953 370.991943359375" style="max-width: 230.4341583251953px;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1693823425440"><style>#mermaid-1693823425440{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1693823425440 .error-icon{fill:hsl(220.5882352941, 100%, 98.3333333333%);}#mermaid-1693823425440 .error-text{fill:rgb(8.5000000002, 5.7500000001, 0);stroke:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425440 .edge-thickness-normal{stroke-width:2px;}#mermaid-1693823425440 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1693823425440 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1693823425440 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1693823425440 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1693823425440 .marker{fill:#0b0b0b;stroke:#0b0b0b;}#mermaid-1693823425440 .marker.cross{stroke:#0b0b0b;}#mermaid-1693823425440 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1693823425440 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1693823425440 .cluster-label text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425440 .cluster-label span,#mermaid-1693823425440 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425440 .label text,#mermaid-1693823425440 span,#mermaid-1693823425440 p{fill:#333;color:#333;}#mermaid-1693823425440 .node rect,#mermaid-1693823425440 .node circle,#mermaid-1693823425440 .node ellipse,#mermaid-1693823425440 .node polygon,#mermaid-1693823425440 .node path{fill:#fff4dd;stroke:hsl(40.5882352941, 60%, 83.3333333333%);stroke-width:1px;}#mermaid-1693823425440 .flowchart-label text{text-anchor:middle;}#mermaid-1693823425440 .node .label{text-align:center;}#mermaid-1693823425440 .node.clickable{cursor:pointer;}#mermaid-1693823425440 .arrowheadPath{fill:#0b0b0b;}#mermaid-1693823425440 .edgePath .path{stroke:#0b0b0b;stroke-width:2.0px;}#mermaid-1693823425440 .flowchart-link{stroke:#0b0b0b;fill:none;}#mermaid-1693823425440 .edgeLabel{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);text-align:center;}#mermaid-1693823425440 .edgeLabel rect{opacity:0.5;background-color:hsl(-79.4117647059, 100%, 93.3333333333%);fill:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-1693823425440 .labelBkg{background-color:rgba(243.9999999999, 220.9999999998, 255, 0.5);}#mermaid-1693823425440 .cluster rect{fill:hsl(220.5882352941, 100%, 98.3333333333%);stroke:hsl(220.5882352941, 60%, 88.3333333333%);stroke-width:1px;}#mermaid-1693823425440 .cluster text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425440 .cluster span,#mermaid-1693823425440 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1693823425440 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(220.5882352941, 100%, 98.3333333333%);border:1px solid hsl(220.5882352941, 60%, 88.3333333333%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1693823425440 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1693823425440 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-A LE-B" id="L-A-B-0" d="M107.21707916259766,30.998390197753906L107.21707916259766,35.16505686442057C107.21707916259766,39.33172353108724,107.21707916259766,47.66505686442057,107.21707916259766,55.998390197753906C107.21707916259766,64.33172353108723,107.21707916259766,72.66505686442058,107.21707916259766,76.83172353108723L107.21707916259766,80.9983901977539"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-B LE-C" id="L-B-C-0" d="M107.21707916259766,111.99678039550781L107.21707916259766,116.16344706217448C107.21707916259766,120.33011372884114,107.21707916259766,128.66344706217447,107.21707916259766,136.9967803955078C107.21707916259766,145.33011372884116,107.21707916259766,153.66344706217447,107.21707916259766,157.83011372884116L107.21707916259766,161.9967803955078"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-C LE-D" id="L-C-D-0" d="M107.21707916259766,192.99517059326172L107.21707916259766,197.16183725992838C107.21707916259766,201.32850392659506,107.21707916259766,209.66183725992838,107.21707916259766,217.99517059326172C107.21707916259766,226.32850392659506,107.21707916259766,234.66183725992838,107.21707916259766,238.82850392659506L107.21707916259766,242.99517059326172"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-D LE-E" id="L-D-E-0" d="M107.21707916259766,273.9935607910156L107.21707916259766,278.1602274576823C107.21707916259766,282.32689412434894,107.21707916259766,290.6602274576823,107.21707916259766,298.9935607910156C107.21707916259766,307.32689412434894,107.21707916259766,315.6602274576823,107.21707916259766,319.82689412434894L107.21707916259766,323.9935607910156"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(107.21707916259766, 15.499195098876953)" id="flowchart-A-8" class="node default default flowchart-label"><rect height="30.998390197753906" width="214.4341583251953" y="-15.499195098876953" x="-107.21707916259766" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-99.71707916259766, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="199.4341583251953"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Calculate RBF Kernel Matrix</span></div></foreignObject></g></g><g transform="translate(107.21707916259766, 96.49758529663086)" id="flowchart-B-9" class="node default default flowchart-label"><rect height="30.998390197753906" width="164.44277954101562" y="-15.499195098876953" x="-82.22138977050781" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-74.72138977050781, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="149.44277954101562"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Optimisation on Cost</span></div></foreignObject></g></g><g transform="translate(107.21707916259766, 177.49597549438477)" id="flowchart-C-11" class="node default default flowchart-label"><rect height="30.998390197753906" width="174.3232879638672" y="-15.499195098876953" x="-87.1616439819336" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-79.6616439819336, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="159.3232879638672"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Optimisation in Binary</span></div></foreignObject></g></g><g transform="translate(107.21707916259766, 258.4943656921387)" id="flowchart-D-13" class="node default default flowchart-label"><rect height="30.998390197753906" width="156.22816467285156" y="-15.499195098876953" x="-78.11408233642578" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-70.61408233642578, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="141.22816467285156"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Binary Opt as QUBO</span></div></foreignObject></g></g><g transform="translate(107.21707916259766, 339.4927558898926)" id="flowchart-E-15" class="node default default flowchart-label"><rect height="30.998390197753906" width="154.0596160888672" y="-15.499195098876953" x="-77.0298080444336" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-69.5298080444336, -7.999195098876953)" style="" class="label"><rect></rect><foreignObject height="15.998390197753906" width="139.0596160888672"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Quantum Annealing</span></div></foreignObject></g></g></g></g></g></svg></pre>
+        </div>
+
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="future" style="top: 42px; display: block;">
+        <h2>Results</h2>
+        <img src="/assets/lti-qsvm-stats.svg" style="max-height:50vh">
+
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="future" style="top: 240px; display: block;">
+        <h2>Results</h2>
+        <p>We notice the following</p>
+        <ul>
+          <li>6 Qubit ZZFeatureMap is the best</li>
+          <li>It is not obvious if more data is better</li>
+          <li>The theoretical maxima of accuracy is probably &lt;70% since across all kernels the best accuracy is 67%
+          </li>
+        </ul>
+      </section>
+      <section data-auto-animate="" hidden="" aria-hidden="true" class="future" style="top: 350px; display: none;">
+        <h2>How to improve?</h2>
+        <p>Data is timeseries</p>
+        <ul>
+          <li>Use RNNs</li>
+          <li>Use VQCs</li>
+          <li>Come up with a Quantum Time Series Mechanism</li>
+        </ul>
+      </section>
+    </article>
+    <div class="backgrounds">
+      <div class="slide-background past" data-loaded="true" style="display: none;"></div>
+      <div class="slide-background past" data-loaded="true" style="display: none;"></div>
+      <div class="slide-background past" data-loaded="true" style="display: none;"></div>
+      <div class="slide-background past" style="display: none;"></div>
+      <div class="slide-background past" style="display: block;" data-loaded="true"></div>
+      <div class="slide-background past" style="display: block;" data-loaded="true"></div>
+      <div class="slide-background present" style="display: block;" data-loaded="true"></div>
+      <div class="slide-background future" style="display: block;" data-loaded="true"></div>
+      <div class="slide-background future" style="display: block;" data-loaded="true"></div>
+      <div class="slide-background future" style="display: none;"></div>
+    </div>
+    <div class="progress" style="display: block;"><span style="width: 725.333px;"></span></div>
+    <aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded"
+      style="display: block;"><button class="navigate-left enabled" aria-label="previous slide">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-right highlight enabled" aria-label="next slide">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-up" aria-label="above slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-down" aria-label="below slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button></aside>
+    <div class="slide-number" style="display: none;"></div>
+    <div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div>
+    <div class="pause-overlay"></div>
+    <div id="aria-status-div" aria-live="polite" aria-atomic="true"
+      style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">QUBO
+      Annealing Mechanism
+
+
+      graph TB
+      A["
+      Calculate RBF Kernel Matrix
+      "] --&gt; B["Optimisation on Cost"]
+      B --&gt; C["Optimisation in Binary"]
+      C --&gt; D["Binary Opt as QUBO"]
+      D --&gt; E["Quantum Annealing"]
+
+    </div>
+  </main>
+
+
+  <script>
+    Reveal.initialize();
+    Reveal.slide( localStorage.getItem( 'currslide' ) || 0 );
+    Reveal.addEventListener( 'slidechanged', ( e ) => {
+      localStorage.setItem( 'currslide', e.indexh );
+    } );
+  </script>
+
+
+  <div class="mermaidTooltip" style="opacity: 0;"></div>
+</body>

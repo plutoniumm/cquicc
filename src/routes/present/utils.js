@@ -11,11 +11,11 @@ export const render = ( text ) => {
     .join( "---" )
     .split( "===" )
     .map( section => marked( section, mcf ) )
-    .join( "</section><section>" );
+    .join( "</section><section data-auto-animate>" );
 
   html = template
     .replace( "&head;", "" )
-    .replace( "&body;", `<section>${ html }</section>` );
+    .replace( "&body;", `<section data-auto-animate>${ html }</section>` );
 
   for ( let key in m )
     html = html.replace( `&${ key };`, m[ key ] );
@@ -24,4 +24,18 @@ export const render = ( text ) => {
     meta: m,
     html,
   }
-}
+};
+
+export const prerender = ( dom ) => {
+  dom.querySelectorAll( ".killCSS" ).forEach( ( e ) => e.remove() );
+
+  const prefix =
+    `<head><scr` +
+    `ipt src="/reveal.js"></scr` +
+    `ipt>
+<link rel="stylesheet" href="https://manav.ch/atomic.css">
+<link rel="stylesheet" href="/css/reveal.css">
+<link rel="stylesheet" href="/css/revealmod.css"></head><body>`;
+
+  return prefix + dom.innerHTML + "</body>";
+};

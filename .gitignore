@@ -7,6 +7,7 @@ projects/qsvm
 .svelte*
 
 MNIST/
+presents/
 
 static/docs/
 pnpm-lock.yaml
