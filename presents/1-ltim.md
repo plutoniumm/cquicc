@@ -1,8 +1,21 @@
 ---
-topic: "QSVM for LTIM at MCQuICC"
+topic: "QSVM at MCQuICC"
 ---
 
 ### Received Dataset
+
+<style>
+table { border-collapse: collapse; }
+tr { border: none; }
+td,th {
+  border-right: solid 1px #8888;
+  border-left: solid 1px #8888;
+  padding: 0.2em 0.5em;
+}
+th{
+  border-bottom: solid 1px #8888;
+}
+</style>
 
 |Coolant T|Fuel P|LOG(Engine rpm)|LOG(Lub oil P)|LOG(Coolant P)|lub oil T|Engine Condition|
 |---|---|---|---|---|---|---|
@@ -129,6 +142,23 @@ graph TB
 
 ## Results
 
+Legend
+
+<div class="f j-ar mx-a" style="width:80%;color">
+  <div class="f p10 rx5" style="background:#aaf;">
+    Classical SVM
+  </div>
+  <div class="f p10 rx5" style="background:#faa;">
+    Quantum Kernel
+  </div>
+  <div class="f p10 rx5" style="background:#faf;">
+    Quantum Annealing
+  </div>
+  <div class="f p10 rx5" style="background:#afa;">
+    Final Quantum Annealing
+  </div>
+</div>
+
 <img src="/assets/lti-qsvm-stats.svg" style="max-height:50vh" />
 
 ===
@@ -146,6 +176,38 @@ We notice the following
 
 Data is timeseries
 
-- Use RNNs
-- Use VQCs
-- Come up with a Quantum Time Series Mechanism
+<div class="f j-ar mx-a" style="width:80%">
+
+<style>
+  .box{
+    height: 300px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+</style>
+
+<div class="box" style="background:#aaf;">
+  <img src="/assets/rnn.png" width="90px" alt="rnn"
+    style="mix-blend-mode: multiply;"
+  />
+  <div>RNN</div>
+</div>
+<div class="box" style="background:#faa;">
+  <img src="/assets/vqc.png" width="120px" alt="rnn"
+    style="mix-blend-mode: multiply;"
+  />
+  <div>VQCs</div>
+</div>
+<div class="box" style="background:#faf;">
+  <svg viewBox="0 0 32 32" height="90px" width="90px" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    <circle cx="14" cy="14" r="12" />
+    <path d="M23 23 L30 30"  />
+  </svg>
+  <div>Come up with a Quantum Time Series Mechanism</div>
+</div>
+</div>
