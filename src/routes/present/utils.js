@@ -5,7 +5,7 @@ import template from "./render.html?raw"
 const mcf = { mangle: false, headerIds: false };
 export const render = ( text ) => {
   const [ , meta, ...rest ] = text.split( "---" );
-  const m = yaml.load( meta.trim(), { json: true } );
+  const m = yaml.load( meta?.trim(), { json: true } );
 
   let html = rest
     .join( "---" )
