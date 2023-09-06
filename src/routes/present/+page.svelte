@@ -22,7 +22,7 @@
   onMount(async () => {
     const code = localStorage.getItem("cquicc-present");
 
-    if (code.length > 1) {
+    if (code) {
       value = code;
     } else {
       const Template = (await import("./basic.md?raw")).default;
