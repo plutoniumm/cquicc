@@ -105,10 +105,10 @@ More mathematically
 
 ```mermaid
 graph LR
-  R1["Row_1"] --> C["ZZFeatureMap"]
-  R2["Row_2"] --> C2["ZZFeatureMap<sup>-1</sup>"]
+  R1["Row 1"] --> C["ZZFeatureMap <span style="opacity:0">AB</span>"]
+  R2["Row 2"] --> C2["ZZFeatureMap<sup>-1</sup> <span style="opacity:0">AB</span>"]
 
-  C & C2 --> Compose --> M["Measure |0&rangle;<sup>n</sup>"]
+  C & C2 --> Compose["Compose A"] --> M["Measure |0&rangle;<sup>n</sup> <span style="opacity:0">AB</span>"]
 ```
 
 ===
@@ -120,20 +120,20 @@ graph LR
 graph TB
   A["<div>
   Calculate RBF Kernel Matrix from <br/>
-   e<sup>-γ * ||x<sub>i</sub> - x<sub>j</sub>||<sup>2</sup></sup>
+   <math display="block"><msup><mi>e</mi><mrow><mo>-</mo><mi>γ</mi><msup><mrow><mo>||</mo><mi>x1</mi><mo>-</mo><mi>x2</mi><mo>||</mo></mrow><mrow><mn>2</mn></mrow></msup></mrow></msup></math>
   </div>"] --> B["<div>
     Get cost function <br/>
-    <math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="M188" display="block"><mrow><mtable><mtr><mtd columnalign="right"><mrow><munder><mo movablelimits="true">min</mo><mi>λ</mi></munder><mspace width="4pt"></mspace><mi mathvariant="script">L</mi><mrow><mo stretchy="false">(</mo><mi>λ</mi><mo stretchy="false">)</mo></mrow></mrow></mtd><mtd columnalign="left"><mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><msub><mi>λ</mi><mi>j</mi></msub><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub><msub><mi>y</mi><mi>i</mi></msub><msub><mi>y</mi><mi>j</mi></msub><mo>-</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><mspace width="2em"></mspace><msub><mi>λ</mi><mi>i</mi></msub><mo>,</mo><msub><mi>λ</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn><mspace width="1em"></mspace><mo>∀</mo><mi>i</mi><mo>,</mo><mi>j</mi></mrow></mtd></mtr></mtable></mrow></math>
+    <math display="block"><mrow><mtable><mtr><mtd columnalign="right"><mrow><munder><mo movablelimits="true">min</mo><mi>λ</mi></munder><mspace width="4pt"></mspace><mi mathvariant="script">L</mi><mrow><mo stretchy="false">(</mo><mi>λ</mi><mo stretchy="false">)</mo></mrow></mrow></mtd><mtd columnalign="left"><mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><msub><mi>λ</mi><mi>j</mi></msub><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub><msub><mi>y</mi><mi>i</mi></msub><msub><mi>y</mi><mi>j</mi></msub><mo>-</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><mspace width="2em"></mspace><msub><mi>λ</mi><mi>i</mi></msub><mo>,</mo><msub><mi>λ</mi><mi>j</mi></msub></mrow></mtd></mtr></mtable></mrow></math>
   </div>"]
   B --> C["<div>
     Convert to binary form <br/>
-    <math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="M218" display="block"><mrow><mtable><mtr><mtd columnalign="right"><mrow><munder><mo movablelimits="true">min</mo><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo>∈</mo><msup><mrow><mi mathvariant="double-struck">B</mi></mrow><mrow><mi mathvariant="italic">NK</mi></mrow></msup></mrow></munder><mspace width="4pt"></mspace><mi mathvariant="script">L</mi><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo stretchy="false">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover></mrow><mi>T</mi></msup><msup><mrow><mi mathvariant="script">P</mi></mrow><mi>T</mi></msup><mrow><mo stretchy="false">(</mo><mi>K</mi><mo>⊙</mo><mi>Y</mi><msup><mi>Y</mi><mi>T</mi></msup><mo stretchy="false">)</mo></mrow><mi mathvariant="script">P</mi><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo>-</mo><msup><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover></mrow><mi>T</mi></msup><msup><mrow><mi mathvariant="script">P</mi></mrow><mi>T</mi></msup><msub><mn>1</mn><mi>N</mi></msub></mrow></mtd></mtr></mtable></mrow></math>
+    <math display="block"><mrow><mtable><mtr><mtd columnalign="right"><mrow><munder><mo movablelimits="true">min</mo><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo>∈</mo><msup><mrow><mi mathvariant="double-struck">B</mi></mrow><mrow><mi mathvariant="italic">NK</mi></mrow></msup></mrow></munder><mspace width="4pt"></mspace><mi mathvariant="script">L</mi><mrow><mo stretchy="false">(</mo><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo stretchy="false">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover></mrow><mi>T</mi></msup><msup><mrow><mi mathvariant="script">P</mi></mrow><mi>T</mi></msup><mrow><mo stretchy="false">(</mo><mi>K</mi><mo>⊙</mo><mi>Y</mi><msup><mi>Y</mi><mi>T</mi></msup><mo stretchy="false">)</mo></mrow><mi mathvariant="script">P</mi><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover><mo>-</mo><msup><mrow><mover accent="true"><mi>λ</mi><mo stretchy="false">^</mo></mover></mrow><mi>T</mi></msup><msup><mrow><mi mathvariant="script">P</mi></mrow><mi>T</mi></msup><msub><mn>1</mn><mi>N</mi></msub><mspace width="2em"></mrow></mtd></mtr></mtable></mrow></math>
   </div>"]
   P["<div>
-  Desired Precision (P) <br/>
-  (1, 2, 4, 8)
+  Desired Precision (P)
+  <math display="block"><mrow><mo>(1, 2, 4, 8)</mo></mrow></math>
   </div>"] --> D
-  C --> D["Quantum Annealing"]
+  C --> D["Quantum Annealing <span style="opacity:0">ABC</span>"]
 ```
 
 </div>
