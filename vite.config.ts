@@ -6,7 +6,7 @@ function docsHMR () {
     name: 'custom-hmr',
     enforce: 'post',
     handleHotUpdate ({ file, server }) {
-      if (file.endsWith('.md')) {
+      if (file.endsWith('.md') && file.includes('static/docs')) {
         server.ws.send({
           type: 'full-reload',
           path: '*'

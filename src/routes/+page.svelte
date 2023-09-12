@@ -9,6 +9,7 @@
   import { defStyles, render, useLocalFile, isLocalHost } from "./utils";
 
   let value = "";
+  let isEditor = true;
   const preprocess = (text) => {
     const { html } = render(text || "");
     localStorage.setItem("cquicc-code", text);
@@ -30,7 +31,7 @@
       value = code;
     } else {
       const Template = await useLocalFile(isLS, file);
-      console.log(Template);
+      isEditor = !isLS || !file;
 
       value = Template;
     }
@@ -49,7 +50,7 @@
 <div class="f j-ar p-fix" id="funcs">
   <div class="rx10 ptr" on:click={print}>PDF</div>
 </div>
-<main class="f fw">
+<main class="f fw" class:edOnly={!isEditor}>
   <div class="editor">
     <CodeMirror
       bind:value
@@ -98,6 +99,13 @@
   }
   .frame {
     width: calc(100% - var(--split));
+  }
+
+  .edOnly > .frame {
+    width: 100%;
+  }
+  .edOnly > .editor {
+    display: none;
   }
 
   .editor,
