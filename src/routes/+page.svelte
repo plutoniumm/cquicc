@@ -6,7 +6,7 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
-  import { defStyles, render } from "./utils";
+  import { defStyles, render, useLocalFile, isLocalHost } from "./utils";
 
   let value = "";
   const preprocess = (text) => {
@@ -16,12 +16,22 @@
   };
 
   onMount(async () => {
-    const code = localStorage.getItem("cquicc-code");
+    const isLS = isLocalHost();
+    const file = new URL(location.href).searchParams.get("file");
+
+    let code;
+    if (!file) {
+      code = localStorage.getItem("cquicc-code");
+    } else {
+      code = "";
+    }
 
     if (code.length > 1) {
       value = code;
     } else {
-      const Template = (await import("./basic.md?raw")).default;
+      const Template = await useLocalFile(isLS, file);
+      console.log(Template);
+
       value = Template;
     }
 

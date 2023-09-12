@@ -4,6 +4,7 @@ import { marked } from "marked";
 import hljs from 'highlight.js';
 import typeset from "typeset";
 import yaml from "js-yaml";
+import { getWeekNumber } from './lib';
 
 import template from "./render.html?raw"
 const mcf = { mangle: false, headerIds: false };
@@ -20,6 +21,13 @@ const renderer = {
     return false;
   }
 };
+
+
+export const isLocalHost = () => window.location.hostname === "localhost";
+export async function useLocalFile ( isLS = false, file ) {
+  if ( !file || !isLS ) return ( await import( "./basic.md?raw" ) ).default;
+  return fetch( `/docs/${ file }.md` ).then( r => r.text() );
+}
 
 
 export const defStyles = {
@@ -89,6 +97,8 @@ export const render = ( text ) => {
     year: 'numeric'
   } );
 
+  m.date = `${ m.date }, Week ${ getWeekNumber( m.date ) }`;
+
   let html =
     typeset(
       marked( rest.join( "---" ), mcf )
@@ -105,4 +115,4 @@ export const render = ( text ) => {
     meta: m,
     html,
   }
-}
+};

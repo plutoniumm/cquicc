@@ -13,7 +13,8 @@
   let TA = "";
 
   const preprocess = (text) => {
-    const { html } = rander(text || "");
+    if (text?.length < 1) return;
+    const { html } = rander(text);
     localStorage.setItem("cquicc-present", text);
 
     return html;
