@@ -6,11 +6,12 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
-  import { defStyles } from "../utils";
+  import { defStyles, useLocalPPT, isLocalHost } from "../utils";
   import { render as rander, prerender } from "./utils";
 
   let value = "";
   let TA = "";
+  let isEditor = true;
 
   const preprocess = (text) => {
     if (text?.length < 1) return;
@@ -21,14 +22,25 @@
   };
 
   onMount(async () => {
-    const code = localStorage.getItem("cquicc-present");
+    const isLS = isLocalHost();
+    const file = new URL(location.href).searchParams.get("file");
 
-    if (code) {
+    let code;
+    if (!file) {
+      code = localStorage.getItem("cquicc-present");
+    } else {
+      code = "";
+    }
+
+    if (code.length > 1) {
       value = code;
     } else {
-      const Template = (await import("./basic.md?raw")).default;
+      const Template = await useLocalPPT(isLS, file);
+      isEditor = !isLS || !file;
+
       value = Template;
     }
+
     document.title += (-new Date()).toString(36);
   });
 
@@ -62,17 +74,18 @@
     GetCode
   </div>
 </div>
-<main class="f fw">
+<main class="f fw" class:edOnly={!isEditor}>
   <div class="editor">
     <CodeMirror
       bind:value
-      lang={markdown({
-        base: markdownLanguage,
-        codeLanguages: languages,
-        completeHTMLTags: true,
-      })}
-      extensions={[dracula]}
-      basic={true}
+      extensions={[
+        markdown({
+          base: markdownLanguage,
+          codeLanguages: languages,
+          completeHTMLTags: true,
+        }),
+        dracula,
+      ]}
       styles={defStyles}
       lineWrapping={true}
       placeholder="Type some markdown here..."
@@ -134,6 +147,13 @@
   }
   .frame {
     width: calc(100% - var(--split));
+  }
+
+  .edOnly > .frame {
+    width: 100%;
+  }
+  .edOnly > .editor {
+    display: none;
   }
 
   .editor,

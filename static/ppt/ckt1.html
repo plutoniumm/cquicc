@@ -1,0 +1,567 @@
+<head>
+  <script src="/reveal.js"></script>
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
+  <link rel="stylesheet" href="/css/reveal.css">
+  <link rel="stylesheet" href="/css/revealmod.css">
+</head>
+
+<body xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML">
+  <main class="reveal slide center has-horizontal-slides ready" style="font-size: 24px;" role="application"
+    data-transition-speed="default" data-background-transition="fade">
+    <article class="slides"
+      style="width: 960px; height: 700px; inset: 50% auto auto 50%; transform: translate(-50%, -50%) scale(0.853);">
+      <section class="past" style="top: 96px; display: none;" hidden="" aria-hidden="true">
+        <h2><span style="font:700 1.5em Helvetica;">Ciruit Cutting</span><br><img src="https://i.imgur.com/KqUPnzE.jpeg"
+            height="300px" class="m20 rx20"></h2>
+      </section>
+      <section data-auto-animate="" class="past" style="top: 80px; display: block;" hidden="" aria-hidden="true">
+        <h3>Large Circuits</h3>
+        <p>Let us say we have the below circuit and it needs to be broken into smaller circuits. There are a few key
+          questions we ask</p>
+        <ul>
+          <li>How can we still get similar results without high overhead</li>
+          <li>What is the best cut? <code>1,3</code>? <code>2,2</code>? <code>3,1</code>?</li>
+          <li>Can the order of the wires be changed to get a better cut?</li>
+        </ul>
+        <img
+          src="https://qiskit-extensions.github.io/circuit-knitting-toolbox/_images/circuit_cutting_tutorials_01_gate_cutting_to_reduce_circuit_width_2_0.png">
+
+      </section>
+      <section data-auto-animate="" class="past" style="top: 44px; display: block;" hidden="" aria-hidden="true">
+        <h3>Quasi-Probability Sampling <br> If it ducks like a quack</h3>
+        <p>The authors attempt to reproduce the expectation values here rather than the circuit or it unitaries.
+          Consider the decomposition</p>
+        <img src="https://i.stack.imgur.com/qb0Q6.png" style="max-width:100%">
+
+        <div class="f tc mx-a j-ar">
+          <div>
+
+            <p>Expected Unitary</p>
+            <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <semantics>
+                  <mrow>
+                    <mo fence="true">[</mo>
+                    <mtable rowspacing="0.16em" columnalign="center center center center" columnspacing="1em">
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                    <mo fence="true">]</mo>
+                  </mrow>
+                  <annotation encoding="application/x-tex">\begin{bmatrix}
+                    1 &amp; 0 &amp; 0 &amp; 0 \\
+                    0 &amp; 1 &amp; 0 &amp; 0 \\
+                    0 &amp; 0 &amp; 1 &amp; 0 \\
+                    0 &amp; 0 &amp; 0 &amp; -1 \\
+                    \end{bmatrix}</annotation>
+                </semantics>
+              </math></span>
+          </div>
+          <div>
+
+            <p>Actual Unitary</p>
+            <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <semantics>
+                  <mrow>
+                    <mo fence="true">[</mo>
+                    <mtable rowspacing="0.16em" columnalign="center center center center" columnspacing="1em">
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>−</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>+</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>+</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                              <mo>−</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                    <mo fence="true">]</mo>
+                  </mrow>
+                  <annotation encoding="application/x-tex">\begin{bmatrix}
+                    1-i &amp; 0 &amp; 0 &amp; 0 \\
+                    0 &amp; 1+i &amp; 0 &amp; 0 \\
+                    0 &amp; 0 &amp; 1+i &amp; 0 \\
+                    0 &amp; 0 &amp; 0 &amp; -1-i \\
+                    \end{bmatrix}</annotation>
+                </semantics>
+              </math></span>
+          </div>
+        </div>
+
+      </section>
+      <section data-auto-animate="" class="present" style="top: 145.5px; display: block;">
+        <h3>Quasi-Probability Sampling <br> If it ducks like a quack</h3>
+        <div class="f tc mx-a j-ar">
+          <div>
+
+            <p>Expected Unitary</p>
+            <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <semantics>
+                  <mrow>
+                    <mo fence="true">[</mo>
+                    <mtable rowspacing="0.16em" columnalign="center center center center" columnspacing="1em">
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>1</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                    <mo fence="true">]</mo>
+                  </mrow>
+                  <annotation encoding="application/x-tex">\begin{bmatrix}
+                    1 &amp; 0 &amp; 0 &amp; 0 \\
+                    0 &amp; 1 &amp; 0 &amp; 0 \\
+                    0 &amp; 0 &amp; 1 &amp; 0 \\
+                    0 &amp; 0 &amp; 0 &amp; -1 \\
+                    \end{bmatrix}</annotation>
+                </semantics>
+              </math></span>
+          </div>
+          <div>
+
+            <p>Actual Unitary</p>
+            <span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                <semantics>
+                  <mrow>
+                    <mo fence="true">[</mo>
+                    <mtable rowspacing="0.16em" columnalign="center center center center" columnspacing="1em">
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>−</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>+</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mn>1</mn>
+                              <mo>+</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                      <mtr>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mn>0</mn>
+                          </mstyle>
+                        </mtd>
+                        <mtd>
+                          <mstyle scriptlevel="0" displaystyle="false">
+                            <mrow>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                              <mo>−</mo>
+                              <mi>i</mi>
+                            </mrow>
+                          </mstyle>
+                        </mtd>
+                      </mtr>
+                    </mtable>
+                    <mo fence="true">]</mo>
+                  </mrow>
+                  <annotation encoding="application/x-tex">\begin{bmatrix}
+                    1-i &amp; 0 &amp; 0 &amp; 0 \\
+                    0 &amp; 1+i &amp; 0 &amp; 0 \\
+                    0 &amp; 0 &amp; 1+i &amp; 0 \\
+                    0 &amp; 0 &amp; 0 &amp; -1-i \\
+                    \end{bmatrix}</annotation>
+                </semantics>
+              </math></span>
+          </div>
+        </div>
+
+        <p>While these two matrices and therefore the gates are not equal. The expectation values</p>
+      </section>
+    </article>
+    <div class="backgrounds">
+      <div class="slide-background past" data-loaded="true" style="display: none;"></div>
+      <div class="slide-background past" data-loaded="true" style="display: block;"></div>
+      <div class="slide-background past" data-loaded="true" style="display: block;"></div>
+      <div class="slide-background present" style="display: block;" data-loaded="true"></div>
+    </div>
+    <div class="progress" style="display: block;"><span style="width: 853px;"></span></div>
+    <aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded"
+      style="display: block;"><button class="navigate-left enabled" aria-label="previous slide">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-right" aria-label="next slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-up" aria-label="above slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-down" aria-label="below slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button></aside>
+    <div class="slide-number" style="display: none;"></div>
+    <div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div>
+    <div class="pause-overlay"></div>
+    <div id="aria-status-div" aria-live="polite" aria-atomic="true"
+      style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">
+      Quasi-Probability Sampling If it ducks like a quack
+
+
+      Expected Unitary
+      [100001000010000−1]
+
+
+      Actual Unitary
+      [1−i00001+i00001+i0000−1−i]
+
+
+      While these two matrices and therefore the gates are not equal. The expectation values
+    </div>
+  </main>
+
+
+  <script>
+    Reveal.initialize();
+    Reveal.slide( localStorage.getItem( 'currslide' ) || 0 );
+    Reveal.addEventListener( 'slidechanged', ( e ) =>
+      localStorage.setItem( 'currslide', e.indexh )
+    );
+  </script>
+
+
+</body>

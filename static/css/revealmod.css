@@ -1,6 +1,7 @@
 @media screen {
   .slides section {
-    margin: 0 auto;
+    margin: 0 2.5%;
+    max-width: 95%;
   }
 }
 
