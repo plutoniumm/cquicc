@@ -6,38 +6,41 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
-  import { defStyles, useLocalPPT, isLocalHost } from "../doc";
-  import { render as rander, prerender } from "../pres";
+  import { mode, isLocalHost } from "./config";
+  import { prerender } from "./pres";
 
   let value = "";
   let TA = "";
   let isEditor = true;
 
-  const preprocess = (text) => {
-    if (text?.length < 1) return;
-    const { html } = rander(text);
-    localStorage.setItem("cquicc-present", text);
-
-    return html;
-  };
-
+  let preprocess;
   onMount(async () => {
+    const url = new URL(location.href);
+    const mod = mode[url.searchParams.get("mode")];
+
+    preprocess = (text) => {
+      if (text?.length < 1) return;
+      const { html } = mod.render(text);
+      localStorage.setItem(mod.memory, text);
+
+      return html;
+    };
+
     const isLS = isLocalHost();
     const file = new URL(location.href).searchParams.get("file");
 
-    let code;
-    if (!file) {
-      code = localStorage.getItem("cquicc-present");
-    } else {
-      code = "";
-    }
+    // useLocal: useLocal( "docs" ),
+    // renderer: "present.html",
+    // template: "present.md",
+    // render: docRender,
+
+    let code = !file ? localStorage.getItem(mod.memory) : "";
 
     if (code.length > 1) {
       value = code;
     } else {
-      const Template = await useLocalPPT(isLS, file);
+      const Template = await mod.useLocal(isLS, file);
       isEditor = !isLS || !file;
-
       value = Template;
     }
 

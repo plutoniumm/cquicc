@@ -6,7 +6,7 @@
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
 
-  import { defStyles, render, useLocalFile, isLocalHost } from "./utils";
+  import { defStyles, render, useLocalFile, isLocalHost } from "./doc";
 
   let value = "";
   let isEditor = true;

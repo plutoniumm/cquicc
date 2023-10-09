@@ -22,18 +22,6 @@ const renderer = {
   }
 };
 
-
-export const isLocalHost = () => window.location.hostname === "localhost";
-export async function useLocalFile ( isLS = false, file ) {
-  if ( !file || !isLS ) return ( await import( "./basic.md?raw" ) ).default;
-  return fetch( `/docs/${ file }.md` ).then( r => r.text() );
-}
-export async function useLocalPPT ( isLS = false, file ) {
-  if ( !file || !isLS ) return ( await import( "./basic.md?raw" ) ).default;
-  return fetch( `/presents/${ file }.md` ).then( r => r.text() );
-}
-
-
 export const defStyles = {
   "&": {
     fontSize: "18px",
