@@ -1,8 +1,7 @@
-import { render as docRender } from "./doc.js";
-import { render as presRender } from "./pres.js";
+import { render as docRender } from "./lib/doc.js";
+import { render as presRender } from "./lib/pres.js";
 
-export const isLocalHost = () => window.location.hostname === "localhost";
-const useLocal = ( from = "document" ) => ( isLS, file ) => {
+const useLocal = async ( from = "document" ) => async ( isLS, file ) => {
   if ( !file || !isLS ) return (
     await import( "./" + from + ".md?raw" )
   ).default;

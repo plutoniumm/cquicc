@@ -4,9 +4,9 @@ import { marked } from "marked";
 import hljs from 'highlight.js';
 import typeset from "typeset";
 import yaml from "js-yaml";
-import { getWeekNumber } from './lib';
+import { getWeekNumber } from '../lib';
 
-import template from "./render.html?raw"
+import template from "../document.html?raw"
 const mcf = { mangle: false, headerIds: false };
 
 const renderer = {
@@ -21,14 +21,6 @@ const renderer = {
     return false;
   }
 };
-
-export const defStyles = {
-  "&": {
-    fontSize: "18px",
-    height: "100%",
-    width: "100%",
-  },
-}
 
 const options = {
   katex: {
