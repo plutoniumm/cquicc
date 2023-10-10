@@ -7,9 +7,7 @@ function docsHMR () {
     enforce: 'post',
     handleHotUpdate ({ file, server }) {
       if (
-        file.endsWith('.md') &&
-        (file.includes('static/docs') ||
-          file.includes('static/presents'))
+        file.endsWith('.md') && file.includes('static/')
       ) {
         server.ws.send({
           type: 'full-reload',

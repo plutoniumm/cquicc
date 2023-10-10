@@ -1,10 +1,11 @@
 import { render as docRender } from "./lib/doc.js";
 import { render as presRender } from "./lib/pres.js";
 
-const useLocal = async ( from = "document" ) => async ( isLS, file ) => {
-  if ( !file || !isLS ) return (
-    await import( "./" + from + ".md?raw" )
-  ).default;
+const useLocal = ( from = "document" ) => async ( isLS, file ) => {
+  if ( !file || !isLS )
+    return (
+      await import( "./" + from + ".md?raw" )
+    ).default;
   return fetch( `/${ from }/${ file }.md` ).then( r => r.text() );
 }
 

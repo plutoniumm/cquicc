@@ -13,36 +13,6 @@
   <script src="/reveal.js"></script>
   <script src="/basics.js"></script>
 
-  <style>
-    img {
-      max-width: 90vw;
-    }
-
-    .afa {
-      background: #afa;
-    }
-
-    .aaf {
-      background: #aaf;
-    }
-
-    .aff {
-      background: #aff;
-    }
-
-    .faa {
-      background: #faa;
-    }
-
-    .faf {
-      background: #faf;
-    }
-
-    .ffa {
-      background: #ffa;
-    }
-  </style>
-
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize( { securityLevel: 'antiscript', theme: "base" } );
@@ -75,9 +45,9 @@
 
 <script>
   Reveal.initialize();
-  Reveal.slide( localStorage.getItem( 'currslide' ) || 0 );
+  Reveal.slide( ...localStorage.getItem( 'currslide' ).split( ',' ) );
   Reveal.addEventListener( 'slidechanged', ( e ) =>
-    localStorage.setItem( 'currslide', e.indexh )
+    localStorage.setItem( 'currslide', [ e.indexh, e.indexv ] )
   );
 </script>
 <style class="killCSS">

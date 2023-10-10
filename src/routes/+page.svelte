@@ -21,13 +21,11 @@
     if (!mod) mod = "doc";
 
     mod = mode[mod];
-    console.log(mod);
     preprocess = (text) => {
       if (text?.length < 1) return;
-      const { html } = mod.render(text);
       localStorage.setItem(mod.memory, text);
 
-      return html;
+      return mod.render(text).html;
     };
 
     const isLS = isLocalHost();
@@ -37,9 +35,8 @@
     if (code.length > 1) {
       value = code;
     } else {
-      const Template = await mod.useLocal(isLS, file);
+      value = await mod.useLocal(isLS, file);
       isEditor = !isLS || !file;
-      value = Template;
     }
 
     document.title += (-new Date()).toString(36);
