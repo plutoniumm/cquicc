@@ -1,6 +1,7 @@
 @media screen {
   .slides section {
-    margin: 0 auto;
+    margin: 0 2.5%;
+    max-width: 95%;
   }
 }
 
@@ -17,4 +18,38 @@ ol {
 
 li {
   margin: 5px 0;
+}
+
+cite {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.afa {
+  background: #afa;
+}
+
+.aaf {
+  background: #aaf;
+}
+
+.aff {
+  background: #aff;
+}
+
+.faa {
+  background: #faa;
+}
+
+.faf {
+  background: #faf;
+}
+
+.ffa {
+  background: #ffa;
+}
+
+img {
+  max-width: 100%;
 }
