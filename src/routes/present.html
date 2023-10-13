@@ -44,7 +44,9 @@
 </body>
 
 <script>
-  Reveal.initialize();
+  Reveal.initialize( {
+    slideNumber: true
+  } );
   Reveal.slide( ...localStorage.getItem( 'currslide' ).split( ',' ) );
   Reveal.addEventListener( 'slidechanged', ( e ) =>
     localStorage.setItem( 'currslide', [ e.indexh, e.indexv ] )

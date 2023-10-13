@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "rm -rf build .svelte*",
     "dev": "vite",
-    "build": "vite build",
+    "build": "sh scripts/build.sh",
     "deploy": "npx gh-pages -d build -t true",
     "postdeploy": "rm -rf build"
   },
