@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216">
+  <path stroke="#b095ff" stroke-width="16" d="M166 190h-34"/>
+  <path stroke="#5668ff" stroke-width="16" d="M50 190h34"/>
+  <path stroke="#f2eff8" stroke-width="16" d="M108 132v34"/>
+  <path stroke="#d5bdff" stroke-width="16" d="M108 84V50"/>
+  <path stroke="#cdb4ff" stroke-width="16" d="M166 26h-34"/>
+  <path stroke="#0f62fe" stroke-width="16" d="M50 26h34"/>
+  <g transform="translate(26 26)">
+    <circle r="24" fill="#dfccfd" stroke="#262626" stroke-width="2"/>
+    <text fill="#161616" dy=".3em" text-anchor="middle">0</text>
+  </g>
+  <g transform="translate(108 26)">
+    <circle r="24" fill="#f2eff8" stroke="#262626" stroke-width="2"/>
+    <text fill="#161616" dy=".3em" text-anchor="middle">1</text>
+  </g>
+  <g transform="translate(190 26)">
+    <circle r="24" fill="#9275ff" stroke="#262626" stroke-width="2"/>
+    <text fill="#161616" dy=".3em" text-anchor="middle">2</text>
+  </g>
+  <g transform="translate(108 108)">
+    <circle r="24" fill="#5b68ff" stroke="#262626" stroke-width="2"/>
+    <text fill="#FFF" dy=".3em" text-anchor="middle">3</text>
+  </g>
+  <g transform="translate(26 190)">
+    <circle r="24" fill="#a88dff" stroke="#262626" stroke-width="2"/>
+    <text fill="#161616" dy=".3em" text-anchor="middle">4</text>
+  </g>
+  <g transform="translate(108 190)">
+    <circle r="24" fill="#e4d6fc" stroke="#262626" stroke-width="2"/>
+    <text fill="#161616" dy=".3em" text-anchor="middle">5</text>
+  </g>
+  <g transform="translate(190 190)">
+    <circle r="24" fill="#0f62fe" stroke="#262626" stroke-width="2"/>
+    <text fill="#FFF" dy=".3em" text-anchor="middle">6</text>
+  </g>
+</svg>
