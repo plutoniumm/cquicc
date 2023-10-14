@@ -241,7 +241,7 @@ Luckily setps 2,3,5 are made easy by the Circuit Knitting Toolbox
     <img src="https://i.imgur.com/FnH21dT.png" style="height:25vh"/>
 </div></div>
 
-<img src="https://i.imgur.com/P4zZjy1.png" style="max-height:25vh;"/>
+<img class="fade-in fragment" src="https://i.imgur.com/P4zZjy1.png" style="max-height:25vh;"/>
 
 </section><section data-transition="none-in fade-out">
 <h3> 2. Define our Cuts </h3>
