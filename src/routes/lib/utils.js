@@ -6,8 +6,8 @@ export const prerender = ( dom ) => {
     `ipt src="/reveal.js"></scr` +
     `ipt>
 <link rel="stylesheet" href="https://manav.ch/atomic.css">
-<link rel="stylesheet" href="/css/reveal.css">
-<link rel="stylesheet" href="/css/revealmod.css"></head><body  xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML">${ dom.innerHTML }</body>`;
+<link rel="stylesheet" href="/assets/reveal.css">
+<link rel="stylesheet" href="/assets/revealmod.css"></head><body  xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML">${ dom.innerHTML }</body>`;
 
   return prefix;
 };
