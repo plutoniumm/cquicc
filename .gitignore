@@ -6,6 +6,7 @@ logs
 projects/qsvm
 .svelte*
 
+.ipynb_checkpoints/
 MNIST/
 present/
 document/

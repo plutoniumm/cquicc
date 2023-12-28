@@ -1,196 +1,105 @@
-<script lang="ts">
-  import CodeMirror, { Renderer } from "sveltemirror";
-
-  import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-  import { languages } from "@codemirror/language-data";
-  import { dracula } from "thememirror";
-  import { onMount } from "svelte";
-  import { prerender, isLocalHost } from "./lib/utils.js";
-
-  import { render as docRender } from "./lib/doc.js";
-  import { render as presRender } from "./lib/pres.js";
-
-  const useLocal =
-    (from = "document") =>
-    async (isLS, file) => {
-      if (!file || !isLS) return (await import(`./${from}.md?raw`)).default;
-      return fetch(`/${from}/${file}.md`).then((r) => r.text());
-    };
-
-  const mode = {
-    pres: {
-      useLocal: useLocal("present"),
-      renderer: "document.html",
-      template: "document.md",
-      memory: "cquicc-present",
-      render: presRender,
-    },
-    doc: {
-      useLocal: useLocal("document"),
-      renderer: "present.html",
-      template: "present.md",
-      memory: "cquicc-code",
-      render: docRender,
-    },
-  };
-
+<script>
+  import list from "./imgur.txt?raw";
   let //
-    value = "",
-    TA = "",
-    isEditor = true,
-    preprocess;
+    search,
+    value = "";
 
-  onMount(async () => {
-    const url = new URL(location.href);
-    let mod = url.searchParams.get("mode");
-    if (!mod) mod = "doc";
+  const images = list
+    .split("\n")
+    .filter(Boolean)
+    .map((e) => {
+      let [link, name] = e.split("::");
+      if (!link.includes("i.imgur")) {
+        link = `https://i.imgur.com/${link}.png`;
+      }
+      return [name || link, link];
+    });
 
-    mod = mode[mod];
-    preprocess = (text) => {
-      if (text?.length < 1) return;
-      localStorage.setItem(mod.memory, text);
-
-      return mod.render(text).html;
-    };
-
-    const isLS = isLocalHost();
-    const file = new URL(location.href).searchParams.get("file");
-
-    let code = !file ? localStorage.getItem(mod.memory) : "";
-    if (code.length > 1) {
-      value = code;
-    } else {
-      value = await mod.useLocal(isLS, file);
-      console.log(value);
-
-      isEditor = !isLS || !file;
+  function copyLink({ target: t }) {
+    if (t.tagName === "IMG") {
+      navigator.clipboard.writeText(t.src);
     }
+  }
 
-    document.title += (-new Date()).toString(36);
-  });
+  function l(s) {
+    return s.toLowerCase();
+  }
 
-  const print = () => {
-    // toggle ?print-pdf
-    const url = /print-pdf/g.test(location.search)
-      ? location.href.replace(/\?print-pdf/g, "")
-      : location.href + "?print-pdf";
+  function activateSearch({ key }) {
+    if (document.activeElement.tagName === "INPUT") return;
+    if (key === "/") {
+      search.focus();
+    }
+    return true;
+  }
 
-    // reload with new url
-    window.location.href = url;
-  };
-  const triggerPrint = () => {
-    if (/print-pdf/g.test(location.search)) window.frames[0].print();
-  };
+  $: s = (value, key) => {
+    if (value.length < 2) return true;
+    key = l(key);
+    value = l(value).replaceAll(" ", ",").split(",");
 
-  const keyup = (e) => {
-    if (e.key === "p" && e.ctrlKey) print();
+    for (let i = 0; i < value.length; i++) {
+      // if list is long we may need to use Fuse.js
+      // very liberal search, ANY matches allowed
+      if (key.includes(value[i])) return true;
+    }
+    return false;
   };
 </script>
 
-<svelte:window on:keyup={keyup} />
+<svelte:window on:keyup={activateSearch} />
 
-<div class="f j-ar p-fix w-50" id="funcs">
-  <div class="rx10 p10 ptr" on:click={print}>TogglePrint</div>
-  <div class="rx10 p10 ptr" on:click={triggerPrint}>Print</div>
-  <div
-    class="rx10 p10 ptr"
-    on:click={() => (TA = prerender(window.frames[0].document.body))}
-  >
-    GetCode
-  </div>
+<div
+  id="search"
+  class="p5 m5 p-fix"
+  style="background: #fff;top:-5px;z-index:1;"
+>
+  <input
+    type="text"
+    placeholder="Search"
+    bind:value
+    bind:this={search}
+    class="rx5 p10 d-b mx-a w-50"
+  />
 </div>
-<main class="f fw" class:edOnly={!isEditor}>
-  <div class="editor">
-    <CodeMirror
-      bind:value
-      extensions={[
-        markdown({
-          base: markdownLanguage,
-          codeLanguages: languages,
-          completeHTMLTags: true,
-        }),
-        dracula,
-      ]}
-      styles={{
-        "&": {
-          fontSize: "18px",
-          height: "100%",
-          width: "100%",
-        },
-      }}
-      lineWrapping={true}
-      placeholder="Type some markdown here..."
-    />
-  </div>
-  <div class="frame">
-    <Renderer bind:value {preprocess} />
-  </div>
-</main>
-{#if TA.length}
-  <div class="p-fix blur tc" id="popup">
-    <textarea name="code" bind:value={TA} class="rpm-10 flow-y-s" />
-    <button
-      class="d-b rx20 mx-a ptr"
-      on:click={() => (TA = "")}
-      style="color:#fff;background:#f00;width:50px;">X</button
-    >
-  </div>
-{/if}
+
+<div
+  class="f j-ar fw"
+  on:click={copyLink}
+  style="z-index: 0;padding-top:100px;"
+>
+  {#each images as image}
+    {#if s(value, image[0])}
+      <div class="p5">
+        <img class="rx5 ptr" src={image[1]} alt={image[0]} />
+        <div class="p5 tc link">{image[0]}</div>
+      </div>
+    {/if}
+  {/each}
+</div>
 
 <style lang="scss">
-  #popup {
-    z-index: 100000;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    --bg: #2222;
-    --sz: 16px;
-    textarea {
-      width: 80%;
-      height: 80%;
-      background: #222;
-      color: #fff;
+  img {
+    max-width: 300px;
+    max-height: 400px;
+    transform: scale(1);
+    transition: transform 0.1s ease-in-out;
+    z-index: 0;
+    &:hover {
+      z-index: 3;
+      transform: scale(1.5);
     }
   }
-  #funcs {
-    color: #fff;
-    bottom: 20px;
-    right: 20px;
-    z-index: 10000;
-    .rx10 {
-      background: #2af;
-      transition: opacity 0.2s ease-in-out;
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+  #search {
+    width: calc(100% - 10px);
   }
-  main {
-    width: 100vw;
-    height: 100vh;
-    background: #888;
-    --split: 42%;
+  input {
+    background: #eee;
   }
 
-  .editor {
-    width: var(--split);
-  }
-  .frame {
-    width: calc(100% - var(--split));
-  }
-
-  .edOnly > .frame {
-    width: 100%;
-  }
-  .edOnly > .editor {
-    display: none;
-  }
-
-  .editor,
-  .frame {
-    height: 100%;
-    background: #ccc;
-    overflow-y: scroll;
+  .link {
+    color: #888;
+    opacity: 0.8;
+    font-size: 0.8em;
   }
 </style>
