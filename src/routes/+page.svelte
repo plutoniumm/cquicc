@@ -5,9 +5,34 @@
   import { languages } from "@codemirror/language-data";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
-
-  import { mode } from "./config";
   import { prerender, isLocalHost } from "./lib/utils.js";
+
+  import { render as docRender } from "./lib/doc.js";
+  import { render as presRender } from "./lib/pres.js";
+
+  const useLocal =
+    (from = "document") =>
+    async (isLS, file) => {
+      if (!file || !isLS) return (await import(`./${from}.md?raw`)).default;
+      return fetch(`/${from}/${file}.md`).then((r) => r.text());
+    };
+
+  const mode = {
+    pres: {
+      useLocal: useLocal("present"),
+      renderer: "document.html",
+      template: "document.md",
+      memory: "cquicc-present",
+      render: presRender,
+    },
+    doc: {
+      useLocal: useLocal("document"),
+      renderer: "present.html",
+      template: "present.md",
+      memory: "cquicc-code",
+      render: docRender,
+    },
+  };
 
   let //
     value = "",
@@ -36,6 +61,8 @@
       value = code;
     } else {
       value = await mod.useLocal(isLS, file);
+      console.log(value);
+
       isEditor = !isLS || !file;
     }
 

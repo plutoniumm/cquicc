@@ -4,9 +4,22 @@ import { marked } from "marked";
 import hljs from 'highlight.js';
 import typeset from "typeset";
 import yaml from "js-yaml";
-import { getWeekNumber } from '../lib';
 
 import template from "../document.html?raw"
+
+function getWeekNumber ( date ) {
+  const d = new Date( date );
+  d.setHours( 0, 0, 0, 0 );
+  d.setDate( d.getDate() + 4 - ( d.getDay() || 7 ) );
+
+  const yearStart = +new Date( d.getFullYear(), 0, 1 );
+
+  let v = +d - yearStart;
+  v = v / 86400000 + 1
+
+  return Math.ceil( v / 7 );
+};
+
 const mcf = { mangle: false, headerIds: false };
 
 const renderer = {
