@@ -5,33 +5,12 @@
   import { languages } from "@codemirror/language-data";
   import { dracula } from "thememirror";
   import { onMount } from "svelte";
-  import { prerender, isLocalHost } from "./lib/utils.js";
 
-  import { render as docRender } from "./lib/doc.js";
-  import { render as presRender } from "./lib/pres.js";
+  import { render as presRender, prerender, isLocalHost } from "./lib.js";
 
-  const useLocal =
-    (from = "document") =>
-    async (isLS, file) => {
-      if (!file || !isLS) return (await import(`./${from}.md?raw`)).default;
-      return fetch(`/${from}/${file}.md`).then((r) => r.text());
-    };
-
-  const mode = {
-    pres: {
-      useLocal: useLocal("present"),
-      renderer: "document.html",
-      template: "document.md",
-      memory: "cquicc-present",
-      render: presRender,
-    },
-    doc: {
-      useLocal: useLocal("document"),
-      renderer: "present.html",
-      template: "present.md",
-      memory: "cquicc-code",
-      render: docRender,
-    },
+  const useLocal = async (isLS, file) => {
+    if (!file || !isLS) return (await import(`./present.md?raw`)).default;
+    return fetch(`/present/${file}.md`).then((r) => r.text());
   };
 
   let //
@@ -40,30 +19,25 @@
     isEditor = true,
     preprocess;
 
-  onMount(async () => {
-    const url = new URL(location.href);
-    let mod = url.searchParams.get("mode");
-    if (!mod) mod = "doc";
-
-    mod = mode[mod];
+  onMount(() => {
     preprocess = (text) => {
       if (text?.length < 1) return;
-      localStorage.setItem(mod.memory, text);
+      localStorage.setItem("cquicc-present", text);
 
-      return mod.render(text).html;
+      return presRender(text).html;
     };
 
     const isLS = isLocalHost();
     const file = new URL(location.href).searchParams.get("file");
 
-    let code = !file ? localStorage.getItem(mod.memory) : "";
+    let code = !file ? localStorage.getItem("cquicc-present") : "";
     if (code.length > 1) {
       value = code;
     } else {
-      value = await mod.useLocal(isLS, file);
-      console.log(value);
-
-      isEditor = !isLS || !file;
+      useLocal(isLS, file).then((value) => {
+        console.log(value);
+        isEditor = !isLS || !file;
+      });
     }
 
     document.title += (-new Date()).toString(36);
