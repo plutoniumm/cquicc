@@ -29,3 +29,11 @@ tCxstBv::hydrogen,hartree fock,uncut
 ohzXm7i::hydrogen,hartree fock,cut move
 viadZ5M::hydrogen,hartree fock,cut A
 PKUEFDp::hydrogen,hartree fock,cut B
+Wwu9feU::hartree fock,hydrogen,chart,uncut
+TwU0SiJ::hartree fock,hydrogen,chart,uncut
+4aupdYs::hartree fock,hydrogen,chart,uncut
+OnSPObf::hartree fock,hydrogen,chart,uncut, combined
+4VFuYQB::hartree fock,hydrogen,chart,cut
+LhCzQwZ::hartree fock,hydrogen,chart,cut
+N1muvmn::hartree fock,hydrogen,chart,cut
+T6qqVmr::hartree fock,hydrogen,chart,cut, combined
