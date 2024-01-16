@@ -1,11 +1,11 @@
 import yaml from "js-yaml";
 import { marked } from "marked";
-import template from "../present.html?raw"
+import template from "./present.html?raw"
 
 const mcf = { mangle: false, headerIds: false };
 export const render = ( text ) => {
-  const [ , meta, ...rest ] = text.split( "---" );
-  const m = yaml.load( meta?.trim(), { json: true } );
+  const [ , m, ...rest ] = text.split( "---" );
+  const meta = yaml.load( m?.trim(), { json: true } );
 
   let html = rest
     .join( "---" )
@@ -17,13 +17,10 @@ export const render = ( text ) => {
     .replace( "&head;", "" )
     .replace( "&body;", `<section data-auto-animate>${ html }</section>` );
 
-  for ( let key in m )
-    html = html.replace( `&${ key };`, m[ key ] );
-
-  return {
-    meta: m,
-    html,
+  for ( let key in meta ) {
+    html = html.replace( `&${ key };`, meta[ key ] );
   }
+  return { meta, html }
 };
 
 export const prerender = ( dom ) => {

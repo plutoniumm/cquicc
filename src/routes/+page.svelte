@@ -34,8 +34,8 @@
     if (code.length > 1) {
       value = code;
     } else {
-      useLocal(isLS, file).then((value) => {
-        console.log(value);
+      useLocal(isLS, file).then((c) => {
+        value = c;
         isEditor = !isLS || !file;
       });
     }
