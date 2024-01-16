@@ -1,0 +1,166 @@
+\documentclass[hidelinks]{book}
+\usepackage{Resources/UoBLab}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[textwidth=7in]{geometry}
+\usepackage{algorithm}
+\usepackage{biblatex}
+%\usepackage{fullpage}
+\usepackage{fancyhdr}
+
+\numberwithin{equation}{section}
+
+\pubyear{2023}
+\title{Circuit Cutting on Variational Quantum Circuits}
+\author{Manav Seksaria}
+\school{Centre for Quantum Information, Communication \& Computing, IIT Madras}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{Circuit Cutting and Knitting}
+\fancyhead[R]{CQuICC, IIT Madras}
+\fancyfoot[L]{\it \small{Manav Seksaria}}
+\fancyfoot[R]{\it \small{Nov'24}}
+
+\section{Context}\label{objective}
+Quantum Computers face a challenge when dealing with large-scale problems due to their limited size. We employ circuit cutting to divide complex tasks into more manageable segments to address this. This strategy allows us to break down large computations into smaller parts, enhancing efficiency.
+
+As a practical demonstration, we apply this approach to model the ground state of molecules. We expect that by running these simulations on smaller systems, we achieve resource and time savings without compromising the accuracy of the computations, even on Noisy Intermediate Scale Quantum Computers.
+
+\textbf{Problem Statement}: Achieving comparable or better values of ground state energy on a cut circuit as an uncut circuit without a significant increase in the compute time
+
+
+\section{Features and Uniqueness}\label{objective}
+\begin{enumerate}
+  \item Practical demonstration of Circuit Cutting on a real-world problem.
+  \item Ability to run sub-parts of a circuit on different hardware, including classical GPUs.
+  \item Automatic selection of best hardware for the given problem
+  \item Ability to find more optimum hardware maps on a circuit due to smaller sizes.
+  \item Fast Automated process of Cut Insertion for arbitrary circuits
+\end{enumerate}
+
+\section{Mechanism}\label{variational-quantum-circuit}
+We start with a Hartree-Fock Ansatz; this circuit forms the backbone of our model and produces the Hartree-Fock Wave Function, which will give us an upper bound on the true ground state energy of the molecule
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\columnwidth]{images/hf0.png}
+\caption{Hartree-Fock Ansatz}
+\end{figure}
+
+We then create two separate tests here, both to find ground state energy. Ground state energy will also therefore act as our cost value
+\begin{enumerate}
+  \item We run this circuit through gradient descent as-is.
+  \item We cut this circuit and then run a gradient descent on the reconstructed value.
+\end{enumerate}
+
+\subsection{Circuit Cutting}\label{hartree-fock-ansatz}
+Circuit Cutting is a technique to break down a large circuit into smaller circuits. This is done by cutting two-qubit gates into single-qubit gates.
+
+We first take a specific wire and split into into before and after the cut. We then create an 'information-transfer' gate i.e. the Move gate from before the cut to after, thus placing both parts in different circuits.
+
+For example we take the below 3-qubit circuit and intend to cut it at wire-1, so we clone the wire and insert move gates from $q_1$ to $q_2$ and back. Where both $q_1$, $q_2$ are reminiscent of the same original $q_1$
+
+\begin{figure}[htb]
+\begin{subfigure}{\columnwidth}
+\centering
+    \includegraphics[width=0.5\textwidth]{images/2.png}
+    \caption{An uncut 3-qubit circuit}
+    \label{fig:A}
+\end{subfigure}
+
+\begin{subfigure}{\columnwidth}
+\centering
+    \includegraphics[width=0.8\textwidth]{images/3.png}
+    \caption{Move gates inserted by duplicating wire $q_2$}
+    \label{fig:B}
+\end{subfigure}
+\end{figure}
+
+We then cut the two-qubit move gate into, single-qubit QuasiProbabilityDistribution (QPD) Gates, successfully splitting it in two. These QPD gates represent a combination of gates that have been placed to replace the two-qubit move.
+
+\begin{figure}[htb]
+\centering
+\begin{subfigure}{\textwidth}
+    \includegraphics[width=0.85\textwidth]{images/w1.png}
+    \label{fig:A}
+\end{subfigure}
+\begin{subfigure}{\textwidth}
+    \includegraphics[width=0.8\textwidth]{images/w2.png}
+    \label{fig:B}
+\end{subfigure}
+\caption{Two fully independent circuits with cuts inserted in place of the Move gates}
+\end{figure}
+
+\section{Application}\label{applying-to-vqc}
+We now select the best backend for each circuit. It is worth noting, the smaller a circuit is, the better coupling maps can be generated for it since qubits can be closer and more tighly linked.
+
+For each subcircuit, i.e the top (A) and bottom (B), we have several subexperiments to run: we need generate the Quasi Probability Distributions for the single-qubit gates that replace the initial two-qubit gates, and then also measure them in all bases $(X, Y, Z, I)$. The results of all these subexperiments give us the necessary values for each subcircuit to then reconstruct the entire circuit
+
+For each circuit we then:
+\begin{enumerate}
+  \item Generate all subexperiments; select 5 at random.
+  \item Calculate ideal backends via mapomatic.
+    \begin{enumerate}
+      \item Total-Error-Rate = gate errors + readout errors
+      \item With total-error-rate as cost, sort ascending.
+    \end{enumerate}
+  \item Poll highest occuring, least cost backend and assign to subcircuit for all it's subexperiments
+\end{enumerate}
+
+From the above process we can now ensure three things
+
+\begin{itemize}
+    \item Calculate ideal backend for maximum subexperiments in a subcircuit.
+    \item Determine the most likely layout for the specified backend and apply it to all subexperiments.
+    \item Perform these calculations independently for each circuit, enabling sequential or parallel execution.
+\end{itemize}
+
+Since we do a \hyperref[sec:hello]{Double Polling} of both the layout and backends, we can ensure we keep the error rate low while still not having to regenerate circuits and thus keeping evaluation speed very high.
+
+\section{Expected Results and Benefits}\label{conclusion}
+For a hydrogen molecule we expect it's ground state energy to be $1.75\pm 0.1$ Hartrees, with the theoretically known minimum value to be $1.84$ Hartrees
+
+We also expect time taken for Uncut Sampler to be the same as time taken as Cut circuits sampler to within 100\%, i.e at worst twice as slow, when running in parallel.
+
+Due to indpendence of circuits and how they can be run, each of these circuits can now be run fully independently on any of Simulators on classical hardware, or with quantum hardware.
+
+\section{Appendix}\label{appendix}
+\subsection{What is Double Polling?}\label{double-polling}
+For each given subcircuit we have a set of subexperiments to run. We know since most of these subexperiments are the similar we need to find only the most likely ideal backend, and the most likely layout for that backend.
+
+\subsubsection{Backend Polling}\label{backend-polling}
+We randonly select 5 subexperiments and calculate the ideal backend for each. We then sort these backends by their total error rate, which is the sum of gate errors and readout errors. We select the backend with the lowest total error rate and assign it to all subexperiments in the subcircuit and therefore choose the backend with the lowest error not for one subexperiment but the whole subcircuit
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Subexperiment} & \textbf{Costs} \\ \hline
+12 & {[}A: 0.1, B: 0.2, C: 0.3{]} \\ \hline
+45 & {[}A: 0.1, B: 0.2, C: 0.3{]} \\ \hline
+67 & {[}A: 0.2, B: 0.1, C: 0.5{]} \\ \hline
+89 & {[}A: 0.1, B: 0.2, C: 0.3{]} \\ \hline
+33 & {[}A: 0.15, B: 0.15, C: 0.3{]} \\ \hline
+\textbf{Sum} & {[}A: 0.5, B: 0.7, C: 1.4{]} \\ \hline
+\end{tabular}
+\caption{Backend Polling}
+\end{table}
+
+Notice how while for subexperiment 67, B is the lowest, but the sum of all costs is the lowest for backend A, so we select backend A for all subexperiments in this subcircuit
+
+\subsubsection{Layout Polling}\label{layout-polling}
+Since for the given experiments we know the best backend, we can now calculate the most likely layout for that backend. We do this by calculating the layout for the selected subexperiments and sorting them in lexicographic order. We know that layout maps have all unique numbers, and therefore we can calculate a dictionary number by treating each layout as a lexicographic string.
+
+So if $[7, 6, 4, 2]$ is our layout then we just count how many times, $7642$ appears in the list of layouts, and select the one with the highest count.
+
+\end{document}

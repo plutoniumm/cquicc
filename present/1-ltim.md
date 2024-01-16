@@ -65,7 +65,7 @@ More mathematically
 
 </div>
 <div>
-<iframe height="200" style="width: 100%;" data-show-tab-bar='no' scrolling="no" title="3D Scatter Plot with Plotly.js Charts" src="/embed/scatter.html" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+<iframe height="200" style="width: 100%;" data-show-tab-bar='no' scrolling="no" title="3D Scatter Plot with Plotly.js Charts" src="/assets/scatter.html" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
 </iframe>
 </div>
 

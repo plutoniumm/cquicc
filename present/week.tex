@@ -1,0 +1,119 @@
+\documentclass[hidelinks]{book}
+\usepackage{Resources/UoBLab}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[textwidth=7in]{geometry}
+\usepackage{algorithm}
+\usepackage{quantikz}
+\usepackage{biblatex}
+\usepackage{fancyhdr}
+
+\numberwithin{equation}{section}
+
+\pubyear{2023}
+\title{Circuit Cutting on Variational Quantum Circuits}
+\author{Manav Seksaria}
+\school{Centre for Quantum Information, Communication \& Computing, IIT Madras}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{Circuit Cutting and Knitting}
+\fancyhead[R]{CQuICC, IIT Madras}
+\fancyfoot[L]{\it \small{Manav Seksaria}}
+\fancyfoot[R]{\it \small{Nov'24}}
+
+\section{Context}\label{objective}
+Our broader problem statement is to fine a way to apply circuit cutting techniques to VQCs and then demonstrate its efficacy on a real world problem. We're currently testing Hartree-Fock Ground state on H2 with and without circuit cutting to apply this. We were stuck at a point where we got results even below theoretical minimum indicating that something was wrong with our implementation.
+
+We diagnosed that the problem was with the difference between Sampler vs Estimator since IBM sent us a script which matches theoretical minimum with Estimator but we use Sampler.
+
+\section{Estimator vs Sampler}\label{}
+\textbf{Estimator:} Given any circuit $C$ and observable $O$, the estimator returns the expectation value of $O$ on $C$, the types for which are
+\textbf{Sampler:} Given any circuit $C$, the sampler returns a set of samples from the probability distribution of $C$ in the Diagonal Basis, the types for which are
+
+\subsubsection{Types}
+\begin{equation}
+  Estimator: \text{Observable, Circuit} \rightarrow \text{Expectation Value} \\
+  Sampler: \text{Circuit} \rightarrow \text{Bitstring Array}
+\end{equation}
+
+We use Sampler for our problem because sampler bitstrings are then used for reconstruction of the cut circuit, this is not possible with the Estimator.
+
+\section{What we need}\label{}
+We need to be able to take an arbitrary observable say $IXYZX$ and a circuit say $C$ and then return the expectation value of the observable on the circuit. The traditional way to do this on a sampler is to apply gates for X,Y axes and then measure in diagonal basis (Z, I are already diagonal)
+
+\begin{figure}
+\begin{equation}
+\begin{quantikz}
+  &\gate[5]{U}&  \meter[5]{} \\
+  &           &  \\
+  &           & \\
+  &           & \\
+  &           &  \\
+\end{quantikz}
+\rightarrow
+\begin{quantikz}
+  &\gate[5]{U}& &\meter[5]{} \\
+  &           & \gate{X} & \\
+  &           & \gate{Y} & \\
+  &           & & \\
+  &           & \gate{X} & \\
+\end{quantikz}
+\end{equation}
+\caption{Traditional way to measure $IXYZX$ on a sampler}
+\end{figure}
+
+This however means that for EACH iteration, if we have $p$ obserables, we need to run the circuit, $p$ times for $s$ shots each. This makes any problem fundamentally unscalable since we may have multiple obserables such as in the $H_2$ case where we need 14 observables.
+
+\section{What IBM is doing}
+IBM has sent us a script which uses observable decomposition to measure each circuit in 3 bases, Diagonal, X, Y and then uses the results to calculate the expectation value. Example: To calculate $IXYZX$ on a circuit $C$, they do the following:
+\begin{itemize}
+  \item Create 3 new sets of obserables
+  \begin{enumerate}
+    \item $O_X = IZIIZ$ i.e Z in X basis, I otherwise
+    \item $O_Y = IIZII$ i.e Z in Y basis, I otherwise
+    \item $O_Z = IIIZI$ i.e Z in Z basis, I otherwise
+  \end{enumerate}
+  \item Run the sampler for these 3 circuits and get 3 bitstring arrays
+  \item Calculate expvalue for all 3 from known coefficients of obserables (here 1 for $IXYZX$)
+  \item Return the sum of all 3
+\end{itemize}
+
+I have jupyter notebook where from this approach IBM has $-1.80$ as the expval for their implementation of the Hydrogen molecule uncut and $-1.74$ cut. I don't know why this works, or if the results are a coincidence
+
+\section{What should ideally happen}
+Basis discussions with Debjyoti and some studying of measurements, there should be no way to determine expval of an arbitrary observable from fully independent basis, which is what we see when I try to repeat this XYZ technique on a simple circuit without circuit cutting, mapomatic or hartree fock. The results DO NOT match.
+
+The experiment I ran
+\begin{itemize}
+  \item Create a small EfficientSU2 circuit with 4 qubits
+  \item Create 5 observables $IIII, XXXX, YYYY, ZZZZ, IXYZ$
+  \item Run circuit with Estimator and Sampler on IBM's decomposition method
+  \item The results should be same since the decomposition will only touch IXYZ leaving all others unchanged
+  \item The results are not same
+\end{itemize}
+
+I don't know why there is a gap. I may have implemented what they did wrong, I may have misunderstood the theory, or there may be a bug in their code. Debjyoti recommended looking into \textit{Learning to predict arbitrary quantum processes} by Preskill et all where the paper actually does prediction of arbitrary obserables from few measurements so I'm currently studying that
+
+\section{Studying the paper}
+Due to large knowlege gap so far I've covered the following in attempt to understand the paper
+\begin{itemize}
+  \item Quantum State and Process Tomography
+  \item Differencial Privacy as an entry point to Gentle Measurement
+  \item Shadow Tomography
+  \item Currently reading \textit{Predicting Many Properties of a Quantum System from Very Few Measurements} by Preskill et all
+\end{itemize}
+
+\section{Next Steps}
+While we wait for our next meeting with IBM, I intend to understand this paper and see if we can implement this in our code. Or at least the general idea of Predicting random quantum processes as a pipeline so that we can get some results from it. Preskill et al have also made their implementation open source so we can use that as a reference.
+
+\end{document}
