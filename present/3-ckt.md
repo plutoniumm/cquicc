@@ -148,28 +148,19 @@ th, td {
         <td>-1.7266</td>
         <td>-1.82</td>
     </tr>
-    <!-- <tr>
-        <td>Li₂</td>
-        <td>20</td>
-        <td>-16.366</td>
-        <td>-</td>
-        <td>-12.669</td>
-        <td>-15.52</td>
-        <td>-</td>
-        <td>-15.786</td>
-        <td>-16.348</td>
-    </tr> -->
     <tr style="font: 100 0.8em monospace;">
         <td colspan="9">CQuICC: 4 qubit H₂</td>
     </tr>
     <tr>
         <td>-1.8426</td>
+        <!-- uncut -->
         <td>-1.8236</td>
-        <td>-1.7541</td>
+        <td>-1.7380</td>
         <td>-1.7546</td>
+        <!-- cut -->
         <td>-1.815</td>
-        <td><b>-1.7915</b></td>
-        <td><b>-1.834</b></td>
+        <td><b>-1.7916</b></td>
+        <td><b>-1.8369</b></td>
     </tr>
 </tbody>
 </table>
@@ -214,7 +205,7 @@ th, td {
 </section><section data-transition="none-in fade-out">
 <div class="f j-ar w-100">
 <figure>
-    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
     <figcaption>Cut Circuit</figcaption>
 </figure>
 <figure>
