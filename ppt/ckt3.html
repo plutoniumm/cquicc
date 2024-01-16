@@ -1,0 +1,337 @@
+<head>
+  <script src="/reveal.js"></script>
+  <link rel="stylesheet" href="https://manav.ch/atomic.css">
+  <link rel="stylesheet" href="/assets/reveal.css">
+  <link rel="stylesheet" href="/assets/revealmod.css">
+</head>
+
+<body xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML">
+  <main class="reveal slide center has-vertical-slides has-horizontal-slides ready" style="font-size: 24px;"
+    role="application" data-transition-speed="default" data-background-transition="fade">
+    <article class="slides" style="width: 960px; height: 700px; zoom: 1.367;">
+      <section class="present" style="top: 269px; display: block;">
+        <h2><span style="font:700 1.5em Helvetica;">Ciruit Cutting</span></h2>
+      </section>
+      <section data-auto-animate="" class="future" style="top: 49.5px; display: block;" hidden="" aria-hidden="true">
+        <h3>Why Circuit Cutting?</h3>
+        <p>Let us say we have the below circuit and it needs to be broken into smaller circuits. Before applying to
+          larger circuits, we first try to break down a simple circuit</p>
+        <figure>
+          <img src="https://i.imgur.com/tCxstBv.png" style="max-width:100%">
+          <figcaption>Hartree Fock Ansatz for H<sub>2</sub></figcaption>
+        </figure>
+
+        <p>We choose Hartree Fock for H2 since while simple, it's still a real world useful problem</p>
+      </section>
+      <section data-auto-animate="" class="stack future" style="top: 0px; display: block;" data-previous-indexv="0"
+        hidden="" aria-hidden="true">
+        <h3>How will we cut it? Wire Cuts</h3>
+        <section data-transition="fade-in none-out" class="" style="top: 185.5px; display: block;" aria-hidden="true">
+          <div class="f j-ct al-ct">
+            <figure>
+              <img src="https://i.imgur.com/Fx9255F.png" style="width:33vw;">
+              <figcaption>Uncut Circuit</figcaption>
+            </figure>
+            <div style="font: 700 2em Helvetica;color:#94f">→</div>
+            <figure>
+              <img src="https://i.imgur.com/lQ4nYpe.png" style="width:33vw;">
+              <figcaption>Move Gates Inserted</figcaption>
+            </figure>
+          </div>
+
+        </section>
+        <section data-transition="none-in fade-out" class="future" aria-hidden="true" hidden=""
+          style="top: 181.5px; display: none;">
+          <div class="f j-ct al-ct">
+            <figure>
+              <img src="https://i.imgur.com/Fx9255F.png" style="width:33vw;">
+              <figcaption>Move Gates Inserted</figcaption>
+            </figure>
+            <div style="font: 700 2em Helvetica;color:#94f">→</div>
+            <figure>
+              <img src="https://i.imgur.com/CtpoLhH.png" style="width:20vw;">
+              <img src="https://i.imgur.com/VDpMFgX.png" style="width:20vw;">
+              <figcaption>Wires cut</figcaption>
+            </figure>
+          </div>
+
+        </section>
+        <section data-transition="none-in fade-out" class="future" aria-hidden="true" hidden=""
+          style="top: 97.5px; display: none;">
+          <div class="f j-ct al-ct">
+            <figure>
+              <img src="https://i.imgur.com/Fx9255F.png" style="width:33vw;">
+              <figcaption>Move Gates Inserted</figcaption>
+            </figure>
+            <div style="font: 700 2em Helvetica;color:#94f">→</div>
+            <figure>
+              <img src="https://i.imgur.com/CtpoLhH.png" style="width:20vw;">
+              <img src="https://i.imgur.com/VDpMFgX.png" style="width:20vw;">
+              <figcaption>Wires cut</figcaption>
+            </figure>
+          </div>
+          <div>
+            <p>
+              Cutting is done via QPD sampling each circuit and comparing it to the original circuit. Gates are added to
+              the cut circuits to make them equivalent to the original circuit. </p>
+            <p>
+              This process is done as a sampling since circuits are variational and we want to find the best sum of
+              circuits that is equivalent to the original circuit
+            </p>
+          </div>
+        </section>
+
+
+      </section>
+      <section data-auto-animate="" class="future" style="top: 4.5px; display: none;" hidden="" aria-hidden="true">
+        <h3>Applying to Hartree Fock of Hydrogen</h3>
+        <figure>
+          <img src="https://i.imgur.com/viadZ5M.png" style="width:33vw;">
+          <figcaption>subcircuit "A"</figcaption>
+        </figure>
+        <figure>
+          <img src="https://i.imgur.com/PKUEFDp.png" style="width:33vw;">
+          <figcaption>subcircuit "B"</figcaption>
+        </figure>
+
+        <p>while number of qubits in <i>cut</i> circuit &gt; qubits in <i>uncut</i> circuit,<br> as the circuit get
+          larger this problem becomes negligible
+          <br><br> For Hydrogen: 4 qubits → 2+4 qubits while for Lithium: 20 qubits → 10+12 qubits
+        </p>
+      </section>
+      <section data-auto-animate="" class="future" style="top: 16.5px; display: none;" hidden="" aria-hidden="true">
+        <h3>Calculating Hamiltonian</h3>
+        <p>Objective is to find parameters which can minimise the energy of the system. This is done by calculating the
+          expectation value <code>expval</code> of the Hamiltonian. <br><br>
+          This expval is an upper bound on the ground state energy of the system
+          Objective is to find parameters which can minimise the energy of the system. <br><br></p>
+        <pre class="mermaid"
+          data-processed="true"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8.000000953674316 770.1399536132812 98.00437927246094" style="max-width: 770.1399536132812px;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1705402140550"><style>#mermaid-1705402140550{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1705402140550 .error-icon{fill:hsl(220.5882352941, 100%, 98.3333333333%);}#mermaid-1705402140550 .error-text{fill:rgb(8.5000000002, 5.7500000001, 0);stroke:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1705402140550 .edge-thickness-normal{stroke-width:2px;}#mermaid-1705402140550 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1705402140550 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1705402140550 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1705402140550 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1705402140550 .marker{fill:#0b0b0b;stroke:#0b0b0b;}#mermaid-1705402140550 .marker.cross{stroke:#0b0b0b;}#mermaid-1705402140550 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1705402140550 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1705402140550 .cluster-label text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1705402140550 .cluster-label span,#mermaid-1705402140550 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1705402140550 .label text,#mermaid-1705402140550 span,#mermaid-1705402140550 p{fill:#333;color:#333;}#mermaid-1705402140550 .node rect,#mermaid-1705402140550 .node circle,#mermaid-1705402140550 .node ellipse,#mermaid-1705402140550 .node polygon,#mermaid-1705402140550 .node path{fill:#fff4dd;stroke:hsl(40.5882352941, 60%, 83.3333333333%);stroke-width:1px;}#mermaid-1705402140550 .flowchart-label text{text-anchor:middle;}#mermaid-1705402140550 .node .label{text-align:center;}#mermaid-1705402140550 .node.clickable{cursor:pointer;}#mermaid-1705402140550 .arrowheadPath{fill:#0b0b0b;}#mermaid-1705402140550 .edgePath .path{stroke:#0b0b0b;stroke-width:2.0px;}#mermaid-1705402140550 .flowchart-link{stroke:#0b0b0b;fill:none;}#mermaid-1705402140550 .edgeLabel{background-color:hsl(-79.4117647059, 100%, 93.3333333333%);text-align:center;}#mermaid-1705402140550 .edgeLabel rect{opacity:0.5;background-color:hsl(-79.4117647059, 100%, 93.3333333333%);fill:hsl(-79.4117647059, 100%, 93.3333333333%);}#mermaid-1705402140550 .labelBkg{background-color:rgba(243.9999999999, 220.9999999998, 255, 0.5);}#mermaid-1705402140550 .cluster rect{fill:hsl(220.5882352941, 100%, 98.3333333333%);stroke:hsl(220.5882352941, 60%, 88.3333333333%);stroke-width:1px;}#mermaid-1705402140550 .cluster text{fill:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1705402140550 .cluster span,#mermaid-1705402140550 p{color:rgb(8.5000000002, 5.7500000001, 0);}#mermaid-1705402140550 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(220.5882352941, 100%, 98.3333333333%);border:1px solid hsl(220.5882352941, 60%, 88.3333333333%);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1705402140550 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1705402140550 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="6" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1705402140550_flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="4.5" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1705402140550_flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1705402140550_flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="mermaid-1705402140550_flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1705402140550_flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="mermaid-1705402140550_flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#mermaid-1705402140550_flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Start LE-Sample" id="L-Start-Sample-0" d="M50.011,44.752L54.177,44.752C58.344,44.752,66.677,44.752,74.127,44.752C81.577,44.752,88.144,44.752,91.427,44.752L94.711,44.752"></path><path marker-end="url(#mermaid-1705402140550_flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Sample LE-Calc" id="L-Sample-Calc-0" d="M206.985,29.251L213.743,26.959C220.501,24.668,234.018,20.084,244.059,17.793C254.1,15.501,260.667,15.501,263.95,15.501L267.234,15.501"></path><path marker-end="url(#mermaid-1705402140550_flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Calc LE-If1" id="L-Calc-If1-0" d="M406.522,15.501L410.688,15.501C414.855,15.501,423.188,15.501,432.146,17.459C441.104,19.416,450.686,23.331,455.477,25.289L460.268,27.246"></path><path marker-end="url(#mermaid-1705402140550_flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-If1 LE-Ret" id="L-If1-Ret-0" d="M549.704,44.752L555.758,44.752C561.813,44.752,573.922,44.752,585.148,44.752C596.373,44.752,606.716,44.752,611.887,44.752L617.058,44.752"></path><path marker-end="url(#mermaid-1705402140550_flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-If1 LE-Sample" id="L-If1-Sample-0" d="M465.174,60.253L459.565,62.545C453.957,64.837,442.739,69.42,421.798,71.712C400.857,74.003,370.192,74.003,339.528,74.003C308.863,74.003,278.198,74.003,256.945,71.995C235.691,69.987,223.847,65.971,217.926,63.963L212.004,61.955"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g transform="translate(586.030987739563, 44.752193450927734)" class="edgeLabel"><g transform="translate(-11.32726764678955, -8.001096725463867)" class="label"><foreignObject height="16.002193450927734" width="22.6545352935791"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel">Yes</span></div></foreignObject></g></g><g transform="translate(339.52769470214844, 74.0032901763916)" class="edgeLabel"><g transform="translate(-9.401288986206055, -8.001096725463867)" class="label"><foreignObject height="16.002193450927734" width="18.80257797241211"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel">No</span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(25.00525665283203, 44.752193450927734)" id="flowchart-Start-10" class="node default default flowchart-label"><rect height="31.002193450927734" width="50.01051330566406" y="-15.501096725463867" x="-25.00525665283203" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-17.50525665283203, -8.001096725463867)" style="" class="label"><rect></rect><foreignObject height="16.002193450927734" width="35.01051330566406"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Start</span></div></foreignObject></g></g><g transform="translate(161.27216720581055, 44.752193450927734)" id="flowchart-Sample-11" class="node default default flowchart-label"><rect height="31.002193450927734" width="122.5233154296875" y="-15.501096725463867" x="-61.26165771484375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-53.76165771484375, -8.001096725463867)" style="" class="label"><rect></rect><foreignObject height="16.002193450927734" width="107.5233154296875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Sample Params</span></div></foreignObject></g></g><g transform="translate(339.52769470214844, 15.501096725463867)" id="flowchart-Calc-13" class="node default default flowchart-label"><rect height="31.002193450927734" width="133.9877471923828" y="-15.501096725463867" x="-66.9938735961914" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-59.493873596191406, -8.001096725463867)" style="" class="label"><rect></rect><foreignObject height="16.002193450927734" width="118.98774719238281"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Calculate expval</span></div></foreignObject></g></g><g transform="translate(503.11264419555664, 44.752193450927734)" id="flowchart-If1-15" class="node default default flowchart-label"><rect height="31.002193450927734" width="93.1821517944336" y="-15.501096725463867" x="-46.5910758972168" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-39.0910758972168, -8.001096725463867)" style="" class="label"><rect></rect><foreignObject height="16.002193450927734" width="78.1821517944336"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terminate?</span></div></foreignObject></g></g><g transform="translate(688.2491245269775, 44.752193450927734)" id="flowchart-Ret-17" class="node default default flowchart-label"><rect height="31.002193450927734" width="131.78173065185547" y="-15.501096725463867" x="-65.89086532592773" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-58.390865325927734, -8.001096725463867)" style="" class="label"><rect></rect><foreignObject height="16.002193450927734" width="116.78173065185547"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Return Minimum</span></div></foreignObject></g></g></g></g></g></svg></pre>
+        <p><br><br></p>
+        <table>
+          <thead>
+            <tr>
+              <th align="center"></th>
+              <th></th>
+              <th align="left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td align="center"><strong>Terminate When</strong></td>
+              <td> </td>
+              <td align="left">expval hasn't changed by &gt;0.5% in 10 samples</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>Sample for Uncut</strong></td>
+              <td></td>
+              <td align="left">Dual Annealing with BOBYBA</td>
+            </tr>
+            <tr>
+              <td align="center"><strong>Sample for Cut</strong></td>
+              <td></td>
+              <td align="left">COBYLA</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section data-auto-animate="" class="future" style="top: 145.5px; display: none;" hidden="" aria-hidden="true">
+        <h3>Results</h3>
+        <style>
+          table {
+            border-collapse: collapse;
+            border: 1px solid black;
+          }
+
+          th,
+          td {
+            border: 1px solid black;
+            padding: 0.5em;
+          }
+        </style>
+
+        <table>
+          <thead>
+            <tr>
+              <td colspan="1"></td>
+              <td colspan="3">UnCut</td>
+              <td colspan="3">Cut</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+              <th>Classical (sto3g)</th>
+              <th>Ideal</th>
+              <th>No-mit</th>
+              <th>MEM</th>
+              <th>Ideal</th>
+              <th>No-mit</th>
+              <th>MEM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="font: 100 0.8em monospace;">
+              <td colspan="9">IBM: 4 qubit H₂</td>
+            </tr>
+            <tr>
+              <td>-1.8426</td>
+              <td>-</td>
+              <td><b>-1.759</b></td>
+              <td><b>-1.82</b></td>
+              <td>-</td>
+              <td>-1.7266</td>
+              <td>-1.82</td>
+            </tr>
+            <!-- <tr>
+          <td>Li₂</td>
+          <td>20</td>
+          <td>-16.366</td>
+          <td>-</td>
+          <td>-12.669</td>
+          <td>-15.52</td>
+          <td>-</td>
+          <td>-15.786</td>
+          <td>-16.348</td>
+      </tr> -->
+            <tr style="font: 100 0.8em monospace;">
+              <td colspan="9">CQuICC: 4 qubit H₂</td>
+            </tr>
+            <tr>
+              <td>-1.8426</td>
+              <td>-1.8236</td>
+              <td>-1.7541</td>
+              <td>-1.7546</td>
+              <td>-1.815</td>
+              <td><b>-1.7915</b></td>
+              <td><b>-1.834</b></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </section>
+      <section data-auto-animate="" class="stack future" style="top: 0px; display: none;" data-previous-indexv="0"
+        hidden="" aria-hidden="true">
+        <h3>Charts</h3>
+        <section data-transition="fade-in none-out" class="" style="top: 160.5px; display: none;" aria-hidden="true">
+          <div class="f j-ar">
+            <figure>
+              <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;">
+              <figcaption>UnCut Circuit</figcaption>
+            </figure>
+            <figure>
+              <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;">
+              <figcaption>Cut Circuit</figcaption>
+            </figure>
+          </div>
+
+        </section>
+        <section data-transition="none-in fade-out" class="future" style="top: 0px; display: none;" hidden=""
+          aria-hidden="true">
+          <div class="f j-ar w-100">
+            <figure>
+              <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;">
+              <figcaption>UnCut Circuit</figcaption>
+            </figure>
+            <figure>
+              <img src="https://i.imgur.com/TwU0SiJ.png" style="width:33vw;">
+              <figcaption>Ideal Simulator</figcaption>
+            </figure>
+          </div>
+          <div class="f j-ar w-100">
+            <figure>
+              <img src="https://i.imgur.com/Wwu9feU.png" style="width:33vw;">
+              <figcaption>Noisy without mitigation</figcaption>
+            </figure>
+            <figure>
+              <img src="https://i.imgur.com/4aupdYs.png" style="width:33vw;">
+              <figcaption>Noisy MEM</figcaption>
+            </figure>
+          </div>
+
+        </section>
+        <section data-transition="none-in fade-out" class="future" style="top: 0px; display: none;" hidden=""
+          aria-hidden="true">
+          <div class="f j-ar w-100">
+            <figure>
+              <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;">
+              <figcaption>Cut Circuit</figcaption>
+            </figure>
+            <figure>
+              <img src="https://i.imgur.com/LhCzQwZ.png" style="width:33vw;">
+              <figcaption>Ideal Simulator</figcaption>
+            </figure>
+          </div>
+          <div class="f j-ar w-100">
+            <figure>
+              <img src="https://i.imgur.com/N1muvmn.png" style="width:33vw;">
+              <figcaption>Noisy without mitigation</figcaption>
+            </figure>
+            <figure>
+              <img src="https://i.imgur.com/4VFuYQB.png" style="width:33vw;">
+              <figcaption>Noisy MEM</figcaption>
+            </figure>
+          </div>
+        </section>
+
+      </section>
+      <section data-auto-animate="" class="future" style="top: 233.5px; display: none;" hidden="" aria-hidden="true">
+        <h2>Next Steps</h2>
+        <ul>
+          <li>Applying to Li<sub>2</sub>, CH<sub>4</sub></li>
+          <li>Getting a small pipeline so that arbitrary circuits can be cut</li>
+          <li>Experimentation with Binary Search Cutting (Ref: FracQC)</li>
+        </ul>
+      </section>
+    </article>
+    <div class="backgrounds">
+      <div class="slide-background present" data-loaded="true" style="display: block;"></div>
+      <div class="slide-background future" data-loaded="true" style="display: block;"></div>
+      <div class="slide-background stack future" data-loaded="true" style="display: block;">
+        <div class="slide-background present" data-loaded="true" style="display: block;"></div>
+        <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+        <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+      </div>
+      <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+      <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+      <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+      <div class="slide-background stack future" style="display: none;" data-loaded="true">
+        <div class="slide-background present" style="display: none;" data-loaded="true"></div>
+        <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+        <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+      </div>
+      <div class="slide-background future" style="display: none;" data-loaded="true"></div>
+    </div>
+    <div class="progress" style="display: block;"><span style="width: 0px;"></span></div>
+    <aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded"
+      style="display: block;"><button class="navigate-left" aria-label="previous slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-right enabled" aria-label="next slide">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-up" aria-label="above slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button><button class="navigate-down" aria-label="below slide" disabled="disabled">
+        <div class="controls-arrow"></div>
+      </button></aside>
+    <div class="slide-number" style="display: block;"><span class="slide-number-a">1</span></div>
+    <div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div>
+    <div class="pause-overlay"></div>
+    <div id="aria-status-div" aria-live="polite" aria-atomic="true"
+      style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">
+      Ciruit Cutting
+    </div>
+  </main>
+
+
+  <script>
+    Reveal.initialize( {
+      slideNumber: true
+    } );
+    Reveal.slide( ...localStorage.getItem( 'currslide' ).split( ',' ) );
+    Reveal.addEventListener( 'slidechanged', ( e ) =>
+      localStorage.setItem( 'currslide', [ e.indexh, e.indexv ] )
+    );
+  </script>
+
+
+  <div class="mermaidTooltip" style="opacity: 0;"></div>
+</body>

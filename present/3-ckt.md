@@ -106,7 +106,6 @@ graph LR
 ===
 
 ### Results
-Exact Solution: -1.84
 
 <style>
 table {
@@ -141,7 +140,7 @@ th, td {
         <td colspan="9">IBM: 4 qubit H₂</td>
     </tr>
     <tr>
-        <td>-1.84</td>
+        <td>-1.8426</td>
         <td>-</td>
         <td><b>-1.759</b></td>
         <td><b>-1.82</b></td>
@@ -164,7 +163,7 @@ th, td {
         <td colspan="9">CQuICC: 4 qubit H₂</td>
     </tr>
     <tr>
-        <td>-1.84</td>
+        <td>-1.8426</td>
         <td>-1.8236</td>
         <td>-1.7541</td>
         <td>-1.7546</td>
@@ -179,6 +178,60 @@ th, td {
 
 ### Charts
 
+<section data-transition="fade-in none-out">
+<div class="f j-ar">
+<figure>
+    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <figcaption>UnCut Circuit</figcaption>
+</figure>
+<figure>
+    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
+    <figcaption>Cut Circuit</figcaption>
+</figure>
+</div>
+
+</section><section data-transition="none-in fade-out">
+<div class="f j-ar w-100">
+<figure>
+    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <figcaption>UnCut Circuit</figcaption>
+</figure>
+<figure>
+    <img src="https://i.imgur.com/TwU0SiJ.png" style="width:33vw;"/>
+    <figcaption>Ideal Simulator</figcaption>
+</figure>
+</div><div class="f j-ar w-100">
+<figure>
+    <img src="https://i.imgur.com/Wwu9feU.png" style="width:33vw;"/>
+    <figcaption>Noisy without mitigation</figcaption>
+</figure>
+<figure>
+    <img src="https://i.imgur.com/4aupdYs.png" style="width:33vw;"/>
+    <figcaption>Noisy MEM</figcaption>
+</figure>
+</div>
+
+</section><section data-transition="none-in fade-out">
+<div class="f j-ar w-100">
+<figure>
+    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <figcaption>Cut Circuit</figcaption>
+</figure>
+<figure>
+    <img src="https://i.imgur.com/LhCzQwZ.png" style="width:33vw;"/>
+    <figcaption>Ideal Simulator</figcaption>
+</figure>
+</div><div class="f j-ar w-100">
+<figure>
+    <img src="https://i.imgur.com/N1muvmn.png" style="width:33vw;"/>
+    <figcaption>Noisy without mitigation</figcaption>
+</figure>
+<figure>
+    <img src="https://i.imgur.com/4VFuYQB.png" style="width:33vw;"/>
+    <figcaption>Noisy MEM</figcaption>
+</figure>
+</div>
+</section>
 
 ===
 
