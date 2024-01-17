@@ -172,11 +172,11 @@ th, td {
 <section data-transition="fade-in none-out">
 <div class="f j-ar">
 <figure>
-    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <img src="https://i.imgur.com/HuiIJAr.png" style="width:33vw;"/>
     <figcaption>UnCut Circuit</figcaption>
 </figure>
 <figure>
-    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
+    <img src="https://i.imgur.com/InjhQpT.png" style="width:33vw;"/>
     <figcaption>Cut Circuit</figcaption>
 </figure>
 </div>
@@ -184,8 +184,8 @@ th, td {
 </section><section data-transition="none-in fade-out">
 <div class="f j-ar w-100">
 <figure>
-    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
-    <figcaption>UnCut Circuit</figcaption>
+    <img src="https://i.imgur.com/InjhQpT.png" style="width:33vw;"/>
+    <figcaption>Cut Circuit</figcaption>
 </figure>
 <figure>
     <img src="https://i.imgur.com/TwU0SiJ.png" style="width:33vw;"/>
@@ -205,8 +205,8 @@ th, td {
 </section><section data-transition="none-in fade-out">
 <div class="f j-ar w-100">
 <figure>
-    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
-    <figcaption>Cut Circuit</figcaption>
+    <img src="https://i.imgur.com/HuiIJAr.png" style="width:33vw;"/>
+    <figcaption>UnCut Circuit</figcaption>
 </figure>
 <figure>
     <img src="https://i.imgur.com/LhCzQwZ.png" style="width:33vw;"/>
