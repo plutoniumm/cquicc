@@ -184,7 +184,7 @@ th, td {
 </section><section data-transition="none-in fade-out">
 <div class="f j-ar w-100">
 <figure>
-    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
+    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
     <figcaption>UnCut Circuit</figcaption>
 </figure>
 <figure>
@@ -205,7 +205,7 @@ th, td {
 </section><section data-transition="none-in fade-out">
 <div class="f j-ar w-100">
 <figure>
-    <img src="https://i.imgur.com/OnSPObf.png" style="width:33vw;"/>
+    <img src="https://i.imgur.com/T6qqVmr.png" style="width:33vw;"/>
     <figcaption>Cut Circuit</figcaption>
 </figure>
 <figure>
